@@ -2,6 +2,7 @@ package dcct.process;
 
 import java.lang.StringBuilder;
 
+// Cambiar nombre a Process
 public abstract class AbstractProcess {
 	public int getId() {
 		return id;
