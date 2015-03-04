@@ -10,4 +10,8 @@ public class SimplicialComplex {
 	public SimplicialComplex(Simplex... simplices){
 		this.simplices = new LinkedHashSet<Simplex>(Arrays.asList(simplices));
 	}
+	
+	public void subdivide(){
+		
+	}
 }
