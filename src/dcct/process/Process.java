@@ -1,15 +1,10 @@
 package dcct.process;
 
 public class Process implements Cloneable {
-	public int getId() {
-		return id;
-	}
-	public void setId(int id) {
-		this.id = id;
-	}
 
 	private int id = -1;
 	private String[] view = null;
+	
 	public String getView() {
 		if (this.view == null)
 			return Integer.toString(this.id);
@@ -17,10 +12,17 @@ public class Process implements Cloneable {
 		StringBuilder sb = new StringBuilder();
 		for(String v : this.view){
 			sb.append(prefix);
-			sb.append(v);
+			sb.append(v!=null? v: "-");
 			prefix = ",";
 		}
 		return "(" + sb.toString() + ")";
+	}
+	
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
 	}
 	
 	public void setView(String[] view) {
@@ -56,7 +58,8 @@ public class Process implements Cloneable {
 		finally
 		{
 			p = new Process(this.id);
-			p.view = this.view.clone();
+			if (this.view != null)
+				p.view = this.view.clone();
 		}
 		return p;
 	}
