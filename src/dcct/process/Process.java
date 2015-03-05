@@ -63,4 +63,17 @@ public class Process implements Cloneable {
 		}
 		return p;
 	}
+	@Override 
+	public boolean equals(Object o){
+		if (!(o instanceof Process)) 
+		    return false;
+		return true;
+//		Process other = (Process) o;
+//		return (this.id == other.id && 
+//				this.getView().compareTo(other.getView())==0);
+	}
+	@Override 
+	public int hashCode(){
+		return this.id + this.getView().hashCode();
+	}
 }

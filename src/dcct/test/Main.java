@@ -10,7 +10,7 @@ public class Main {
 	public static void main(String[] args){
 		DCModel model = new DCModel(new AtomicImmediateSnapshot());
 		
-		Simplex s0 = new Simplex(new Process(0), new Process(1));
+		Simplex s0 = new Simplex(new Process(0), new Process(1), new Process(2));
 		
 		System.out.println("Simplex s0 has dimension "+s0.dimension());
 		for (Process p : s0.getProcesses()){
@@ -26,7 +26,7 @@ public class Main {
 				System.out.println("Process "+ p.getId() + "'s view:" + p.getView());
 			}
 		}
-		
+		System.out.println("Complex has "+protocolComplex.getSimplices().size()+" simplices.");
 		System.out.println("2nd round");
 		protocolComplex = model.subdivide(protocolComplex);
 		
@@ -36,5 +36,20 @@ public class Main {
 				System.out.println("Process "+ p.getId() + "'s view:" + p.getView());
 			}
 		}
+		System.out.println("Complex has "+protocolComplex.getSimplices().size()+" simplices.");
+
+		
+//		System.out.println("3rd round");
+//		protocolComplex = model.subdivide(protocolComplex);
+//		
+//		for (Simplex s: protocolComplex.getSimplices()){
+//			System.out.println("Simplex s has dimension "+s0.dimension());
+//			for (Process p : s.getProcesses()){
+//				System.out.println("Process "+ p.getId() + "'s view:" + p.getView());
+//			}
+//		}
+//		System.out.println("Complex has "+protocolComplex.getSimplices().size()+" simplices.");
+
+
 	}
 }

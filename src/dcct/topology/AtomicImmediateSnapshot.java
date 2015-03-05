@@ -1,12 +1,9 @@
 package dcct.topology;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
-
-import dcct.process.*;
 import dcct.process.Process;
 import dcct.combinatorics.*;
 
@@ -28,10 +25,10 @@ public class AtomicImmediateSnapshot implements CommunicationModel{
 				while (iter.hasNext()) {
 					List<Process> permut = iter.next();
 					String[] memory = new String[permut.size()];
-					List<Process> newProcesses = new ArrayList<Process>(permut.size());
+					Set<Process> newProcesses = new LinkedHashSet<Process>(permut.size());
 					for (String g : groups) {
 						int[] indices = toIndices(g);
-						performExecution(newProcesses, permut, memory, indices);
+						newProcesses.addAll(performExecution(permut, memory, indices));
 					}
 					newSimplices.add(new Simplex(newProcesses));
 				}
@@ -40,7 +37,7 @@ public class AtomicImmediateSnapshot implements CommunicationModel{
 		return newSimplices;
 	}
 	
-	protected void performExecution(List<Process> newProcesses, List<Process> permut, String[] memory, int[] indices) {
+	protected List<Process> performExecution(List<Process> permut, String[] memory, int[] indices) {
 		List<Process> tempProcesses = new ArrayList<Process>(indices.length);
 		int i;
 		for(i=0;i<indices.length;i++){
@@ -51,7 +48,7 @@ public class AtomicImmediateSnapshot implements CommunicationModel{
 		for (Process p: tempProcesses){
 			p.snapshot(memory);
 		}
-		newProcesses.addAll(tempProcesses);
+		return tempProcesses;
 	}
 	
 	protected int[] toIndices(String group){
