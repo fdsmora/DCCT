@@ -1,16 +1,25 @@
 package dcct.test;
 
+import java.util.Arrays;
+import java.util.List;
+
 import dcct.topology.AtomicImmediateSnapshot;
 import dcct.topology.DCModel;
 import dcct.topology.Simplex;
 import dcct.topology.SimplicialComplex;
+import dcct.visualization.Visualizer;
 import dcct.process.Process;
 
 public class Main {
+	
+	protected static DCModel model;
+	protected static List<String> colorsPool = Arrays.asList("white","black","green", "red", "blue", "yellow");
+	
 	public static void main(String[] args){
-		DCModel model = new DCModel(new AtomicImmediateSnapshot());
 		
-		Simplex s0 = new Simplex(new Process(0), new Process(1), new Process(2));
+		model = new DCModel(new AtomicImmediateSnapshot());
+		
+		Simplex s0 = new Simplex(new Process(0), new Process(1),new Process(2));
 		
 		System.out.println("Simplex s0 has dimension "+s0.dimension());
 		for (Process p : s0.getProcesses()){
@@ -18,38 +27,36 @@ public class Main {
 		}
 		
 		SimplicialComplex initialComplex = new SimplicialComplex(s0);
-		SimplicialComplex protocolComplex = model.subdivide(initialComplex);
+		
+		int rounds = 1;
+		
+		SimplicialComplex protocolComplex = testSubdivison(initialComplex, rounds);
+		
+		Visualizer visualizer = new Visualizer();
+		visualizer.draw(protocolComplex,
+				buildColors(protocolComplex.totalDistinctProcesses()));
+	}
 	
-		for (Simplex s: protocolComplex.getSimplices()){
-			System.out.println("Simplex s has dimension "+s0.dimension());
-			for (Process p : s.getProcesses()){
-				System.out.println("Process "+ p.getId() + "'s view:" + p.getView());
-			}
-		}
-		System.out.println("Complex has "+protocolComplex.getSimplices().size()+" simplices.");
-		System.out.println("2nd round");
-		protocolComplex = model.subdivide(protocolComplex);
+	public static SimplicialComplex testSubdivison(SimplicialComplex sc, int rounds){
+		SimplicialComplex tComplex = sc;
+		for (int i=0;i<rounds;i++){
+			System.out.println("-------------------\nround: " + i);
+			System.out.println("-------------------");
+			SimplicialComplex protocolComplex = model.subdivide(tComplex);
 		
-		for (Simplex s: protocolComplex.getSimplices()){
-			System.out.println("Simplex s has dimension "+s0.dimension());
-			for (Process p : s.getProcesses()){
-				System.out.println("Process "+ p.getId() + "'s view:" + p.getView());
+			for (Simplex s: protocolComplex.getSimplices()){
+				System.out.println("Simplex s has dimension "+s.dimension());
+				for (Process p : s.getProcesses()){
+					System.out.println("Process "+ p.getId() + "'s view:" + p.getView());
+				}
 			}
+			System.out.println("Complex has "+protocolComplex.getSimplices().size()+" simplices.");
+			tComplex = protocolComplex;
 		}
-		System.out.println("Complex has "+protocolComplex.getSimplices().size()+" simplices.");
-
-		
-//		System.out.println("3rd round");
-//		protocolComplex = model.subdivide(protocolComplex);
-//		
-//		for (Simplex s: protocolComplex.getSimplices()){
-//			System.out.println("Simplex s has dimension "+s0.dimension());
-//			for (Process p : s.getProcesses()){
-//				System.out.println("Process "+ p.getId() + "'s view:" + p.getView());
-//			}
-//		}
-//		System.out.println("Complex has "+protocolComplex.getSimplices().size()+" simplices.");
-
-
+		return tComplex;
+	}
+	
+	public static List<String> buildColors(int k){
+		return colorsPool.subList(0, k);
 	}
 }

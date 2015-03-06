@@ -25,6 +25,10 @@ public class Simplex {
 	public int dimension(){
 		return processes.size()-1;
 	}
+	
+	public int getProcessCount(){
+		return processes.size();
+	}
 	@Override 
 	public boolean equals(Object o){
 		if (!(o instanceof Simplex)) 
