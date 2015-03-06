@@ -1,5 +1,7 @@
 package dcct.visualization;
 
+import java.awt.Color;
+
 import dcct.process.Process;
 
 public class Vertex {
@@ -17,10 +19,10 @@ public class Vertex {
 	public void setIndex(int index) {
 		this.index = index;
 	}
-	public String getColor() {
+	public Color getColor() {
 		return color;
 	}
-	public void setColor(String color) {
+	public void setColor(Color color) {
 		this.color = color;
 	}
 	public String getLabel() {
@@ -31,7 +33,7 @@ public class Vertex {
 	}
 	protected double[] coordinates;
 	protected int index;
-	protected String color;
+	protected Color color;
 	protected String label;
 	
 	public Vertex(Process p){
@@ -42,8 +44,8 @@ public class Vertex {
 	
 	@Override
 	public String toString(){
-		return String.format("Vertex.index=%1$s\nVertex.label=%2$s\nVertex.coordinates=%3$.2f\nVertex.color=%4$s\n",
-				this.index,this.label,this.coordinates,this.color);
+		return String.format("Vertex.index=%1$s\nVertex.label=%2$s\nVertex.coordinates=(%3$.2f,%3$.2f,%3$.2f)\nVertex.color=%4$s\n",
+				this.index,this.label,this.coordinates[0],this.coordinates[1],this.coordinates[2],this.color);
 	}
 	
 	@Override

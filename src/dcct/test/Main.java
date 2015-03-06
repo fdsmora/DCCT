@@ -1,5 +1,6 @@
 package dcct.test;
 
+import java.awt.Color;
 import java.util.Arrays;
 import java.util.List;
 
@@ -13,13 +14,14 @@ import dcct.process.Process;
 public class Main {
 	
 	protected static DCModel model;
-	protected static List<String> colorsPool = Arrays.asList("white","black","green", "red", "blue", "yellow");
+	protected static List<Color> colors = Arrays.asList(Color.WHITE,Color.BLACK,Color.GREEN,Color.RED,
+			Color.BLUE,Color.YELLOW, Color.PINK, Color.CYAN, Color.MAGENTA);
 	
 	public static void main(String[] args){
 		
 		model = new DCModel(new AtomicImmediateSnapshot());
 		
-		Simplex s0 = new Simplex(new Process(0), new Process(1),new Process(2));
+		Simplex s0 = new Simplex(new Process(0), new Process(1), new Process(2));
 		
 		System.out.println("Simplex s0 has dimension "+s0.dimension());
 		for (Process p : s0.getProcesses()){
@@ -28,7 +30,7 @@ public class Main {
 		
 		SimplicialComplex initialComplex = new SimplicialComplex(s0);
 		
-		int rounds = 1;
+		int rounds = 0;
 		
 		SimplicialComplex protocolComplex = testSubdivison(initialComplex, rounds);
 		
@@ -56,7 +58,7 @@ public class Main {
 		return tComplex;
 	}
 	
-	public static List<String> buildColors(int k){
-		return colorsPool.subList(0, k);
+	public static List<Color> buildColors(int k){
+		return colors.subList(0, k);
 	}
 }
