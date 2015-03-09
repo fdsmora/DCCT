@@ -130,7 +130,7 @@ public class jRealityVisualization {
 		dps.setShowPoints(true);
 		
 		DefaultPointShader ps = (DefaultPointShader) dps.getPointShader();
-		ps.setPointRadius(3.0);
+		ps.setPointRadius(2.5);
 		//ps.setDiffuseColor(de.jreality.shader.Color.red);
 		
 		// Labels
