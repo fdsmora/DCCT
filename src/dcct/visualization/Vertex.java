@@ -31,14 +31,20 @@ public class Vertex {
 	public void setLabel(String label) {
 		this.label = label;
 	}
+	
+	public String getId() {
+		return id;
+	}
 	protected double[] coordinates;
 	protected int index;
 	protected Color color;
 	protected String label;
+	protected String id;
 	
 	public Vertex(Process p){
 		if (p!=null){
-			this.label = p.toString();
+			this.label = p.getView();
+			this.id = p.toString();
 		}
 	}
 	
@@ -57,6 +63,6 @@ public class Vertex {
 	
 	@Override
 	public int hashCode(){
-		return this.label.hashCode();
+		return this.id.hashCode();
 	}
 }

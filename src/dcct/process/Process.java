@@ -43,7 +43,7 @@ public class Process implements Cloneable {
 	
 	@Override 
 	public String toString(){
-		return String.format("(%d,%s)", this.id,getView());
+		return String.format("(%d,%s)", this.id, getView());
 	}
 	
 	@Override

@@ -1,9 +1,13 @@
 package dcct.visualization;
 
 import java.awt.Color;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Queue;
 import java.util.Random;
 import java.util.Set;
@@ -13,19 +17,9 @@ import dcct.topology.Simplex;
 import dcct.process.Process;
 
 public class Visualizer {
-	
-	public Set<Vertex> getVertices() {
-		return vertices;
-	}
 
-	public void setVertices(Set<Vertex> vertices) {
-		this.vertices = vertices;
-	}
-
-	protected Set<Vertex> vertices = new LinkedHashSet<Vertex>();
-	
-	public static void main(String[] args) {
-	}
+	protected Map<String, Vertex> vertices = new LinkedHashMap<String, Vertex>();
+	protected List<int[]> faces;
 	
 	public Visualizer(){
 	}
@@ -39,15 +33,24 @@ public class Visualizer {
 				Color[] processColors = new Color[sc.totalDistinctProcesses()];
 				int indexCount = 0;
 				Queue<Color> qColors = new LinkedList<Color>(colors);
+				faces = new ArrayList<int[]>(sc.getSimplices().size());
 				for (Simplex s : sc.getSimplices()) {
+					int[] face = new int[s.getProcessCount()];
+					int i=0;
 					for (Process p : s.getProcesses()) {
-						Vertex v = new Vertex(p);
-						if (vertices.add(v)) {
+						Vertex v;
+						if (vertices.containsKey(p.toString())) {
+							v = vertices.get(p.toString());
+						}else {
+							v = new Vertex(p);
 							v.index = indexCount++;
 							v.coordinates = randomCoordGenerator();
 							setColor(v, p, qColors, processColors);
+							vertices.put(p.toString(),v);
 						}
+						face[i++]=v.index;
 					}
+					faces.add(face);
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -57,15 +60,15 @@ public class Visualizer {
 		//TEST
 		testDraw();
 		
-		jRealityVisualization jRealityV = new jRealityVisualization(vertices);
+		jRealityVisualization jRealityV = new jRealityVisualization(vertices, faces);
 		jRealityV.createVisualization();
 	}
 	
 	protected double[] randomCoordGenerator() {
 		double[] coords = new double[3];
 		Random rand = new Random();
-		coords[0]=rand.nextInt(20);
-		coords[1]=rand.nextInt(20);
+		coords[0]=rand.nextInt(60);
+		coords[1]=rand.nextInt(60);
 		coords[2]=0.0;
 		return coords;
 	}
@@ -77,8 +80,20 @@ public class Visualizer {
 	}
 	
 	public void testDraw(){
-		System.out.println("------------------------");
-		for (Vertex v : vertices)
+		System.out.println("-----------Vertices-------------");
+		for (Vertex v : vertices.values())
 			System.out.println(v);
+		System.out.println("-----------Faces-------------");
+		System.out.print("[");
+		for (int[] f : faces){
+			String prefix = "";
+			System.out.print("[");
+			for(int i=0; i< f.length; i++){
+				System.out.print(prefix + f[i]);
+				prefix = ",";
+			}
+			System.out.print("]");
+		}
+		System.out.println("]");
 	}
 }

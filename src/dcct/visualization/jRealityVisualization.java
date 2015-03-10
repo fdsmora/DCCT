@@ -1,9 +1,9 @@
 package dcct.visualization;
 
-//import java.awt.Color;
 import java.awt.Color;
 import java.awt.Font;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.swing.SwingConstants;
@@ -33,21 +33,44 @@ import de.jtem.jrworkspace.plugin.sidecontainer.template.ShrinkPanelPlugin;
 
 public class jRealityVisualization {
 	
-	protected Set<Vertex> vertices;
+	protected Map<String, Vertex> vertices;
+	protected List<int[]> faces;
 	protected JRViewer viewer = new JRViewer();
 	protected static SceneGraphComponent sgc = new SceneGraphComponent();
 	
-	public jRealityVisualization(Set<Vertex> vertices){
+	public jRealityVisualization(Map<String, Vertex> vertices, List<int[]> faces){
 		this.vertices = vertices;
+		this.faces = faces;
 	}
 	
 	public void createVisualization(){
 		configVertices();
-		//configFaces()
+		configFaces();
 		configViewer(viewer);
 		viewer.startup();
 	}
 	
+	protected void configFaces() {
+		IndexedFaceSetFactory faceFactory = new IndexedFaceSetFactory();
+		int f = faces.size();
+		faceFactory.setVertexCount(vertices.size());
+		faceFactory.setVertexCoordinates(getVertexCoordinates());
+		
+//		Color[] faceColors = new Color[f];
+//		for (int i=0 ; i<f; i++){
+//			faceColors[i]=Color.ORANGE;
+//		}
+//		faceFactory.setFaceColors(toDoubleArray(faceColors));
+		
+		faceFactory.setFaceCount(f);
+		faceFactory.setFaceIndices(getFaceIndices()); 
+		faceFactory.setGenerateFaceNormals( true );
+		faceFactory.setGenerateEdgesFromFaces(true);
+
+		faceFactory.update();
+		sgc.setGeometry(faceFactory.getPointSet());
+	}
+
 	protected void configVertices() {
 		SceneGraphComponent sgcV = new SceneGraphComponent();
 		
@@ -63,11 +86,20 @@ public class jRealityVisualization {
 		sgc.addChild(sgcV);
 		
 	}
+	
+	protected int[][] getFaceIndices(){
+		int[][] faceIndices = new int[faces.size()][];
+		int i =0;
+		for (int[] l : faces){
+			faceIndices[i++]=l;
+		}
+		return faceIndices;
+	}
 
 	protected double[][] getVertexCoordinates() {
 		double[][] coordinates = new double[vertices.size()][3];
 		int i=0;
-		for (Vertex v:vertices)
+		for (Vertex v:vertices.values())
 			coordinates[i++]=v.getCoordinates();
 		return coordinates;
 	}
@@ -75,7 +107,7 @@ public class jRealityVisualization {
 	protected Color[] getVertexColors() {
 		Color[] colors = new Color[vertices.size()];
 		int i=0;
-		for (Vertex v:vertices)
+		for (Vertex v:vertices.values())
 			colors[i++]=v.getColor();
 		return colors;
 	}
@@ -83,7 +115,7 @@ public class jRealityVisualization {
 	private void setVertexLabels(PointSetFactory psf){
 		String[] labels = new String[vertices.size()];
 		int i=0;
-		for (Vertex v : vertices)
+		for (Vertex v : vertices.values())
 			labels[i++]=v.getLabel();
 		
 		psf.setVertexAttribute(Attribute.LABELS, StorageModel.STRING_ARRAY.createReadOnly(labels));
@@ -127,18 +159,17 @@ public class jRealityVisualization {
 	protected void setAppearance(){
 		sgc.setAppearance(new Appearance());
 		DefaultGeometryShader dps = ShaderUtility.createDefaultGeometryShader(sgc.getAppearance(), false);
-		dps.setShowPoints(true);
 		
 		DefaultPointShader ps = (DefaultPointShader) dps.getPointShader();
-		ps.setPointRadius(2.5);
+		ps.setPointRadius(0.8);
 		//ps.setDiffuseColor(de.jreality.shader.Color.red);
-		
+		dps.setShowPoints(true);
 		// Labels
 	    DefaultTextShader pts = (DefaultTextShader) ps.getTextShader();
-	    //pts.setDiffuseColor(de.jreality.shader.Color.blue);
+	    pts.setDiffuseColor(de.jreality.shader.Color.blue);
 	    // scale the label
 	    Double scale = new Double(0.01);
-	    pts.setScale(1.0*scale);
+	    pts.setScale(1.5*scale);
 	    // apply a translation to the position of the label in camera coordinates (-z away from camera)
 	    double[] offset = new double[]{-.1,0,0.3};
 	    pts.setOffset(offset);
