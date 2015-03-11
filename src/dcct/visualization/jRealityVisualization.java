@@ -2,6 +2,7 @@ package dcct.visualization;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -29,61 +30,92 @@ import de.jreality.shader.DefaultPointShader;
 import de.jreality.shader.DefaultPolygonShader;
 import de.jreality.shader.DefaultTextShader;
 import de.jreality.shader.ShaderUtility;
+import de.jtem.jrworkspace.plugin.Plugin;
 import de.jtem.jrworkspace.plugin.sidecontainer.template.ShrinkPanelPlugin;
 
-public class jRealityVisualization {
+public class jRealityVisualization  {
 	
-	protected Map<String, Vertex> vertices;
-	protected List<int[]> faces;
-	protected JRViewer viewer = new JRViewer();
-	protected static SceneGraphComponent sgc = new SceneGraphComponent();
-	
-	public jRealityVisualization(Map<String, Vertex> vertices, List<int[]> faces){
+	public Map<String, Vertex> getVertices() {
+		return vertices;
+	}
+
+	public void setVertices(Map<String, Vertex> vertices) {
 		this.vertices = vertices;
+	}
+
+	public List<int[]> getFaces() {
+		return faces;
+	}
+
+	public void setFaces(List<int[]> faces) {
 		this.faces = faces;
 	}
 	
-	public void createVisualization(){
+	public void addPlugin(Plugin plugin){
+		plugins.add(plugin);
+	}
+
+	protected Map<String, Vertex> vertices;
+	protected List<int[]> faces;
+	protected JRViewer viewer = new JRViewer();
+	public SceneGraphComponent getSgc() {
+		return sgc;
+	}
+
+	public void setSgc(SceneGraphComponent sgc) {
+		jRealityVisualization.sgc = sgc;
+	}
+
+	protected static SceneGraphComponent sgc = new SceneGraphComponent();
+	protected List<Plugin> plugins = new ArrayList<Plugin>();
+	
+	public jRealityVisualization(){
+	}
+	
+	public void startVisualization(){
 		configVertices();
 		configFaces();
 		configViewer(viewer);
 		viewer.startup();
 	}
 	
-	protected void configFaces() {
-		IndexedFaceSetFactory faceFactory = new IndexedFaceSetFactory();
-		int f = faces.size();
-		faceFactory.setVertexCount(vertices.size());
-		faceFactory.setVertexCoordinates(getVertexCoordinates());
-		
-//		Color[] faceColors = new Color[f];
-//		for (int i=0 ; i<f; i++){
-//			faceColors[i]=Color.ORANGE;
-//		}
-//		faceFactory.setFaceColors(toDoubleArray(faceColors));
-		
-		faceFactory.setFaceCount(f);
-		faceFactory.setFaceIndices(getFaceIndices()); 
-		faceFactory.setGenerateFaceNormals( true );
-		faceFactory.setGenerateEdgesFromFaces(true);
-
-		faceFactory.update();
-		sgc.setGeometry(faceFactory.getPointSet());
+	protected void configFaces() {		
+		if (faces!=null) {
+			IndexedFaceSetFactory faceFactory = new IndexedFaceSetFactory();
+			int f = faces.size();
+			
+//			Color[] faceColors = new Color[f];
+//			for (int i=0 ; i<f; i++){
+//				faceColors[i]=Color.ORANGE;
+//			}
+//			faceFactory.setFaceColors(toDoubleArray(faceColors));
+			
+			faceFactory.setVertexCount(vertices.size());
+			faceFactory.setVertexCoordinates(getVertexCoordinates());
+			faceFactory.setFaceCount(f);
+			faceFactory.setFaceIndices(getFaceIndices());
+			faceFactory.setGenerateFaceNormals(true);
+			faceFactory.setGenerateEdgesFromFaces(true);
+			faceFactory.update();
+			sgc.setGeometry(faceFactory.getPointSet());
+		}
 	}
 
 	protected void configVertices() {
-		SceneGraphComponent sgcV = new SceneGraphComponent();
-		
-		PointSetFactory psf = new PointSetFactory();
-		psf.setVertexCount(vertices.size());
-		psf.setVertexCoordinates(getVertexCoordinates());
-		psf.setVertexColors(toDoubleArray(getVertexColors()));
-		setVertexLabels(psf);
-		psf.update();
-		
-		sgcV.setGeometry(psf.getPointSet());
-		
-		sgc.addChild(sgcV);
+		if (vertices!=null){
+			SceneGraphComponent sgcV = new SceneGraphComponent();
+			
+			PointSetFactory psf = new PointSetFactory();
+			psf.setVertexCount(vertices.size());
+			psf.setVertexCoordinates(getVertexCoordinates());
+			psf.setVertexColors(toDoubleArray(getVertexColors()));
+			setVertexLabels(psf);
+			psf.update();
+			
+			sgcV.setGeometry(psf.getPointSet());
+			
+			sgc.addChild(sgcV);
+		}
 		
 	}
 	
@@ -133,27 +165,21 @@ public class jRealityVisualization {
 		}		
 		return array;
 	}
-
-//	public static void main(String[] args){
-//		JRViewer viewer = new JRViewer();
-//		configViewer(viewer);
-//		viewer.startup();
-//	}
 	
 	public void configViewer(JRViewer viewer){
 		viewer.setShowPanelSlots(true,true,true,true);
 		viewer.addBasicUI();
+		for (Plugin p : plugins){
+			viewer.registerPlugin(p);
+		}
 //		viewer.getController().registerPlugin(new Avatar());
 //		viewer.getController().registerPlugin(new Terrain());
 //		viewer.getController().registerPlugin(new Sky());
-		//viewer.registerPlugin(new SCPanelPlugin(sgc,sc));
-		viewer.setShowPanelSlots(true, false, false, false);
+//		viewer.registerPlugin(new SCPanelPlugin(sgc,sc));
+		viewer.setShowPanelSlots(true, true, true, true);
 		viewer.setContent(sgc);
-//		viewer.addContentUI();
-		// Para permitir rotación y zoom
-		viewer.registerPlugin(new ContentLoader());
-		ContentTools contentTools = new ContentTools();
-		viewer.registerPlugin(contentTools);
+		viewer.addContentUI();
+
 	}
 	
 	protected void setAppearance(){

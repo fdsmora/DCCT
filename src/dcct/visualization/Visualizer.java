@@ -12,21 +12,46 @@ import java.util.Queue;
 import java.util.Random;
 import java.util.Set;
 
+import dcct.topology.DCModel;
 import dcct.topology.SimplicialComplex;
 import dcct.topology.Simplex;
 import dcct.process.Process;
+import de.jreality.plugin.content.ContentLoader;
+import de.jreality.plugin.content.ContentTools;
 
 public class Visualizer {
 
 	protected Map<String, Vertex> vertices = new LinkedHashMap<String, Vertex>();
 	protected List<int[]> faces;
+	protected jRealityVisualization jRealityV;
+	public DCModel getModel() {
+		return model;
+	}
+
+	public void setModel(DCModel model) {
+		this.model = model;
+	}
+
+	protected DCModel model;
 	
-	public Visualizer(){
+	public Visualizer(DCModel model){
+		this.model = model;
+		jRealityV = new jRealityVisualization();
+		// Para permitir rotación y zoom
+		jRealityV.addPlugin(new ContentLoader());
+		jRealityV.addPlugin(new ContentTools());
+		jRealityV.addPlugin(new SCPanelPlugin(jRealityV.getSgc(),this));
+		jRealityV.addPlugin(new SCGeneratePanelPlugin(jRealityV.getSgc(),this));
 	}
 	
-	public void draw(SimplicialComplex sc, List<Color> colors){
+	public void startVisualization(){
+		jRealityV.startVisualization();
+	}
+	
+	public void draw(SimplicialComplex sc){
 		if (sc!=null) {
 			try {
+				List<Color> colors = DCModel.getColors(sc.totalDistinctProcesses());
 				if (colors == null || sc.totalDistinctProcesses() > colors.size())
 					throw new Exception(
 							"Not enough colors to assign to all processes.");
@@ -60,8 +85,13 @@ public class Visualizer {
 		//TEST
 		testDraw();
 		
-		jRealityVisualization jRealityV = new jRealityVisualization(vertices, faces);
-		jRealityV.createVisualization();
+		jRealityV.setVertices(vertices);
+		jRealityV.setFaces(faces);
+		jRealityV.startVisualization();
+	}
+	
+	public void subdivision(){
+		draw(model.subdivide());	
 	}
 	
 	protected double[] randomCoordGenerator() {
