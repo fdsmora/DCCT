@@ -3,7 +3,9 @@ package dcct.visualization;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import de.jreality.plugin.basic.Scene;
@@ -15,8 +17,9 @@ import de.jreality.plugin.basic.ViewShrinkPanelPlugin;
 public class SCGeneratePanelPlugin extends ViewShrinkPanelPlugin implements
 		ActionListener {
 	
-	private JButton btnGenerate = new JButton("Generate");
+	private JButton btnGenerate = new JButton("Generate for n processes");
 	private JTextField txtN = new JTextField();
+	private JPanel panel = new JPanel();
 	private final SceneGraphComponent sgc;
 	private Visualizer visualizer;
 	
@@ -24,10 +27,12 @@ public class SCGeneratePanelPlugin extends ViewShrinkPanelPlugin implements
 		this.sgc = sgc;
 		this.visualizer = visualizer;
 		setInitialPosition(SHRINKER_LEFT);
-		getShrinkPanel().add(btnGenerate);
-		getShrinkPanel().add(txtN);
-		txtN.setText("Type number of processes for initial complex");
+		txtN.setText("");
 		txtN.setSize(50, 50);
+		panel.add(btnGenerate);
+		panel.add(txtN);
+		panel.setLayout(new BoxLayout(panel,BoxLayout.Y_AXIS));
+		getShrinkPanel().add(panel);
 		btnGenerate.addActionListener(this);
 	}
 
@@ -50,10 +55,12 @@ public class SCGeneratePanelPlugin extends ViewShrinkPanelPlugin implements
 	}
 	
 	public void actionPerformed(ActionEvent e){
-		//visualizer.getModel().createInicialComplex(Integer.parseInt(txtN.getText()));
-		visualizer.draw(visualizer.getModel().createInicialComplex(3));
-
+		int n =0;
+	     try{  
+	    	 n = Integer.parseInt(txtN.getText());   
+	     } catch(NumberFormatException nfe){  
+	    	 n = 2;
+	     } 
+		visualizer.draw(visualizer.getModel().createInicialComplex(n));
 	}
-
-
 }

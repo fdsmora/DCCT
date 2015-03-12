@@ -2,15 +2,12 @@ package dcct.visualization;
 
 import java.awt.Color;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Random;
-import java.util.Set;
 
 import dcct.topology.DCModel;
 import dcct.topology.SimplicialComplex;
@@ -18,10 +15,17 @@ import dcct.topology.Simplex;
 import dcct.process.Process;
 import de.jreality.plugin.content.ContentLoader;
 import de.jreality.plugin.content.ContentTools;
+import de.jreality.plugin.menu.CameraMenu;
+import de.jreality.scene.tool.Tool;
+import de.jreality.tools.ClickWheelCameraZoomTool;
+import de.jreality.tools.DragEventTool;
+import de.jreality.tools.PointDragEvent;
+import de.jreality.tools.PointDragListener;
+import de.jreality.tools.RotateTool;
 
 public class Visualizer {
 
-	protected Map<String, Vertex> vertices = new LinkedHashMap<String, Vertex>();
+	protected Map<String, Vertex> vertices; 
 	protected List<int[]> faces;
 	protected jRealityVisualization jRealityV;
 	public DCModel getModel() {
@@ -42,6 +46,25 @@ public class Visualizer {
 		jRealityV.addPlugin(new ContentTools());
 		jRealityV.addPlugin(new SCPanelPlugin(jRealityV.getSgc(),this));
 		jRealityV.addPlugin(new SCGeneratePanelPlugin(jRealityV.getSgc(),this));
+		
+//		for (Tool t: jRealityV.getSgc().getTools())
+//			if (t.getClass().equals(DragEventTool.class))
+//			{
+//				((DragEventTool)t).addPointDragListener(new PointDragListener() {
+//					public void pointDragEnd(PointDragEvent e) {
+//					}
+//					public void pointDragStart(PointDragEvent e) {
+//					}
+//					public void pointDragged(PointDragEvent e) {
+//						jRealityV.pointDragged(e);
+//					}
+//				});
+//				break;
+//			}
+		
+		
+		
+		jRealityV.configViewer();
 	}
 	
 	public void startVisualization(){
@@ -58,6 +81,7 @@ public class Visualizer {
 				Color[] processColors = new Color[sc.totalDistinctProcesses()];
 				int indexCount = 0;
 				Queue<Color> qColors = new LinkedList<Color>(colors);
+				vertices = new LinkedHashMap<String, Vertex>();
 				faces = new ArrayList<int[]>(sc.getSimplices().size());
 				for (Simplex s : sc.getSimplices()) {
 					int[] face = new int[s.getProcessCount()];
@@ -69,7 +93,7 @@ public class Visualizer {
 						}else {
 							v = new Vertex(p);
 							v.index = indexCount++;
-							v.coordinates = randomCoordGenerator();
+							v.coordinates = randomCoordGenerator(indexCount);
 							setColor(v, p, qColors, processColors);
 							vertices.put(p.toString(),v);
 						}
@@ -94,12 +118,16 @@ public class Visualizer {
 		draw(model.subdivide());	
 	}
 	
-	protected double[] randomCoordGenerator() {
+	protected double[] randomCoordGenerator(int i) {
 		double[] coords = new double[3];
 		Random rand = new Random();
-		coords[0]=rand.nextInt(60);
-		coords[1]=rand.nextInt(60);
-		coords[2]=0.0;
+		int range = 4; 
+		int x = i%2==0 ? range:0;
+		coords[0]=rand.nextInt(range) - x;
+		rand = new Random();
+		coords[1]=rand.nextInt(range) - x;
+		rand = new Random();
+		coords[2]=rand.nextInt(range) - x;
 		return coords;
 	}
 
@@ -113,7 +141,7 @@ public class Visualizer {
 		System.out.println("-----------Vertices-------------");
 		for (Vertex v : vertices.values())
 			System.out.println(v);
-		System.out.println("-----------Faces-------------");
+		System.out.println("-----------Faces=" + faces.size() +"-------------");
 		System.out.print("[");
 		for (int[] f : faces){
 			String prefix = "";

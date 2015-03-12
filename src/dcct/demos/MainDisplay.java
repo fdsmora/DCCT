@@ -27,6 +27,9 @@ import de.jreality.shader.DefaultPointShader;
 import de.jreality.shader.DefaultPolygonShader;
 import de.jreality.shader.DefaultTextShader;
 import de.jreality.shader.ShaderUtility;
+import de.jreality.tools.DragEventTool;
+import de.jreality.tools.PointDragEvent;
+import de.jreality.tools.PointDragListener;
 import de.jtem.jrworkspace.plugin.sidecontainer.template.ShrinkPanelPlugin;
 
 public class MainDisplay {
@@ -34,8 +37,9 @@ public class MainDisplay {
 	public static JRViewer viewer = new JRViewer();
 	public static SceneGraphComponent sgc = new SceneGraphComponent();
 	public static SimplicialComplex sc;
-	
-	public MainDisplay(){}
+
+	public MainDisplay(){
+	}
 	
 	public static void main(String[] args) throws InterruptedException {
 		sc = new SimplicialComplex();
@@ -46,7 +50,7 @@ public class MainDisplay {
 		Simplex2 initial = new Simplex2(p,q,r);
 		
 		sc.addTriangle(initial);
-		
+				
 		configViewer();
 		
 		draw();
@@ -66,6 +70,7 @@ public class MainDisplay {
 	}
 	
 	public static void configViewer(){
+		
 		viewer.setShowPanelSlots(true,true,true,true);
 		viewer.addBasicUI();
 //		viewer.getController().registerPlugin(new Avatar());
@@ -80,7 +85,7 @@ public class MainDisplay {
 		ContentTools contentTools = new ContentTools();
 		viewer.registerPlugin(contentTools);
 	}
-	
+
 	public static void draw(){
 		setAppearance();
 		drawVertices();

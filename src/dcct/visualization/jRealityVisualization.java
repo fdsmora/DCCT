@@ -5,7 +5,6 @@ import java.awt.Font;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.swing.SwingConstants;
 
@@ -19,19 +18,18 @@ import de.jreality.plugin.content.ContentLoader;
 import de.jreality.plugin.content.ContentTools;
 import de.jreality.plugin.scene.Avatar;
 import de.jreality.plugin.scene.Sky;
-import de.jreality.plugin.scene.Terrain;
 import de.jreality.scene.Appearance;
 import de.jreality.scene.SceneGraphComponent;
 import de.jreality.scene.data.Attribute;
-import de.jreality.scene.data.DataList;
 import de.jreality.scene.data.StorageModel;
 import de.jreality.shader.DefaultGeometryShader;
 import de.jreality.shader.DefaultPointShader;
-import de.jreality.shader.DefaultPolygonShader;
 import de.jreality.shader.DefaultTextShader;
 import de.jreality.shader.ShaderUtility;
+import de.jreality.tools.DragEventTool;
+import de.jreality.tools.PointDragEvent;
+import de.jreality.tools.PointDragListener;
 import de.jtem.jrworkspace.plugin.Plugin;
-import de.jtem.jrworkspace.plugin.sidecontainer.template.ShrinkPanelPlugin;
 
 public class jRealityVisualization  {
 	
@@ -58,24 +56,59 @@ public class jRealityVisualization  {
 	protected Map<String, Vertex> vertices;
 	protected List<int[]> faces;
 	protected JRViewer viewer = new JRViewer();
+	//protected double[][] coordinates;
+	protected PointSetFactory psf;
+	
 	public SceneGraphComponent getSgc() {
+//		if (sgc == null)
+//		{
+//			sgc = new SceneGraphComponent();
+//			DragEventTool dragTool = new DragEventTool();
+//			sgc.addTool(dragTool);
+//
+//			dragTool.addPointDragListener(new PointDragListener() {
+//				public void pointDragEnd(PointDragEvent e) {
+//				}
+//				public void pointDragStart(PointDragEvent e) {
+//				}
+//				public void pointDragged(PointDragEvent e) {
+//					jRealityVisualization.this.pointDragged(e);
+//				}
+//			});
+//		}
+		
+		
 		return sgc;
 	}
 
 	public void setSgc(SceneGraphComponent sgc) {
-		jRealityVisualization.sgc = sgc;
+		this.sgc = sgc;
 	}
 
-	protected static SceneGraphComponent sgc = new SceneGraphComponent();
+	protected SceneGraphComponent sgc = new SceneGraphComponent();
 	protected List<Plugin> plugins = new ArrayList<Plugin>();
+	DragEventTool dragTool = new DragEventTool();
 	
 	public jRealityVisualization(){
+		//sgc.addTool(dragTool);
+		
+		dragTool.addPointDragListener(new PointDragListener() {
+			public void pointDragEnd(PointDragEvent e) {
+			}
+			public void pointDragStart(PointDragEvent e) {
+			}
+			public void pointDragged(PointDragEvent e) {
+				//jRealityVisualization.this.pointDragged(e);
+			}
+		});
 	}
 	
 	public void startVisualization(){
+		sgc = getSgc();
+		sgc.removeAllChildren();
 		configVertices();
 		configFaces();
-		configViewer(viewer);
+		//setAppearance();
 		viewer.startup();
 	}
 	
@@ -97,7 +130,9 @@ public class jRealityVisualization  {
 			faceFactory.setGenerateFaceNormals(true);
 			faceFactory.setGenerateEdgesFromFaces(true);
 			faceFactory.update();
-			sgc.setGeometry(faceFactory.getPointSet());
+			
+			
+			getSgc().setGeometry(faceFactory.getPointSet());
 		}
 	}
 
@@ -105,7 +140,7 @@ public class jRealityVisualization  {
 		if (vertices!=null){
 			SceneGraphComponent sgcV = new SceneGraphComponent();
 			
-			PointSetFactory psf = new PointSetFactory();
+			psf = new PointSetFactory();
 			psf.setVertexCount(vertices.size());
 			psf.setVertexCoordinates(getVertexCoordinates());
 			psf.setVertexColors(toDoubleArray(getVertexColors()));
@@ -114,10 +149,19 @@ public class jRealityVisualization  {
 			
 			sgcV.setGeometry(psf.getPointSet());
 			
-			sgc.addChild(sgcV);
+			getSgc().addChild(sgcV);
 		}
 		
 	}
+	
+//	public void pointDragged(PointDragEvent e) {
+//		coordinates[e.getIndex()][0]=e.getX();
+//		coordinates[e.getIndex()][1]=e.getY();
+//		coordinates[e.getIndex()][2]=e.getZ();
+//		psf.setVertexCoordinates(getVertexCoordinates());
+//		psf.update();
+//	}
+	
 	
 	protected int[][] getFaceIndices(){
 		int[][] faceIndices = new int[faces.size()][];
@@ -129,10 +173,12 @@ public class jRealityVisualization  {
 	}
 
 	protected double[][] getVertexCoordinates() {
+
 		double[][] coordinates = new double[vertices.size()][3];
-		int i=0;
-		for (Vertex v:vertices.values())
-			coordinates[i++]=v.getCoordinates();
+			int i=0;
+			for (Vertex v:vertices.values())
+				coordinates[i++]=v.getCoordinates();
+
 		return coordinates;
 	}
 	
@@ -166,7 +212,7 @@ public class jRealityVisualization  {
 		return array;
 	}
 	
-	public void configViewer(JRViewer viewer){
+	public void configViewer(){
 		viewer.setShowPanelSlots(true,true,true,true);
 		viewer.addBasicUI();
 		for (Plugin p : plugins){
@@ -176,18 +222,19 @@ public class jRealityVisualization  {
 //		viewer.getController().registerPlugin(new Terrain());
 //		viewer.getController().registerPlugin(new Sky());
 //		viewer.registerPlugin(new SCPanelPlugin(sgc,sc));
-		viewer.setShowPanelSlots(true, true, true, true);
-		viewer.setContent(sgc);
+		viewer.setShowPanelSlots(true, true, false, false);
+		viewer.setContent(getSgc());
 		viewer.addContentUI();
+		
 
 	}
 	
 	protected void setAppearance(){
-		sgc.setAppearance(new Appearance());
+		getSgc().setAppearance(new Appearance());
 		DefaultGeometryShader dps = ShaderUtility.createDefaultGeometryShader(sgc.getAppearance(), false);
 		
 		DefaultPointShader ps = (DefaultPointShader) dps.getPointShader();
-		ps.setPointRadius(0.8);
+		ps.setPointRadius(0.2);
 		//ps.setDiffuseColor(de.jreality.shader.Color.red);
 		dps.setShowPoints(true);
 		// Labels
@@ -197,12 +244,12 @@ public class jRealityVisualization  {
 	    Double scale = new Double(0.01);
 	    pts.setScale(1.5*scale);
 	    // apply a translation to the position of the label in camera coordinates (-z away from camera)
-	    double[] offset = new double[]{-.1,0,0.3};
+	    double[] offset = new double[]{-.3,0,0.3};
 	    pts.setOffset(offset);
 	    // the alignment specifies a direction in which the label will be shifted in the 2d-plane of the billboard
-	    pts.setAlignment(SwingConstants.NORTH_WEST);
+	    pts.setAlignment(SwingConstants.TRAILING);
 	    // here you can specify any available Java font
-	    Font f = new Font("Arial Bold", Font.ITALIC, 24);
+	    Font f = new Font("Arial Bold", Font.ITALIC, 20);
 	    pts.setFont(f);
 	}
 }

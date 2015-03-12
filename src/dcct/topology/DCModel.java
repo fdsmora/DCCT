@@ -44,6 +44,7 @@ public class DCModel {
 	
 	public SimplicialComplex createInicialComplex(int n){
 		initialComplex = new SimplicialComplex(createSimplex(n));
+		protocolComplex = null;
 		return initialComplex;
 	}
 	
