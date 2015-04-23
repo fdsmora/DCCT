@@ -19,8 +19,6 @@ public class Main {
 		
 		model = new DCModel(new AtomicImmediateSnapshot());
 		
-		model.createInicialComplex(4);
-		
 		Visualizer visualizer = new Visualizer(model);
 		visualizer.startVisualization();
 		

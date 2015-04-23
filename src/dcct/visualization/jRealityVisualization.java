@@ -33,88 +33,45 @@ import de.jtem.jrworkspace.plugin.Plugin;
 
 public class jRealityVisualization  {
 	
-	public Map<String, Vertex> getVertices() {
-		return vertices;
-	}
-
-	public void setVertices(Map<String, Vertex> vertices) {
-		this.vertices = vertices;
-	}
-
-	public List<int[]> getFaces() {
-		return faces;
-	}
-
-	public void setFaces(List<int[]> faces) {
-		this.faces = faces;
-	}
-	
-	public void addPlugin(Plugin plugin){
-		plugins.add(plugin);
-	}
-
+	protected double[][] coordinates;
 	protected Map<String, Vertex> vertices;
 	protected List<int[]> faces;
 	protected JRViewer viewer = new JRViewer();
-	//protected double[][] coordinates;
-	protected PointSetFactory psf;
-	
-	public SceneGraphComponent getSgc() {
-//		if (sgc == null)
-//		{
-//			sgc = new SceneGraphComponent();
-//			DragEventTool dragTool = new DragEventTool();
-//			sgc.addTool(dragTool);
-//
-//			dragTool.addPointDragListener(new PointDragListener() {
-//				public void pointDragEnd(PointDragEvent e) {
-//				}
-//				public void pointDragStart(PointDragEvent e) {
-//				}
-//				public void pointDragged(PointDragEvent e) {
-//					jRealityVisualization.this.pointDragged(e);
-//				}
-//			});
-//		}
-		
-		
-		return sgc;
-	}
-
-	public void setSgc(SceneGraphComponent sgc) {
-		this.sgc = sgc;
-	}
-
 	protected SceneGraphComponent sgc = new SceneGraphComponent();
+	protected SceneGraphComponent sgcV = new SceneGraphComponent();
+	protected DragEventTool dragTool = new DragEventTool();
+	protected IndexedFaceSetFactory faceFactory = new IndexedFaceSetFactory();
+	protected PointSetFactory psf = new PointSetFactory();
 	protected List<Plugin> plugins = new ArrayList<Plugin>();
-	DragEventTool dragTool = new DragEventTool();
-	
+
 	public jRealityVisualization(){
-		//sgc.addTool(dragTool);
-		
-		dragTool.addPointDragListener(new PointDragListener() {
-			public void pointDragEnd(PointDragEvent e) {
-			}
-			public void pointDragStart(PointDragEvent e) {
-			}
-			public void pointDragged(PointDragEvent e) {
-				//jRealityVisualization.this.pointDragged(e);
-			}
-		});
+
 	}
 	
 	public void startVisualization(){
-		sgc = getSgc();
 		sgc.removeAllChildren();
 		configVertices();
 		configFaces();
-		//setAppearance();
+		setAppearance();
 		viewer.startup();
+	}
+
+	protected void configVertices() {
+		if (vertices!=null){			
+			psf.setVertexCount(vertices.size());
+			psf.setVertexCoordinates(getVertexCoordinates());
+			psf.setVertexColors(toDoubleArray(getVertexColors()));
+			setVertexLabels(psf);
+			psf.update();
+
+			sgcV.setGeometry(psf.getPointSet());			
+			sgc.addChild(sgcV);
+		}
 	}
 	
 	protected void configFaces() {		
 		if (faces!=null) {
-			IndexedFaceSetFactory faceFactory = new IndexedFaceSetFactory();
+			
 			int f = faces.size();
 			
 //			Color[] faceColors = new Color[f];
@@ -131,37 +88,20 @@ public class jRealityVisualization  {
 			faceFactory.setGenerateEdgesFromFaces(true);
 			faceFactory.update();
 			
-			
-			getSgc().setGeometry(faceFactory.getPointSet());
+			sgc.setGeometry(faceFactory.getPointSet());
 		}
 	}
-
-	protected void configVertices() {
-		if (vertices!=null){
-			SceneGraphComponent sgcV = new SceneGraphComponent();
-			
-			psf = new PointSetFactory();
-			psf.setVertexCount(vertices.size());
-			psf.setVertexCoordinates(getVertexCoordinates());
-			psf.setVertexColors(toDoubleArray(getVertexColors()));
-			setVertexLabels(psf);
-			psf.update();
-			
-			sgcV.setGeometry(psf.getPointSet());
-			
-			getSgc().addChild(sgcV);
-		}
-		
+	
+	public void pointDragged(PointDragEvent e) {
+		coordinates[e.getIndex()][0]=e.getX();
+		coordinates[e.getIndex()][1]=e.getY();
+		coordinates[e.getIndex()][2]=e.getZ();
+		//psf.setVertexCoordinates(getVertexCoordinates());
+		psf.setVertexCoordinates(coordinates);
+		psf.update();
+		faceFactory.setVertexCoordinates(coordinates);
+		faceFactory.update();
 	}
-	
-//	public void pointDragged(PointDragEvent e) {
-//		coordinates[e.getIndex()][0]=e.getX();
-//		coordinates[e.getIndex()][1]=e.getY();
-//		coordinates[e.getIndex()][2]=e.getZ();
-//		psf.setVertexCoordinates(getVertexCoordinates());
-//		psf.update();
-//	}
-	
 	
 	protected int[][] getFaceIndices(){
 		int[][] faceIndices = new int[faces.size()][];
@@ -173,12 +113,13 @@ public class jRealityVisualization  {
 	}
 
 	protected double[][] getVertexCoordinates() {
-
-		double[][] coordinates = new double[vertices.size()][3];
+	
+		//if (coordinates ==null){
+			coordinates = new double[vertices.size()][3];
 			int i=0;
 			for (Vertex v:vertices.values())
 				coordinates[i++]=v.getCoordinates();
-
+		//}
 		return coordinates;
 	}
 	
@@ -213,24 +154,32 @@ public class jRealityVisualization  {
 	}
 	
 	public void configViewer(){
+		sgc.addTool(dragTool);
+		
+		dragTool.addPointDragListener(new PointDragListener() {
+			public void pointDragEnd(PointDragEvent e) {
+			}
+			public void pointDragStart(PointDragEvent e) {
+			}
+			public void pointDragged(PointDragEvent e) {
+				jRealityVisualization.this.pointDragged(e);
+			}
+		});
+		
 		viewer.setShowPanelSlots(true,true,true,true);
 		viewer.addBasicUI();
 		for (Plugin p : plugins){
 			viewer.registerPlugin(p);
 		}
-//		viewer.getController().registerPlugin(new Avatar());
-//		viewer.getController().registerPlugin(new Terrain());
-//		viewer.getController().registerPlugin(new Sky());
 //		viewer.registerPlugin(new SCPanelPlugin(sgc,sc));
 		viewer.setShowPanelSlots(true, true, false, false);
-		viewer.setContent(getSgc());
+		viewer.setContent(sgc);
 		viewer.addContentUI();
-		
 
 	}
 	
 	protected void setAppearance(){
-		getSgc().setAppearance(new Appearance());
+		sgc.setAppearance(new Appearance());
 		DefaultGeometryShader dps = ShaderUtility.createDefaultGeometryShader(sgc.getAppearance(), false);
 		
 		DefaultPointShader ps = (DefaultPointShader) dps.getPointShader();
@@ -252,4 +201,29 @@ public class jRealityVisualization  {
 	    Font f = new Font("Arial Bold", Font.ITALIC, 20);
 	    pts.setFont(f);
 	}
+	
+	public void addPlugin(Plugin plugin){
+		plugins.add(plugin);
+	}
+	
+	public SceneGraphComponent getSgc() {
+		return sgc;
+	}
+
+	public Map<String, Vertex> getVertices() {
+		return vertices;
+	}
+
+	public void setVertices(Map<String, Vertex> vertices) {
+		this.vertices = vertices;
+	}
+
+	public List<int[]> getFaces() {
+		return faces;
+	}
+
+	public void setFaces(List<int[]> faces) {
+		this.faces = faces;
+	}
+
 }

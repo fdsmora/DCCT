@@ -28,6 +28,7 @@ public class Visualizer {
 	protected Map<String, Vertex> vertices; 
 	protected List<int[]> faces;
 	protected jRealityVisualization jRealityV;
+	
 	public DCModel getModel() {
 		return model;
 	}
@@ -44,7 +45,6 @@ public class Visualizer {
 		// Para permitir rotación y zoom
 		jRealityV.addPlugin(new ContentLoader());
 		jRealityV.addPlugin(new ContentTools());
-		jRealityV.addPlugin(new SCPanelPlugin(jRealityV.getSgc(),this));
 		jRealityV.addPlugin(new SCGeneratePanelPlugin(jRealityV.getSgc(),this));
 		
 //		for (Tool t: jRealityV.getSgc().getTools())
@@ -61,9 +61,6 @@ public class Visualizer {
 //				});
 //				break;
 //			}
-		
-		
-		
 		jRealityV.configViewer();
 	}
 	

@@ -16,8 +16,7 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/Fausto/git/jreality/lib/antlr-3.4-complete.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Fausto/git/jreality/lib/colorpicker.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Fausto/git/jreality/lib/sunflow.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Fausto/Documents/MCC UNAM/tesis/impl/DCCT/lib/colorpicker.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Fausto/Documents/MCC UNAM/tesis/impl/DCCT/lib/xmlpull_1_0_5.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

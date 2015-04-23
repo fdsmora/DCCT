@@ -1,7 +1,7 @@
 package dcct.combinatorics;
 //For now only works for 0>n<10
 public class ScenarioGenerator {
-	protected static StringBuilder allCombinations = new StringBuilder();
+	protected static StringBuilder allCombinations;
 	protected static String delimiter ="|";
 	
 	// TEST
@@ -12,6 +12,7 @@ public class ScenarioGenerator {
 	
 	public static String generate(int n){
 		++n; // to get correct number of processes
+		allCombinations = new StringBuilder();
 		String base = buildBaseCombination(n);
 		putCombination(base);
 		generate(base,-1);
