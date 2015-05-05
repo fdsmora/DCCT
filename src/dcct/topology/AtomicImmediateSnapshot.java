@@ -7,7 +7,6 @@ import java.util.Set;
 import dcct.process.Process;
 import dcct.combinatorics.*;
 
-import org.apache.commons.collections4.iterators.PermutationIterator;
 public class AtomicImmediateSnapshot implements CommunicationModel{
 
 	public AtomicImmediateSnapshot(){}
@@ -20,28 +19,24 @@ public class AtomicImmediateSnapshot implements CommunicationModel{
 			String[] scenarios = strAllScenarios.split("\n");
 			for (String scn : scenarios) {
 				String[] groups = scn.split("\\" + ScenarioGenerator.getDelimiter());
-				// Change PermutationIterator to something more efficient
-				PermutationIterator<Process> iter = new PermutationIterator<Process>(s.processes);
-				while (iter.hasNext()) {
-					List<Process> permut = iter.next();
-					String[] memory = new String[permut.size()];
-					Set<Process> newProcesses = new LinkedHashSet<Process>(permut.size());
-					for (String g : groups) {
-						int[] indices = toIndices(g);
-						newProcesses.addAll(performExecution(permut, memory, indices));
-					}
-					newSimplices.add(new Simplex(newProcesses));
+				List<Process> processes = new ArrayList<Process>(s.getProcesses());
+				String[] memory = new String[processes.size()];
+				Set<Process> newProcesses = new LinkedHashSet<Process>(processes.size());
+				for (String g : groups) {
+					int[] indices = toIndices(g);
+					newProcesses.addAll(performExecution(processes, memory, indices));
 				}
+				newSimplices.add(new Simplex(newProcesses));
 			}
 		}
 		return newSimplices;
 	}
 	
-	protected List<Process> performExecution(List<Process> permut, String[] memory, int[] indices) {
+	protected List<Process> performExecution(List<Process> processes, String[] memory, int[] indices) {
 		List<Process> tempProcesses = new ArrayList<Process>(indices.length);
 		int i;
 		for(i=0;i<indices.length;i++){
-			Process p = (Process)permut.get(indices[i]).clone();
+			Process p = (Process)processes.get(indices[i]).clone();
 			p.write(memory);
 			tempProcesses.add(p);
 		}
@@ -58,6 +53,7 @@ public class AtomicImmediateSnapshot implements CommunicationModel{
 			indices[i]=Integer.parseInt(String.valueOf(group.charAt(i)));
 		return indices;
 	}
+	
 }
 
 

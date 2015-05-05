@@ -40,8 +40,8 @@ public class DCModel {
 		else if (initialComplex!=null)
 			protocolComplex = subdivide(initialComplex);;
 		return protocolComplex;
-	}
-	
+	}	
+	//Rename to something more like 'start of everything', that's why we also set protocolComplex=null.
 	public SimplicialComplex createInicialComplex(int n){
 		initialComplex = new SimplicialComplex(createSimplex(n));
 		protocolComplex = null;

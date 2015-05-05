@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project default="create_run_jar" name="Create Runnable Jar for Project DCCT with libraries in sub-folder">
+    <!--this file was created by Eclipse Runnable JAR Export Wizard-->
+    <!--ANT 1.7 is required                                        -->
+    <target name="create_run_jar">
+        <jar destfile="C:/Users/Fausto/Documents/MCC UNAM/tesis/impl/DCCT/DCCT_error.jar">
+            <manifest>
+                <attribute name="Main-Class" value="dcct.test.Main"/>
+                <attribute name="Class-Path" value=". DCCT_error_lib/colorpicker.jar DCCT_error_lib/xmlpull_1_0_5.jar DCCT_error_lib/jreality-1.1.jar DCCT_error_lib/jogl-all-2.1.3.jar DCCT_error_lib/gluegen-rt-2.1.3.jar DCCT_error_lib/jrworkspace-1.1.jar DCCT_error_lib/commons-collections4-4.0.jar DCCT_error_lib/netutil-1.0.0.jar DCCT_error_lib/xstream-parent-1.4.7.jar DCCT_error_lib/xpp3_min-1.1.4c.jar DCCT_error_lib/itextpdf-5.5.5.jar DCCT_error_lib/sunflow-0.07.2.jar DCCT_error_lib/janino-2.7.8.jar DCCT_error_lib/commons-compiler-2.7.8.jar DCCT_error_lib/jterm-1.1.jar DCCT_error_lib/beans-1.1.jar"/>
+            </manifest>
+            <fileset dir="C:/Users/Fausto/Documents/MCC UNAM/tesis/impl/DCCT/target/classes"/>
+        </jar>
+        <delete dir="C:/Users/Fausto/Documents/MCC UNAM/tesis/impl/DCCT/DCCT_error_lib"/>
+        <mkdir dir="C:/Users/Fausto/Documents/MCC UNAM/tesis/impl/DCCT/DCCT_error_lib"/>
+        <copy file="C:/Users/Fausto/Documents/MCC UNAM/tesis/impl/DCCT/lib/colorpicker.jar" todir="C:/Users/Fausto/Documents/MCC UNAM/tesis/impl/DCCT/DCCT_error_lib"/>
+        <copy file="C:/Users/Fausto/Documents/MCC UNAM/tesis/impl/DCCT/lib/xmlpull_1_0_5.jar" todir="C:/Users/Fausto/Documents/MCC UNAM/tesis/impl/DCCT/DCCT_error_lib"/>
+        <copy file="C:/Users/Fausto/.m2/repository/de/jreality/jreality/1.1/jreality-1.1.jar" todir="C:/Users/Fausto/Documents/MCC UNAM/tesis/impl/DCCT/DCCT_error_lib"/>
+        <copy file="C:/Users/Fausto/.m2/repository/org/jogamp/jogl/jogl-all/2.1.3/jogl-all-2.1.3.jar" todir="C:/Users/Fausto/Documents/MCC UNAM/tesis/impl/DCCT/DCCT_error_lib"/>
+        <copy file="C:/Users/Fausto/.m2/repository/org/jogamp/gluegen/gluegen-rt/2.1.3/gluegen-rt-2.1.3.jar" todir="C:/Users/Fausto/Documents/MCC UNAM/tesis/impl/DCCT/DCCT_error_lib"/>
+        <copy file="C:/Users/Fausto/.m2/repository/de/jtem/jrworkspace/1.1/jrworkspace-1.1.jar" todir="C:/Users/Fausto/Documents/MCC UNAM/tesis/impl/DCCT/DCCT_error_lib"/>
+        <copy file="C:/Users/Fausto/.m2/repository/org/apache/commons/commons-collections4/4.0/commons-collections4-4.0.jar" todir="C:/Users/Fausto/Documents/MCC UNAM/tesis/impl/DCCT/DCCT_error_lib"/>
+        <copy file="C:/Users/Fausto/.m2/repository/de/sciss/netutil/1.0.0/netutil-1.0.0.jar" todir="C:/Users/Fausto/Documents/MCC UNAM/tesis/impl/DCCT/DCCT_error_lib"/>
+        <copy file="C:/Users/Fausto/.m2/repository/com/thoughtworks/xstream/xstream-parent/1.4.7/xstream-parent-1.4.7.jar" todir="C:/Users/Fausto/Documents/MCC UNAM/tesis/impl/DCCT/DCCT_error_lib"/>
+        <copy file="C:/Users/Fausto/.m2/repository/xpp3/xpp3_min/1.1.4c/xpp3_min-1.1.4c.jar" todir="C:/Users/Fausto/Documents/MCC UNAM/tesis/impl/DCCT/DCCT_error_lib"/>
+        <copy file="C:/Users/Fausto/.m2/repository/com/itextpdf/itextpdf/5.5.5/itextpdf-5.5.5.jar" todir="C:/Users/Fausto/Documents/MCC UNAM/tesis/impl/DCCT/DCCT_error_lib"/>
+        <copy file="C:/Users/Fausto/.m2/repository/org/sunflow/sunflow/0.07.2/sunflow-0.07.2.jar" todir="C:/Users/Fausto/Documents/MCC UNAM/tesis/impl/DCCT/DCCT_error_lib"/>
+        <copy file="C:/Users/Fausto/.m2/repository/org/codehaus/janino/janino/2.7.8/janino-2.7.8.jar" todir="C:/Users/Fausto/Documents/MCC UNAM/tesis/impl/DCCT/DCCT_error_lib"/>
+        <copy file="C:/Users/Fausto/.m2/repository/org/codehaus/janino/commons-compiler/2.7.8/commons-compiler-2.7.8.jar" todir="C:/Users/Fausto/Documents/MCC UNAM/tesis/impl/DCCT/DCCT_error_lib"/>
+        <copy file="C:/Users/Fausto/.m2/repository/de/jtem/jterm/1.1/jterm-1.1.jar" todir="C:/Users/Fausto/Documents/MCC UNAM/tesis/impl/DCCT/DCCT_error_lib"/>
+        <copy file="C:/Users/Fausto/.m2/repository/de/jtem/beans/1.1/beans-1.1.jar" todir="C:/Users/Fausto/Documents/MCC UNAM/tesis/impl/DCCT/DCCT_error_lib"/>
+    </target>
+</project>
