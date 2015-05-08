@@ -44,7 +44,8 @@ public class ISScenarioGenerator {
 			for (int j : R){
 				scenario.setCharAt(k, (char)('0'+j));
 				S.remove(j);
-				if (first+h==n){
+				//if (first+h==n){
+				if (S.cardinality()==0){
 					allScenarios.append(scenario.toString());
 					allScenarios.append("\n");
 					return;
