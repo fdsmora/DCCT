@@ -14,8 +14,6 @@ import dcct.combinatorics.*;
  *
  */
 public class AtomicImmediateSnapshot implements CommunicationModel{
-
-	protected ISScenarioGenerator scenarioGenerator;
 	
 	/**
 	 * Simulates all possible execution scenarios of processes communicating through shared memory.
@@ -23,15 +21,14 @@ public class AtomicImmediateSnapshot implements CommunicationModel{
 	 * protocol complex will be obtained.  
 	 */
 	public Set<Simplex> communicationRound(Set<Simplex> simplices){
-		scenarioGenerator = new ISScenarioGenerator();
 		
 		Set<Simplex> newSimplices = new LinkedHashSet<Simplex>();
 		
 		for(Simplex s: simplices){
-			String strAllScenarios = scenarioGenerator.generate(s.dimension());
+			String strAllScenarios = PartitionGenerator.generate(s.dimension());
 			String[] scenarios = strAllScenarios.split("\n");
 			for (String scn : scenarios) {
-				String[] groups = scn.split("\\" + String.valueOf(scenarioGenerator.getDelimiter()));
+				String[] groups = scn.split("\\" + String.valueOf(PartitionGenerator.getDelimiter()));
 				List<Process> processes = new ArrayList<Process>(s.getProcesses());
 				String[] sharedMemory = new String[processes.size()];
 				Set<Process> newProcesses = new LinkedHashSet<Process>(processes.size());
