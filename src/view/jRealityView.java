@@ -181,7 +181,8 @@ public class jRealityView implements View {
 		viewer.addBasicUI();
 		viewer.registerPlugin(new ContentLoader());
 		viewer.registerPlugin(new ContentTools());
-		viewer.registerPlugin(new SCGeneratePanelPlugin(model));
+		//viewer.registerPlugin(new SCGeneratePanelPlugin(model));
+		viewer.registerPlugin(new SCPanel(model));
 		viewer.setShowPanelSlots(true, true, false, false);
 		viewer.setContent(sgc);
 		viewer.addContentUI();

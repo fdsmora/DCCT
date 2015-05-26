@@ -41,4 +41,19 @@ public class SimplicialComplex {
 						return Integer.compare(s.dimension(),t.dimension());
 					}}).dimension();
 	}
+	
+	@Override
+	public String toString(){
+		StringBuilder sb = new StringBuilder();
+		String prefix = "";
+		sb.append("{");
+		for (Simplex s : this.simplices){
+			sb.append(prefix);
+			sb.append(s.toString());
+			prefix = ",";
+		}
+		sb.append("}");
+		return sb.toString();
+	}
+	
 }

@@ -43,4 +43,18 @@ public class Simplex {
 		return hashC;
 	}
 	
+	@Override
+	public String toString(){
+		StringBuilder sb = new StringBuilder();
+		String prefix = "";
+		sb.append("{");
+		for (Process p : this. processes){
+			sb.append(prefix);
+			sb.append(p.toString());
+			prefix = ",";
+		}
+		sb.append("}");
+		return sb.toString();
+	}
+	
 }

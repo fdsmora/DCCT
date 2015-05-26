@@ -3,11 +3,13 @@ package dctopology;
 public abstract class Process implements Cloneable {
 
 	protected int id = -1;
+	protected String name = "";
 	protected String[] view = null;
 	
 	public String getView() {
 		if (this.view == null)
-			return Integer.toString(this.id);
+			return name;
+			//return Integer.toString(this.id);
 		String prefix = "";
 		StringBuilder sb = new StringBuilder();
 		for(String v : this.view){
@@ -35,7 +37,7 @@ public abstract class Process implements Cloneable {
 	
 	@Override 
 	public String toString(){
-		return String.format("(%d,%s)", this.id, getView());
+		return String.format("(%d, %s)", this.id, getView());
 	}
 	
 	@Override
@@ -49,12 +51,6 @@ public abstract class Process implements Cloneable {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-//		finally
-//		{
-//			p = new Process(this.id);
-//			if (this.view != null)
-//				p.view = this.view.clone();
-//		}
 		return p;
 	}
 	@Override 
@@ -66,5 +62,13 @@ public abstract class Process implements Cloneable {
 	@Override 
 	public int hashCode(){
 		return this.id + this.getView().hashCode();
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 }

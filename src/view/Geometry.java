@@ -75,7 +75,7 @@ public class Geometry {
 		rand = new Random();
 		coords[1]=rand.nextInt(range) - x;
 		rand = new Random();
-		coords[2]=rand.nextInt(range) - x;
+		coords[2]=0;//rand.nextInt(range) - x;
 		return coords;
 	}
 
