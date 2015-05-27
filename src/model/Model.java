@@ -1,6 +1,8 @@
 package model;
 
+import java.awt.Color;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -17,8 +19,12 @@ public class Model {
 	protected SimplicialComplex protocolComplex;
 	protected CommunicationMechanism communicationMechanism;
 	protected Map<String, List<String>> availableCommunicationModels = new LinkedHashMap<String, List<String>>();
-	protected boolean chromatic = false;
+	protected boolean chromatic = true;
+	protected int n =0;
 	protected View view;
+	protected List<Color> pColors;
+	public static final Color[] DEFAULT_COLORS = {Color.BLUE, Color.WHITE, Color.RED, Color.GREEN, Color.YELLOW};
+	protected static final int MAX_COLORS = 5;
 	
 	public Model(){
 		List<String> smOptions = new ArrayList<String>();
@@ -26,7 +32,7 @@ public class Model {
 		availableCommunicationModels.put("Shared memory", smOptions);
 	}
 	
-	public SimplicialComplex createInitialComplex(int n, List<String> pNames){
+	public SimplicialComplex createInitialComplex(List<String> pNames){	
 		Process[] processes = new Process[n];
 		for (int i = 0; i<n; i++){
 			processes[i]= communicationMechanism.createProcess(i);
@@ -106,6 +112,33 @@ public class Model {
 		else 
 			System.out.println("null");
 		return null;
+	}
+
+	public int getN() {
+		return n;
+	}
+
+	public void setN(int n) {
+		this.n = n<1? 2:n;
+	}
+
+	public List<Color> getSimplicialComplexColors() {
+		if (chromatic){
+			if (pColors == null)
+				return Arrays.asList(DEFAULT_COLORS);
+		} else return null;
+		
+		return pColors;
+	}
+
+	public void setSimplicialComplexColors(List<Color> pColors) {
+		// Add additional colors to prevent cases when there are less colors than processes.
+		if (pColors.size()<MAX_COLORS){
+			for (int i=MAX_COLORS-pColors.size(); i>0; i--){
+				pColors.add(DEFAULT_COLORS[i]);
+			}
+		}
+		this.pColors = pColors;
 	}
 	
 	

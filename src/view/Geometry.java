@@ -17,18 +17,19 @@ import dctopology.SimplicialComplex;
 public class Geometry {
 	protected Map<String, Vertex> vertices; 
 	protected List<int[]> faces;
-	protected static List<Color> colors = Arrays.asList(Color.WHITE,Color.BLACK,Color.GREEN,Color.RED,
-			Color.BLUE,Color.YELLOW, Color.PINK, Color.CYAN, Color.MAGENTA);
+	protected static final Color DEFAULT_COLOR = Color.GREEN;
+//	protected static List<Color> colors = Arrays.asList(Color.WHITE,Color.BLACK,Color.GREEN,Color.RED,
+//			Color.BLUE,Color.YELLOW, Color.PINK, Color.CYAN, Color.MAGENTA);
 	
-	public Geometry(SimplicialComplex sc){
+	public Geometry(SimplicialComplex sc, List<Color> colors){
 		if (sc!=null) {
-			if (colors == null || sc.totalDistinctProcesses() > colors.size())
-				throw new IllegalArgumentException(
-						"Not enough colors to assign to all processes.");
+//			if (colors == null || sc.totalDistinctProcesses() > colors.size())
+//				throw new IllegalArgumentException(
+//						"Not enough colors to assign to all processes.");
 			
 			Color[] processColors = new Color[sc.totalDistinctProcesses()];
 			int indexCount = 0;
-			Queue<Color> qColors = new LinkedList<Color>(colors);
+			Queue<Color> qColors = colors == null? null : new LinkedList<Color>(colors) ;
 			
 			vertices = new LinkedHashMap<String, Vertex>();
 			faces = new ArrayList<int[]>(sc.getSimplices().size());
@@ -54,10 +55,6 @@ public class Geometry {
 		}
 	}
 
-	public List<Color> getColors() {
-		return colors;
-	}
-
 	public Map<String, Vertex> getVertices() {
 		return vertices;
 	}
@@ -80,9 +77,12 @@ public class Geometry {
 	}
 
 	protected void setColor(Vertex v, Process p, Queue<Color> qColors, Color[] pColors){
-		if (pColors[p.getId()]==null)
-			pColors[p.getId()]=qColors.remove();
-		v.color=pColors[p.getId()];	
+		if (qColors != null){
+			if (pColors[p.getId()]==null)
+				pColors[p.getId()]= qColors.remove();
+			v.color=pColors[p.getId()];	
+		}else 
+			v.color=DEFAULT_COLOR;
 	}
 	
 	public void test(){

@@ -50,7 +50,7 @@ public class jRealityView implements View {
 	
 	public void update(String action) {
 		complex = action=="i"? model.getInitialComplex() : model.getProtocolComplex();
-		g = new Geometry(complex);
+		g = new Geometry(complex, model.getSimplicialComplexColors());
 		updateView();
 	}
 

@@ -27,7 +27,6 @@ import model.Model;
 public class SCGeneratePanelPlugin extends ViewShrinkPanelPlugin implements
 		ActionListener {
 	
-	
 	private final JButton btnGenerateIC = new JButton("Generate!");
 	private final JButton btnGeneratePC = new JButton("Generate!");
 	private final JButton btnBackStartOver = new JButton("Back");
@@ -177,7 +176,7 @@ public class SCGeneratePanelPlugin extends ViewShrinkPanelPlugin implements
 			}
 			List<String> lpNames = new ArrayList<String>(n);
 			lpNames.addAll(pNames);
-			model.createInitialComplex(n, lpNames);
+			//model.createInitialComplex(n, lpNames);
 			initialComplexPanel.setVisible(false);
 			showProtocolComplexControls();
 		}else if (command == "generatePC"){
