@@ -202,27 +202,27 @@ public class SCGeneratePanelPlugin extends ViewShrinkPanelPlugin implements
 	}
 
 	private void displayModelSubOptions(String selectedModel) {
-		Map<String, List<String>> modelOptions = model.getAvailableCommunicationModels();
-		List<String> subOptions = modelOptions.get(selectedModel);
-		
-		String[] subOptionsArr = new String[subOptions.size()];
-		subOptions.toArray(subOptionsArr);
-		
-		communicationModelSubOptions.setModel(new DefaultComboBoxModel<String>(subOptionsArr));
+//		Map<String, List<String>> modelOptions = model.getAvailableCommunicationModels();
+//		List<String> subOptions = modelOptions.get(selectedModel);
+//		
+//		String[] subOptionsArr = new String[subOptions.size()];
+//		subOptions.toArray(subOptionsArr);
+//		
+//		communicationModelSubOptions.setModel(new DefaultComboBoxModel<String>(subOptionsArr));
 		
 	}
 
 	protected void displayModelOptions() {
-		Map<String, List<String>> modelOptions = model.getAvailableCommunicationModels();
-		List<String> options = new ArrayList<String>(modelOptions.keySet());
-		String[] optionsArr = new String[options.size()];
-		options.toArray(optionsArr);
-		communicationModelOptions.setModel(new DefaultComboBoxModel<String>(optionsArr));
-		
-		displayModelSubOptions(options.get(0));
-		
-		protocolComplexPanel.setVisible(true);
-		panel.setBorder(BorderFactory.createTitledBorder("Protocol complex"));
+//		Map<String, List<String>> modelOptions = model.getAvailableCommunicationModels();
+//		List<String> options = new ArrayList<String>(modelOptions.keySet());
+//		String[] optionsArr = new String[options.size()];
+//		options.toArray(optionsArr);
+//		communicationModelOptions.setModel(new DefaultComboBoxModel<String>(optionsArr));
+//		
+//		displayModelSubOptions(options.get(0));
+//		
+//		protocolComplexPanel.setVisible(true);
+//		panel.setBorder(BorderFactory.createTitledBorder("Protocol complex"));
 	}
 	
 	protected void showProtocolComplexControls(){

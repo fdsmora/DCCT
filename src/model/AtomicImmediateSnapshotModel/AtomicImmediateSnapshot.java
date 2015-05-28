@@ -10,21 +10,8 @@ import dctopology.SimplicialComplex;
 import dctopology.Simplex;
 import dctopology.Process;
 
-public class AtomicImmediateSnapshot implements CommunicationMechanism {
-	protected int t;
-	
-	public int get_t() {
-		return t;
-	}
+public class AtomicImmediateSnapshot extends CommunicationMechanism {
 
-	public void set_t(int t) {
-		this.t = t;
-	}
-
-	public Process createProcess(int id) {
-		return new ISProcess(id);
-	}
-	
 	/**
 	 * Simulates all possible execution scenarios of processes communicating through shared memory.
 	 * @param simplices The set containing the simplices which in turn contain the processes of the simplicial complex from which the simplices of this
@@ -58,21 +45,29 @@ public class AtomicImmediateSnapshot implements CommunicationMechanism {
 	 * processes with new views. 
 	 * @param processes The processes whose copies will write and take snapshots of shared memory. 
 	 * @param memory An array that represents the shared memory. 
-	 * @param order The permutation of process indices that determine the ordern in which processes communicate. 
+	 * @param order The permutation of process indices that determine the order n in which processes communicate. 
 	 * @return A list containing a copy of the processes with new views. 
 	 */
-	protected List<ISProcess> simulateCommunication(List<Process> processes, String[] memory, int[] order) {
-		List<ISProcess> tempProcesses = new ArrayList<ISProcess>(order.length);
+	protected List<Process> simulateCommunication(List<Process> processes, String[] memory, int[] order) {
+		List<Process> tempProcesses = new ArrayList<Process>(order.length);
 		int i;
 		for(i=0;i<order.length;i++){
-			ISProcess p = (ISProcess)processes.get(order[i]).clone();
-			p.write(memory);
+			Process p = (Process)processes.get(order[i]).clone();
+			write(p, memory);
 			tempProcesses.add(p);
 		}
-		for (ISProcess p: tempProcesses){
-			p.snapshot(memory);
+		for (Process p: tempProcesses){
+			snapshot(p, memory);
 		}
 		return tempProcesses;
+	}
+	
+	protected static void write(Process p, String[] memory){
+		memory[p.getId()] = p.getView();
+	}
+	
+	protected static void snapshot(Process p, String[] memory){
+		p.setView(memory.clone());
 	}
 	
 	/**

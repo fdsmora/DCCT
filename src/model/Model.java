@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import configuration.Configuration;
 import view.View;
 import dctopology.Simplex;
 import dctopology.SimplicialComplex;
@@ -18,24 +19,19 @@ public class Model {
 	protected SimplicialComplex initialComplex;
 	protected SimplicialComplex protocolComplex;
 	protected CommunicationMechanism communicationMechanism;
-	protected Map<String, List<String>> availableCommunicationModels = new LinkedHashMap<String, List<String>>();
 	protected boolean chromatic = true;
 	protected int n =0;
 	protected View view;
 	protected List<Color> pColors;
-	public static final Color[] DEFAULT_COLORS = {Color.BLUE, Color.WHITE, Color.RED, Color.GREEN, Color.YELLOW};
-	protected static final int MAX_COLORS = 5;
+
 	
 	public Model(){
-		List<String> smOptions = new ArrayList<String>();
-		smOptions.add("Atomic immediate snapshot");
-		availableCommunicationModels.put("Shared memory", smOptions);
 	}
 	
 	public SimplicialComplex createInitialComplex(List<String> pNames){	
 		Process[] processes = new Process[n];
 		for (int i = 0; i<n; i++){
-			processes[i]= communicationMechanism.createProcess(i);
+			processes[i]= new Process(i);
 			processes[i].setName(pNames.get(i));
 		}
 		
@@ -91,13 +87,8 @@ public class Model {
 		return communicationMechanism;
 	}
 
-	public void setCommunicationMechanism(
-			CommunicationMechanism communicationMechanism) {
-		this.communicationMechanism = communicationMechanism;
-	}
-
-	public Map<String, List<String>> getAvailableCommunicationModels() {
-		return availableCommunicationModels;
+	public void setCommunicationMechanism(String c) {
+		this.communicationMechanism = CommunicationMechanism.createCommunicationMechanism(c);
 	}
 
 	public String toString(){
@@ -125,7 +116,7 @@ public class Model {
 	public List<Color> getSimplicialComplexColors() {
 		if (chromatic){
 			if (pColors == null)
-				return Arrays.asList(DEFAULT_COLORS);
+				return Arrays.asList(Configuration.DEFAULT_COLORS);
 		} else return null;
 		
 		return pColors;
@@ -133,9 +124,9 @@ public class Model {
 
 	public void setSimplicialComplexColors(List<Color> pColors) {
 		// Add additional colors to prevent cases when there are less colors than processes.
-		if (pColors.size()<MAX_COLORS){
-			for (int i=MAX_COLORS-pColors.size(); i>0; i--){
-				pColors.add(DEFAULT_COLORS[i]);
+		if (pColors.size()<Configuration.MAX_COLORS){
+			for (int i=Configuration.MAX_COLORS-pColors.size(); i>0; i--){
+				pColors.add(Configuration.DEFAULT_COLORS[i]);
 			}
 		}
 		this.pColors = pColors;

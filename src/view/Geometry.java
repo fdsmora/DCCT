@@ -39,14 +39,14 @@ public class Geometry {
 				int i=0;
 				for (Process p : s.getProcesses()) {
 					Vertex v;
-					if (vertices.containsKey(p.toString())) {
-						v = vertices.get(p.toString());
+					if (vertices.containsKey(p.getView())) {
+						v = vertices.get(p.getView());
 					} else {
 						v = new Vertex(p);
 						v.index = indexCount++;
 						v.coordinates = randomCoordGenerator(indexCount);
 						setColor(v, p, qColors, processColors);
-						vertices.put(p.toString(),v);
+						vertices.put(p.getView(),v);
 					}
 					face[i++]=v.index;
 				}

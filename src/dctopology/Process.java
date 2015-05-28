@@ -1,6 +1,6 @@
 package dctopology;
 
-public abstract class Process implements Cloneable {
+public class Process implements Cloneable {
 
 	protected int id = -1;
 	protected String name = "";
@@ -59,9 +59,11 @@ public abstract class Process implements Cloneable {
 		    return false;
 		return true;
 	}
+	
 	@Override 
 	public int hashCode(){
 		return this.id + this.getView().hashCode();
+		//return this.getView().hashCode();
 	}
 
 	public String getName() {

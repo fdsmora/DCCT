@@ -8,6 +8,7 @@ import javax.swing.SwingConstants;
 import model.Model;
 import controller.Controller;
 import view.SCGeneratePanelPlugin;
+import view.UI.SCPanel;
 import dctopology.SimplicialComplex;
 import de.jreality.geometry.IndexedFaceSetFactory;
 import de.jreality.geometry.PointSetFactory;
