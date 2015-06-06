@@ -50,7 +50,18 @@ public class jRealityView implements View {
 	}
 	
 	public void update(String action) {
-		complex = action=="i"? model.getInitialComplex() : model.getProtocolComplex();
+		if (action.equals("r")){
+			sgcV.setGeometry(null);
+			sgcV.removeAllChildren();
+			sgc.setGeometry(null);
+			sgc.removeAllChildren();
+			return;
+		}
+		if (action.equals("i"))
+			complex = model.getInitialComplex();
+		else 
+			complex = model.getProtocolComplex();
+		
 		g = new Geometry(complex, model.getSimplicialComplexColors());
 		updateView();
 	}
@@ -77,7 +88,6 @@ public class jRealityView implements View {
 			psf.update();
 
 			sgcV.setGeometry(psf.getPointSet());			
-			sgc.addChild(sgcV);
 		}
 	}
 	
@@ -166,6 +176,7 @@ public class jRealityView implements View {
 	}
 	
 	protected void configViewer(){
+		sgc.addChild(sgcV);
 		sgc.addTool(dragTool);
 		
 		dragTool.addPointDragListener(new PointDragListener() {
@@ -183,11 +194,12 @@ public class jRealityView implements View {
 		viewer.registerPlugin(new ContentLoader());
 		viewer.registerPlugin(new ContentTools());
 		//viewer.registerPlugin(new SCGeneratePanelPlugin(model));
-		viewer.registerPlugin(new SCPanel(model));
+		viewer.registerPlugin(new view.scwizard.SCPanel(model));
+		//viewer.registerPlugin(new SCPanel(model));
+		
 		viewer.setShowPanelSlots(true, true, false, false);
 		viewer.setContent(sgc);
 		viewer.addContentUI();
-
 	}
 	
 	protected void setAppearance(){

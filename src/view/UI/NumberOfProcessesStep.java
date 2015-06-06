@@ -25,11 +25,11 @@ public class NumberOfProcessesStep extends Step {
 		pContent.add(rbTwoP);
 		pContent.add(rbThreeP);
 		
-		rbOneP.setActionCommand("1");
+		rbOneP.setActionCommand(rbOneP.getText());
 		rbOneP.addActionListener(this);
-		rbTwoP.setActionCommand("2");
+		rbTwoP.setActionCommand(rbTwoP.getText());
 		rbTwoP.addActionListener(this);
-		rbThreeP.setActionCommand("3");
+		rbThreeP.setActionCommand(rbThreeP.getText());
 		rbThreeP.addActionListener(this);
 		
 		btnNext.setEnabled(false);

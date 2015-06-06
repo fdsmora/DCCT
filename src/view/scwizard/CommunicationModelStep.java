@@ -1,4 +1,4 @@
-package view.UI;
+package view.scwizard;
 
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
@@ -9,13 +9,11 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 
 import configuration.Configuration;
+import configuration.Constants;
 
 public class CommunicationModelStep extends Step {
-	
-	JComboBox<String> communicationModelOptions = new JComboBox<String>();
-	JComboBox<String> communicationModelSubOptions = new JComboBox<String>();
-	static final String EXECUTE_ROUND = "Execute round!";
-	static final String START_OVER = "Start over";
+	protected JComboBox<String> communicationModelOptions = new JComboBox<String>();
+	protected JComboBox<String> communicationModelSubOptions = new JComboBox<String>();
 	
 	public CommunicationModelStep(SCPanel p){
 		super(p);
@@ -33,11 +31,12 @@ public class CommunicationModelStep extends Step {
 		displayModelOptions();
 	}
 	
+	@Override
 	public void visit(){
 		super.visit();
 		
-		btnNext.setText(EXECUTE_ROUND);
-		btnBack.setText(START_OVER);
+		btnNext.setText(Constants.EXECUTE_ROUND);
+		btnBack.setText(Constants.START_OVER);
 		
 	}
 	
@@ -59,19 +58,30 @@ public class CommunicationModelStep extends Step {
 		communicationModelSubOptions.setModel(new DefaultComboBoxModel<String>(subOptionsArr));
 	}
 	
+	@Override
+	public Step getNext(){
+		String cModel = (String)communicationModelSubOptions.getSelectedItem();
+		model.setCommunicationMechanism(cModel);
+		model.setProtocolComplex(null);
+		model.executeRound();		
+		
+		if (next == null)
+			next = scPanel.getSteps().get(Constants.NEXT_ROUND_STEP);
+		return next;	
+	}
+	
+	@Override
+	public Step getBack(){
+		scPanel.initialize();
+		if (back == null)
+			back = scPanel.getSteps().get(Constants.NUMBER_OF_PROCESSES_STEP);
+		return back;
+	}
+	
 	public void actionPerformed(ActionEvent e) {
 		String command = e.getActionCommand();
 		if (command == "mo"){
 			displayModelSubOptions((String)communicationModelOptions.getSelectedItem());
 		}
-	}
-	
-	@Override
-	public boolean execute(){
-		String cModel = (String)communicationModelSubOptions.getSelectedItem();
-		m.setCommunicationMechanism(cModel);
-		m.setProtocolComplex(null);
-		m.executeRound();
-		return true;
 	}
 }

@@ -28,6 +28,15 @@ public class Model {
 	public Model(){
 	}
 	
+	public void reset(){
+		initialComplex =protocolComplex= null;
+		chromatic = true;
+		pColors = null;
+		n =0;
+		if (view!=null)
+			view.update("r");
+	}
+	
 	public SimplicialComplex createInitialComplex(List<String> pNames){	
 		Process[] processes = new Process[n];
 		for (int i = 0; i<n; i++){
