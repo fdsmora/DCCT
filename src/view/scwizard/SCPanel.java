@@ -137,5 +137,13 @@ public class SCPanel extends ViewShrinkPanelPlugin implements ActionListener {
 	public void setCurrentStep(Step currentStep) {
 		this.currentStep = currentStep;
 	}
+
+	public JPanel getpButtons() {
+		return pButtons;
+	}
+
+	public void setpButtons(JPanel pButtons) {
+		this.pButtons = pButtons;
+	}
 	
 }
