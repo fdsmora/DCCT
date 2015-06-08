@@ -18,46 +18,51 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import configuration.Configuration;
+import configuration.Constants;
 
+/***
+ * 
+ * @author Fausto
+ *
+ */
 public class NameColorStep extends Step {
-	JPanel pProcessNames = new JPanel();
-	JPanel pProcessColors = new JPanel();
-	List<JTextField> l_processNames;
-	List<ColorEditor> l_processColors;
-	static final String GENERATE = "Generate!";
-	static final String NEXT = "Next";
-	
+	protected JPanel pProcessNames = new JPanel();
+	protected JPanel pProcessColors = new JPanel();
+	protected List<JTextField> l_processNames;
+	protected List<ColorEditor> l_processColors;
+	protected int n = 0;
+
 	public NameColorStep(SCPanel p) {
-		super(p);		
+		super(p);
 	}
 	
 	@Override
 	public void visit(){
 		super.visit();
 		
-		int n = m.getN();
+		int n = ((NumberOfProcessesStep)(scPanel.getSteps()
+						.get(Constants.NUMBER_OF_PROCESSES_STEP))).getN();
 		
 		pContent.removeAll();
 		
 		createFields(n);	
+		
 		pProcessNames.setLayout(new BoxLayout(pProcessNames,BoxLayout.PAGE_AXIS));
 		pContent.setLayout(new BoxLayout(pContent,BoxLayout.Y_AXIS));
 		pContent.add(pProcessNames);
 		
 		String colorMsg = "";
-		if (m.isChromatic()){
-			pProcessColors.setLayout(new BoxLayout(pProcessColors,BoxLayout.Y_AXIS));
-			createColors(n);
-			pContent.add(pProcessColors);
-			colorMsg = " and colors";
-		}
+		
+		pProcessColors.setLayout(new BoxLayout(pProcessColors,BoxLayout.Y_AXIS));
+		createColors(n);
+		pContent.add(pProcessColors);
+		colorMsg = " and colors";
 		
 		lbDesc.setText("Enter processes names" + colorMsg);
 		
 		btnNext.setEnabled(true);
 		btnNext.setVisible(true);
-		btnNext.setText(GENERATE);
+		btnNext.setText(Constants.GENERATE);
 		btnBack.setVisible(true);
 	}
 	
@@ -73,21 +78,21 @@ public class NameColorStep extends Step {
 			pProcessNames.add(lbN);
 			pProcessNames.add(txtN);
 		}
-	}	
+	}
 	
 	protected void createColors(int n){
 		l_processColors = new ArrayList<ColorEditor>(n);
 		pProcessColors.removeAll();
 		
 		for (int i = 0; i<n ; i++){
-			ColorEditor cEditor = new ColorEditor(Configuration.DEFAULT_COLORS[i]);
+			ColorEditor cEditor = new ColorEditor(Constants.DEFAULT_COLORS[i]);
 			l_processColors.add(cEditor);
 			pProcessColors.add(cEditor.getButton());	
 		}
 	}
-
+	
 	@Override
-	public boolean execute(){
+	public void validateAndExecute(){
 		Set<String> procNames = new LinkedHashSet<String>();
 		Pattern p = Pattern.compile("^[a-zA-Z0-9]*$");
 		
@@ -101,27 +106,32 @@ public class NameColorStep extends Step {
 			}
 			else{
 				JOptionPane.showMessageDialog(null, "Process names must be non-empty, alphanumeric, one-character and unique.");
-				return false;
+				return;
 			}
 		}
 		
-		List<String> lprocNames = new ArrayList<String>(m.getN());
+		List<String> lprocNames = new ArrayList<String>(n);
 		lprocNames.addAll(procNames);
 		
-		if (m.isChromatic()){
-			List<Color> lprocColors = new ArrayList<Color>(m.getN());
-			for (ColorEditor ce : l_processColors)
-				lprocColors.add(ce.getCurrentColor());
-			m.setSimplicialComplexColors(lprocColors);
-		}
-	
-		m.createInitialComplex(lprocNames);
+		List<Color> lprocColors = new ArrayList<Color>(n);
+		for (ColorEditor ce : l_processColors)
+			lprocColors.add(ce.getCurrentColor());
 		
-		btnNext.setText(NEXT);
-
-		return true;
+		model.setSimplicialComplexColors(lprocColors);
+		model.createInitialComplex(lprocNames);
+		
+		Step nextStep = scPanel.getSteps().get(Constants.COMMUNICATION_MODEL_STEP);
+		scPanel.setCurrentStep(nextStep);
+		nextStep.visit();
 	}
 	
+	@Override
+	public void goBack(){
+		Step back = scPanel.getSteps().get(Constants.NUMBER_OF_PROCESSES_STEP);
+		scPanel.setCurrentStep(back);
+		back.visit();		
+	}
+		
 	private class ColorEditor implements ActionListener {
 		JButton button = new JButton(" ");
 		Color currentColor;
@@ -165,5 +175,5 @@ public class NameColorStep extends Step {
 		}
 
 	}
-	
+
 }

@@ -5,15 +5,18 @@ import java.awt.event.ActionEvent;
 import javax.swing.ButtonGroup;
 import javax.swing.JRadioButton;
 
-public class NumberOfProcessesStep extends Step {
+import configuration.Constants;
 
-	JRadioButton rbOneP = new JRadioButton("1");
-	JRadioButton rbTwoP = new JRadioButton("2");
-	JRadioButton rbThreeP = new JRadioButton("3");
-	boolean modified = false;
+public class NumberOfProcessesStep extends Step {
+	protected JRadioButton rbOneP = new JRadioButton("1");
+	protected JRadioButton rbTwoP = new JRadioButton("2");
+	protected JRadioButton rbThreeP = new JRadioButton("3");
+	protected boolean modified = false;
+	protected int n = 0;
 	
 	public NumberOfProcessesStep(SCPanel p){
 		super(p);
+		model.reset();
 					
 		ButtonGroup nprocGroup = new ButtonGroup();
 		nprocGroup.add(rbOneP);
@@ -31,11 +34,9 @@ public class NumberOfProcessesStep extends Step {
 		rbTwoP.addActionListener(this);
 		rbThreeP.setActionCommand(rbThreeP.getText());
 		rbThreeP.addActionListener(this);
-		
-		btnNext.setEnabled(false);
-
 	}
 	
+	@Override
 	public void visit(){
 		super.visit();
 		
@@ -45,11 +46,23 @@ public class NumberOfProcessesStep extends Step {
 		}
 		
 		lbDesc.setText("Select number of processes");
-		
-		btnNext.setVisible(true);
-		btnBack.setVisible(true);
-	}
 
+		btnBack.setVisible(false);
+	}
+	
+	@Override
+	public void validateAndExecute(){
+		Step next = scPanel.getSteps().get(Constants.NAME_COLOR_STEP);
+		scPanel.setCurrentStep(next);
+		next.visit();
+	}
+	@Override
+	public void goBack(){
+		Step back = scPanel.getSteps().get(Constants.NUMBER_OF_PROCESSES_STEP);
+		scPanel.setCurrentStep(back);
+		back.visit();
+	}
+	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		modified = true;			
@@ -57,6 +70,10 @@ public class NumberOfProcessesStep extends Step {
 		btnNext.setEnabled(true);
 		
 		String command = e.getActionCommand();
-		m.setN(Integer.parseInt(command));
+		n = Integer.parseInt(command);
 	}	
+	
+	public int getN(){
+		return n;
+	}
 }

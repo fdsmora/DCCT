@@ -1,56 +1,93 @@
 package view.UI;
 
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 
+import javax.swing.BorderFactory;
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JRadioButton;
+
+import configuration.Constants;
 
 public class NextRoundStep extends Step {
-	private static final String NEXT_ROUND = "Next round";
-	private static final String START_OVER = "Start over";
-	private static final String CHANGE_MODEL = "Change model";
-	private JButton btnNextRound = new JButton(NEXT_ROUND);
-	private JButton btnStartOver = new JButton(START_OVER);
-	//private JButton btnChangeModel = new JButton(CHANGE_MODEL);
-	private static final int MAX_ALLOWED_ROUNDS = 4;
-	private int roundCount = 1;
+	protected JButton btnChangeModel = new JButton(Constants.CHANGE_MODEL);
+	protected static final int MAX_ALLOWED_ROUNDS = 3;
+	protected JLabel lbMaxReached = new JLabel(Constants.MAX_ROUNDS_REACHED_MSG);
+	protected int roundCount = 1;
+	protected JRadioButton rbChromatic = new JRadioButton(Constants.CHROMATIC);
+	protected JRadioButton rbNonChromatic = new JRadioButton(Constants.NON_CHROMATIC);
 	
 	public NextRoundStep(SCPanel p){
 		super(p);	
-		btnNextRound.setActionCommand("n");
-		btnNextRound.addActionListener(this);
-		btnStartOver.setActionCommand("s");
-		btnStartOver.addActionListener(this);
-		//btnChangeModel.setActionCommand("c");
-		//btnChangeModel.addActionListener(this);
 		
-		pContent.add(btnNextRound);
-		//pContent.add(btnChangeModel);
-		pContent.add(btnStartOver);
+		lbMaxReached.setForeground(Color.RED);
+		pContent.add(lbMaxReached);
+		
+		pContent.setBorder(BorderFactory.createTitledBorder(Constants.PROTOCOL_COMPLEX));
+		
+		btnChangeModel.setActionCommand("h");
+		btnChangeModel.addActionListener(this);
+		
+		ButtonGroup chromGroup = new ButtonGroup();
+		chromGroup.add(rbChromatic);
+		chromGroup.add(rbNonChromatic);
+
+		pContent.add(lbDesc);
+		pContent.add(rbChromatic);
+		pContent.add(rbNonChromatic);
+		
+		rbChromatic.setActionCommand("c");
+		rbNonChromatic.setActionCommand("nc");
+		
+		rbChromatic.addActionListener(this);
+		rbNonChromatic.addActionListener(this);
+		
+		rbChromatic.setSelected(true);
+		
+		lbDesc.setText("Select simplicial complex's color");
 	}
 	
 	@Override
 	public void visit(){
+		super.visit();
 		roundCount = 1;
-		btnNextRound.setToolTipText("");
-
-		btnNext.setVisible(false);
-		
-		btnBack.setText(CHANGE_MODEL);
+		lbMaxReached.setVisible(false);		
+		btnBack.setText(Constants.START_OVER);
+		btnNext.setText(Constants.NEXT_ROUND);
+		scPanel.getpButtons().add(btnChangeModel,2);
 	}
 	
+	@Override
+	public void goBack(){
+		scPanel.getpButtons().remove(2);
+		scPanel.initialize();
+		Step back = scPanel.getSteps().get(Constants.NUMBER_OF_PROCESSES_STEP);
+		back.visit();
+	}
+	
+	@Override
+	public void validateAndExecute(){
+		model.executeRound();
+		++roundCount;
+		if (roundCount>=MAX_ALLOWED_ROUNDS){
+			btnNext.setEnabled(false);
+			lbMaxReached.setVisible(true);
+		}
+	}
+	
+	@Override
 	public void actionPerformed(ActionEvent e) {
-		String command = e.getActionCommand();
-		if (command == "n"){
-			m.executeRound();
-			++roundCount;
-			if (roundCount >= MAX_ALLOWED_ROUNDS){
-				btnNextRound.setEnabled(false);
-				btnNextRound.setToolTipText("It is not possible to execute more rounds.");
-			}
+		String cmd = e.getActionCommand();
+		if (cmd.equals("h")){
+			scPanel.getpButtons().remove(2);
+			Step next = scPanel.getSteps().get(Constants.COMMUNICATION_MODEL_STEP);
+			scPanel.currentStep=next;
+			next.visit();
+		}else{
+			model.setChromatic(cmd=="c");
 		}
-		else if (command == "s"){
-			scPanel.initializeWizard();
-		}
-	}
-	
+	}	
+		
 }

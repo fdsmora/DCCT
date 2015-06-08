@@ -2,35 +2,45 @@ package view.UI;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.HashMap;
+import java.util.Map;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JPanel;
-
 import model.Model;
+import configuration.Constants;
 import de.jreality.plugin.basic.ViewShrinkPanelPlugin;
 import de.jtem.jrworkspace.plugin.Controller;
 import de.jtem.jrworkspace.plugin.PluginInfo;
 
+/***
+ * 
+ * @author Fausto
+ *
+ */
 public class SCPanel extends ViewShrinkPanelPlugin implements ActionListener {
-
 	protected Model model = null;
 	protected JPanel pContent = new JPanel();
 	protected JPanel pMain = new JPanel();
 	protected JPanel pButtons = new JPanel();
-	protected JButton btnNext = new JButton("Next");
-	protected JButton btnBack = new JButton("Back");
-	protected Step current;
+	protected JButton btnNext = new JButton(Constants.NEXT);
+	protected JButton btnBack = new JButton(Constants.BACK);
+	protected Step startStep = null;
+	protected Step currentStep = null;
+	protected Map<String, Step> steps;
 	
 	public SCPanel(Model m){
 		this.model = m;
-		btnNext.setActionCommand("next");
 		btnNext.addActionListener(this);
-		btnBack.setActionCommand("back");
+		btnNext.setActionCommand(Constants.NEXT);
 		btnBack.addActionListener(this);
+		btnBack.setActionCommand(Constants.BACK);
+		
 		pMain.setLayout(new BoxLayout(pMain,BoxLayout.Y_AXIS));
 		pButtons.setLayout(new BoxLayout(pButtons,BoxLayout.X_AXIS));
 		pButtons.setBorder(BorderFactory.createEtchedBorder());
+		
 		pButtons.add(btnBack);
 		pButtons.add(btnNext);
 		
@@ -39,40 +49,33 @@ public class SCPanel extends ViewShrinkPanelPlugin implements ActionListener {
 		
 		setInitialPosition(SHRINKER_LEFT);
 		
-		initializeWizard();
+		initialize();
+		currentStep.visit();
 		
-		current.visit();
 		getShrinkPanel().add(pMain);
 	}
-
-	public void initializeWizard() {
-		current = new ChromaticStep(this);
-		Step base = current;
-		current.setNext(new NumberOfProcessesStep(this));
-		current.getNext().setBack(current);
-		current=current.getNext();
-		current.setNext(new NameColorStep(this));
-		current.getNext().setBack(current);
- 		current=current.getNext();
- 		current.setNext(new CommunicationModelStep(this));
-		current.getNext().setBack(current);
- 		current=current.getNext();
- 		current.setNext(new NextRoundStep(this));
-		current.getNext().setBack(current);
-		current=base;
-	}
-
+	
 	public void actionPerformed(ActionEvent e) {
-		String command = e.getActionCommand();
-		if (command=="next"){
-			if (current.execute()){
-				current = current.getNext();
-				current.visit();
-			}
-		}else if (command=="back"){
-			current = current.getBack();
-			current.visit();
-		}
+		String cmd = e.getActionCommand();
+		if (cmd.equals(Constants.NEXT))
+			currentStep.validateAndExecute();
+		else 
+			currentStep.goBack();
+//		currentStep = cmd.equals(Constants.NEXT) ?
+//							currentStep.getNext() : currentStep.getBack();
+//		if (currentStep!=null)
+//			currentStep.visit();
+	}
+	
+	public void initialize(){
+		steps = new HashMap<String, Step>();
+		steps.put(Constants.NUMBER_OF_PROCESSES_STEP, Step.createStep(Constants.NUMBER_OF_PROCESSES_STEP, this));
+		steps.put(Constants.NAME_COLOR_STEP, Step.createStep(Constants.NAME_COLOR_STEP, this));
+		steps.put(Constants.COMMUNICATION_MODEL_STEP, Step.createStep(Constants.COMMUNICATION_MODEL_STEP, this));
+		steps.put(Constants.CHROMATIC_STEP, Step.createStep(Constants.CHROMATIC_STEP, this));
+		steps.put(Constants.NEXT_ROUND_STEP, Step.createStep(Constants.NEXT_ROUND_STEP, this));
+		startStep = steps.get(Constants.NUMBER_OF_PROCESSES_STEP);
+		currentStep = startStep;
 	}
 	
 	public JPanel getpContent() {
@@ -99,6 +102,18 @@ public class SCPanel extends ViewShrinkPanelPlugin implements ActionListener {
 		this.btnBack = btnBack;
 	}
 	
+	public JPanel getpMain() {
+		return pMain;
+	}
+	
+	public Model getModel() {
+		return model;
+	}
+
+	public void setModel(Model model) {
+		this.model = model;
+	}
+	
 	public PluginInfo getPluginInfo() {
 		return new PluginInfo("Simplicial Complex Panel");
 	}
@@ -110,16 +125,25 @@ public class SCPanel extends ViewShrinkPanelPlugin implements ActionListener {
 	public void uninstall(Controller c) throws Exception {
 		super.uninstall(c);
 	}
+
+	public Map<String, Step> getSteps() {
+		return steps;
+	}
+
+	public Step getCurrentStep() {
+		return currentStep;
+	}
+
+	public void setCurrentStep(Step currentStep) {
+		this.currentStep = currentStep;
+	}
+
+	public JPanel getpButtons() {
+		return pButtons;
+	}
+
+	public void setpButtons(JPanel pButtons) {
+		this.pButtons = pButtons;
+	}
 	
-	public JPanel getpMain() {
-		return pMain;
-	}
-
-	public Model getModel() {
-		return model;
-	}
-
-	public void setModel(Model model) {
-		this.model = model;
-	}
 }

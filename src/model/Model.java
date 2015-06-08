@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import configuration.Configuration;
+import configuration.Constants;
 import view.View;
 import dctopology.Simplex;
 import dctopology.SimplicialComplex;
@@ -118,7 +118,7 @@ public class Model {
 	public List<Color> getSimplicialComplexColors() {
 		if (chromatic){
 			if (pColors == null)
-				return Arrays.asList(Configuration.DEFAULT_COLORS);
+				return Arrays.asList(Constants.DEFAULT_COLORS);
 		} else return null;
 		
 		return pColors;
@@ -126,9 +126,9 @@ public class Model {
 
 	public void setSimplicialComplexColors(List<Color> pColors) {
 		// Add additional colors to prevent cases when there are less colors than processes.
-		if (pColors.size()<Configuration.MAX_COLORS){
-			for (int i=Configuration.MAX_COLORS-pColors.size(); i>0; i--){
-				pColors.add(Configuration.DEFAULT_COLORS[i]);
+		if (pColors.size()<Constants.MAX_COLORS){
+			for (int i=Constants.MAX_COLORS-pColors.size(); i>0; i--){
+				pColors.add(Constants.DEFAULT_COLORS[i]);
 			}
 		}
 		this.pColors = pColors;

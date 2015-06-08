@@ -26,6 +26,8 @@ public final class Constants {
 	public static final String MAX_ROUNDS_REACHED_MSG = "Maximum number of rounds allowed reached.";
 	public static final String CHROMATIC = "Chromatic";
 	public static final String NON_CHROMATIC = "Non-chromatic";
+	public static final String PROTOCOL_COMPLEX = "Protocol Complex";
+	public static final String INITIAL_COMPLEX = "Initial Complex";
 	
 	public static final Map<String, List<String>> availableCommunicationModels;
 	static {

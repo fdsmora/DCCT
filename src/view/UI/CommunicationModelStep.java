@@ -7,20 +7,16 @@ import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
-
-import configuration.Configuration;
+import configuration.Constants;
 
 public class CommunicationModelStep extends Step {
-	
-	JComboBox<String> communicationModelOptions = new JComboBox<String>();
-	JComboBox<String> communicationModelSubOptions = new JComboBox<String>();
-	static final String EXECUTE_ROUND = "Execute round!";
-	static final String START_OVER = "Start over";
+	protected JComboBox<String> communicationModelOptions = new JComboBox<String>();
+	protected JComboBox<String> communicationModelSubOptions = new JComboBox<String>();
 	
 	public CommunicationModelStep(SCPanel p){
 		super(p);
 		
-		pContent.setBorder(BorderFactory.createTitledBorder("Protocol Complex"));
+		pContent.setBorder(BorderFactory.createTitledBorder(Constants.PROTOCOL_COMPLEX));
 		
 		communicationModelOptions.addActionListener(this);
 		communicationModelOptions.setActionCommand("mo");
@@ -33,16 +29,15 @@ public class CommunicationModelStep extends Step {
 		displayModelOptions();
 	}
 	
+	@Override
 	public void visit(){
 		super.visit();
-		
-		btnNext.setText(EXECUTE_ROUND);
-		btnBack.setText(START_OVER);
-		
+		btnNext.setText(Constants.EXECUTE_ROUND);
+		btnBack.setText(Constants.START_OVER);
 	}
 	
 	protected void displayModelOptions() {			
-		List<String> options = new ArrayList<String>(Configuration.availableCommunicationModels.keySet());
+		List<String> options = new ArrayList<String>(Constants.availableCommunicationModels.keySet());
 		String[] optionsArr = new String[options.size()];
 		options.toArray(optionsArr);
 		communicationModelOptions.setModel(new DefaultComboBoxModel<String>(optionsArr));
@@ -51,7 +46,7 @@ public class CommunicationModelStep extends Step {
 	}
 
 	protected void displayModelSubOptions(String selectedModel) {			
-		List<String> subOptions = Configuration.availableCommunicationModels.get(Configuration.SHARED_MEMORY);
+		List<String> subOptions = Constants.availableCommunicationModels.get(Constants.SHARED_MEMORY);
 		
 		String[] subOptionsArr = new String[subOptions.size()];
 		subOptions.toArray(subOptionsArr);
@@ -59,19 +54,29 @@ public class CommunicationModelStep extends Step {
 		communicationModelSubOptions.setModel(new DefaultComboBoxModel<String>(subOptionsArr));
 	}
 	
+	@Override
+	public void validateAndExecute(){
+		String cModel = (String)communicationModelSubOptions.getSelectedItem();
+		model.setCommunicationMechanism(cModel);
+		model.setProtocolComplex(null);
+		model.executeRound();		
+		
+		Step nextStep = scPanel.getSteps().get(Constants.NEXT_ROUND_STEP);
+		scPanel.setCurrentStep(nextStep);
+		nextStep.visit();	
+	}
+	
+	@Override
+	public void goBack(){
+		scPanel.initialize();
+		Step back = scPanel.getSteps().get(Constants.NUMBER_OF_PROCESSES_STEP);
+		back.visit();
+	}
+	
 	public void actionPerformed(ActionEvent e) {
 		String command = e.getActionCommand();
 		if (command == "mo"){
 			displayModelSubOptions((String)communicationModelOptions.getSelectedItem());
 		}
-	}
-	
-	@Override
-	public boolean execute(){
-		String cModel = (String)communicationModelSubOptions.getSelectedItem();
-		m.setCommunicationMechanism(cModel);
-		m.setProtocolComplex(null);
-		m.executeRound();
-		return true;
 	}
 }

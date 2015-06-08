@@ -1,7 +1,7 @@
 package model;
 
 import model.AtomicImmediateSnapshotModel.AtomicImmediateSnapshot;
-import configuration.Configuration;
+import configuration.Constants;
 import dctopology.SimplicialComplex;
 
 public abstract class CommunicationMechanism {
@@ -17,7 +17,7 @@ public abstract class CommunicationMechanism {
 	public abstract SimplicialComplex communicationRound(SimplicialComplex sc);
 	
 	public static CommunicationMechanism createCommunicationMechanism(String name){
-		if (name == Configuration.ATOMIC_IMMEDIATE_SNAPSHOT)
+		if (name.equals(Constants.ATOMIC_IMMEDIATE_SNAPSHOT))
 			return new AtomicImmediateSnapshot();
 		return null;
 	}

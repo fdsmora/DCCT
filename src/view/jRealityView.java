@@ -7,7 +7,6 @@ import javax.swing.SwingConstants;
 
 import model.Model;
 import controller.Controller;
-import view.SCGeneratePanelPlugin;
 import view.UI.SCPanel;
 import dctopology.SimplicialComplex;
 import de.jreality.geometry.IndexedFaceSetFactory;
@@ -197,10 +196,7 @@ public class jRealityView implements View {
 		viewer.addBasicUI();
 		viewer.registerPlugin(new ContentLoader());
 		viewer.registerPlugin(new ContentTools());
-		//viewer.registerPlugin(new SCGeneratePanelPlugin(model));
-		viewer.registerPlugin(new view.scwizard.SCPanel(model));
-		//viewer.registerPlugin(new SCPanel(model));
-		
+		viewer.registerPlugin(new SCPanel(model));		
 		viewer.setShowPanelSlots(true, true, false, false);
 		viewer.setContent(sgc);
 		viewer.addContentUI();
