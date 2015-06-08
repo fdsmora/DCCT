@@ -68,6 +68,7 @@ public class jRealityView implements View {
 		sgcV.removeAllChildren();
 		sgc.setGeometry(null);
 		sgc.removeAllChildren();
+		sgc.addChild(sgcV);
 	}
 
 	private void updateView() {
@@ -215,7 +216,7 @@ public class jRealityView implements View {
 		dps.setShowPoints(true);
 		// Labels
 	    DefaultTextShader pts = (DefaultTextShader) ps.getTextShader();
-	    pts.setDiffuseColor(de.jreality.shader.Color.blue);
+	    pts.setDiffuseColor(de.jreality.shader.Color.BLACK);
 	    // scale the label
 	    Double scale = new Double(0.01);
 	    pts.setScale(1.5*scale);
@@ -225,7 +226,7 @@ public class jRealityView implements View {
 	    // the alignment specifies a direction in which the label will be shifted in the 2d-plane of the billboard
 	    pts.setAlignment(SwingConstants.TRAILING);
 	    // here you can specify any available Java font
-	    Font f = new Font("Arial Bold", Font.ITALIC, 20);
+	    Font f = new Font("Arial Bold", Font.PLAIN, 20);
 	    pts.setFont(f);
 	}
 	

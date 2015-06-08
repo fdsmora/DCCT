@@ -17,7 +17,7 @@ import dctopology.SimplicialComplex;
 public class Geometry {
 	protected Map<String, Vertex> vertices; 
 	protected List<int[]> faces;
-	protected static final Color DEFAULT_COLOR = Color.GREEN;
+	protected static final Color DEFAULT_COLOR = Color.BLUE;
 	
 	public Geometry(SimplicialComplex sc, List<Color> colors){
 		if (sc!=null) {
@@ -36,14 +36,16 @@ public class Geometry {
 				int i=0;
 				for (Process p : s.getProcesses()) {
 					Vertex v;
-					if (vertices.containsKey(p.toString())) {
-						v = vertices.get(p.toString());
+					// If complex is chromatic, distinguish processes by pair (id, view), otherwise only by view. 
+					String pKey = colors != null? p.toString() : p.getView();
+					if (vertices.containsKey(pKey)) {
+						v = vertices.get(pKey);
 					} else {
 						v = new Vertex(p);
 						v.index = indexCount++;
 						v.coordinates = randomCoordGenerator(indexCount);
 						setColor(v, p, qColors, processColors);
-						vertices.put(p.toString(),v);
+						vertices.put(pKey,v);
 					}
 					face[i++]=v.index;
 				}
