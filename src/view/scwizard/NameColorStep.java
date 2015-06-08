@@ -117,8 +117,8 @@ public class NameColorStep extends Step {
 		List<Color> lprocColors = new ArrayList<Color>(n);
 		for (ColorEditor ce : l_processColors)
 			lprocColors.add(ce.getCurrentColor());
+		
 		model.setSimplicialComplexColors(lprocColors);
-	
 		model.createInitialComplex(lprocNames);
 		
 		Step nextStep = scPanel.getSteps().get(Constants.COMMUNICATION_MODEL_STEP);

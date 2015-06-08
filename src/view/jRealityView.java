@@ -33,7 +33,6 @@ public class jRealityView implements View {
 	protected Controller controller;
 	protected SimplicialComplex complex;
 	protected Geometry g;
-	
 	protected JRViewer viewer = new JRViewer();
 	protected SceneGraphComponent sgc = new SceneGraphComponent();
 	protected SceneGraphComponent sgcV = new SceneGraphComponent();
@@ -51,19 +50,24 @@ public class jRealityView implements View {
 	
 	public void update(String action) {
 		if (action.equals("r")){
-			sgcV.setGeometry(null);
-			sgcV.removeAllChildren();
-			sgc.setGeometry(null);
-			sgc.removeAllChildren();
+			resetView();
 			return;
 		}
 		if (action.equals("i"))
 			complex = model.getInitialComplex();
 		else 
 			complex = model.getProtocolComplex();
-		
-		g = new Geometry(complex, model.getSimplicialComplexColors());
+
+		g = new Geometry(complex, 
+				model.isChromatic()? model.getSimplicialComplexColors() : null);
 		updateView();
+	}
+	
+	public void resetView(){
+		sgcV.setGeometry(null);
+		sgcV.removeAllChildren();
+		sgc.setGeometry(null);
+		sgc.removeAllChildren();
 	}
 
 	private void updateView() {
@@ -86,7 +90,6 @@ public class jRealityView implements View {
 			psf.setVertexColors(toDoubleArray(getVertexColors()));
 			setVertexLabels(psf);
 			psf.update();
-
 			sgcV.setGeometry(psf.getPointSet());			
 		}
 	}

@@ -23,7 +23,6 @@ public class Model {
 	protected View view;
 	protected List<Color> pColors;
 
-	
 	public Model(){
 	}
 	
@@ -31,6 +30,7 @@ public class Model {
 		initialComplex =protocolComplex= null;
 		chromatic = true;
 		pColors = null;
+		communicationMechanism = null;
 		if (view!=null)
 			view.update("r");
 	}
@@ -73,6 +73,8 @@ public class Model {
 
 	public void setChromatic(boolean chromatic) {
 		this.chromatic = chromatic;
+		if (view!=null)
+			view.update("p"); // Chromatic changed
 	}
 	
 	public void registerView(View v){
