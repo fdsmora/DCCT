@@ -12,10 +12,10 @@ public class NumberOfProcessesStep extends Step {
 	protected JRadioButton rbTwoP = new JRadioButton("2");
 	protected JRadioButton rbThreeP = new JRadioButton("3");
 	protected boolean modified = false;
+	protected int n = 0;
 	
 	public NumberOfProcessesStep(SCPanel p){
 		super(p);
-		
 		model.reset();
 					
 		ButtonGroup nprocGroup = new ButtonGroup();
@@ -51,10 +51,16 @@ public class NumberOfProcessesStep extends Step {
 	}
 	
 	@Override
-	public Step getNext(){
-		if (next == null)
-			next = scPanel.getSteps().get(Constants.NAME_COLOR_STEP);
-		return next;		
+	public void validateAndExecute(){
+		Step next = scPanel.getSteps().get(Constants.NAME_COLOR_STEP);
+		scPanel.setCurrentStep(next);
+		next.visit();
+	}
+	@Override
+	public void goBack(){
+		Step back = scPanel.getSteps().get(Constants.NUMBER_OF_PROCESSES_STEP);
+		scPanel.setCurrentStep(back);
+		back.visit();
 	}
 	
 	@Override
@@ -64,6 +70,10 @@ public class NumberOfProcessesStep extends Step {
 		btnNext.setEnabled(true);
 		
 		String command = e.getActionCommand();
-		model.setN(Integer.parseInt(command));
+		n = Integer.parseInt(command);
 	}	
+	
+	public int getN(){
+		return n;
+	}
 }

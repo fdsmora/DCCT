@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JColorChooser;
@@ -19,7 +18,6 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-
 import configuration.Configuration;
 import configuration.Constants;
 
@@ -33,17 +31,18 @@ public class NameColorStep extends Step {
 	protected JPanel pProcessColors = new JPanel();
 	protected List<JTextField> l_processNames;
 	protected List<ColorEditor> l_processColors;
+	protected int n = 0;
 
 	public NameColorStep(SCPanel p) {
 		super(p);
-		
 	}
 	
 	@Override
 	public void visit(){
 		super.visit();
 		
-		int n = model.getN();
+		int n = ((NumberOfProcessesStep)(scPanel.getSteps()
+						.get(Constants.NUMBER_OF_PROCESSES_STEP))).getN();
 		
 		pContent.removeAll();
 		
@@ -93,7 +92,8 @@ public class NameColorStep extends Step {
 		}
 	}
 	
-	protected boolean validateAndExecute(){
+	@Override
+	public void validateAndExecute(){
 		Set<String> procNames = new LinkedHashSet<String>();
 		Pattern p = Pattern.compile("^[a-zA-Z0-9]*$");
 		
@@ -107,43 +107,32 @@ public class NameColorStep extends Step {
 			}
 			else{
 				JOptionPane.showMessageDialog(null, "Process names must be non-empty, alphanumeric, one-character and unique.");
-				return false;
+				return;
 			}
 		}
 		
-		List<String> lprocNames = new ArrayList<String>(model.getN());
+		List<String> lprocNames = new ArrayList<String>(n);
 		lprocNames.addAll(procNames);
 		
-		List<Color> lprocColors = new ArrayList<Color>(model.getN());
+		List<Color> lprocColors = new ArrayList<Color>(n);
 		for (ColorEditor ce : l_processColors)
 			lprocColors.add(ce.getCurrentColor());
 		model.setSimplicialComplexColors(lprocColors);
 	
 		model.createInitialComplex(lprocNames);
 		
-		btnNext.setText(Constants.NEXT);
-		
-		return true;
+		Step nextStep = scPanel.getSteps().get(Constants.COMMUNICATION_MODEL_STEP);
+		scPanel.setCurrentStep(nextStep);
+		nextStep.visit();
 	}
 	
 	@Override
-	public Step getNext(){
-		if (!validateAndExecute())
-			return this;
-		
-		if (next == null)
-			next = scPanel.getSteps().get(Constants.COMMUNICATION_MODEL_STEP);
-		return next;		
-	}
-	
-	@Override
-	public Step getBack(){
-		if (back == null)
-			back = scPanel.getSteps().get(Constants.NUMBER_OF_PROCESSES_STEP);
-		return back;		
+	public void goBack(){
+		Step back = scPanel.getSteps().get(Constants.NUMBER_OF_PROCESSES_STEP);
+		scPanel.setCurrentStep(back);
+		back.visit();		
 	}
 		
-	
 	private class ColorEditor implements ActionListener {
 		JButton button = new JButton(" ");
 		Color currentColor;

@@ -20,7 +20,6 @@ public class Model {
 	protected SimplicialComplex protocolComplex;
 	protected CommunicationMechanism communicationMechanism;
 	protected boolean chromatic = true;
-	protected int n =0;
 	protected View view;
 	protected List<Color> pColors;
 
@@ -32,12 +31,12 @@ public class Model {
 		initialComplex =protocolComplex= null;
 		chromatic = true;
 		pColors = null;
-		n =0;
 		if (view!=null)
 			view.update("r");
 	}
 	
-	public SimplicialComplex createInitialComplex(List<String> pNames){	
+	public SimplicialComplex createInitialComplex(List<String> pNames){
+		int n = pNames.size();
 		Process[] processes = new Process[n];
 		for (int i = 0; i<n; i++){
 			processes[i]= new Process(i);
@@ -112,14 +111,6 @@ public class Model {
 		else 
 			System.out.println("null");
 		return null;
-	}
-
-	public int getN() {
-		return n;
-	}
-
-	public void setN(int n) {
-		this.n = n<1? 2:n;
 	}
 
 	public List<Color> getSimplicialComplexColors() {

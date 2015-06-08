@@ -34,10 +34,8 @@ public class CommunicationModelStep extends Step {
 	@Override
 	public void visit(){
 		super.visit();
-		
 		btnNext.setText(Constants.EXECUTE_ROUND);
 		btnBack.setText(Constants.START_OVER);
-		
 	}
 	
 	protected void displayModelOptions() {			
@@ -59,23 +57,22 @@ public class CommunicationModelStep extends Step {
 	}
 	
 	@Override
-	public Step getNext(){
+	public void validateAndExecute(){
 		String cModel = (String)communicationModelSubOptions.getSelectedItem();
 		model.setCommunicationMechanism(cModel);
 		model.setProtocolComplex(null);
 		model.executeRound();		
 		
-		if (next == null)
-			next = scPanel.getSteps().get(Constants.NEXT_ROUND_STEP);
-		return next;	
+		Step nextStep = scPanel.getSteps().get(Constants.NEXT_ROUND_STEP);
+		scPanel.setCurrentStep(nextStep);
+		nextStep.visit();	
 	}
 	
 	@Override
-	public Step getBack(){
+	public void goBack(){
 		scPanel.initialize();
-		if (back == null)
-			back = scPanel.getSteps().get(Constants.NUMBER_OF_PROCESSES_STEP);
-		return back;
+		Step back = scPanel.getSteps().get(Constants.NUMBER_OF_PROCESSES_STEP);
+		back.visit();
 	}
 	
 	public void actionPerformed(ActionEvent e) {

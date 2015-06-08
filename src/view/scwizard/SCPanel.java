@@ -4,12 +4,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
 import java.util.Map;
-
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JPanel;
-
 import model.Model;
 import configuration.Constants;
 import de.jreality.plugin.basic.ViewShrinkPanelPlugin;
@@ -59,11 +57,14 @@ public class SCPanel extends ViewShrinkPanelPlugin implements ActionListener {
 	
 	public void actionPerformed(ActionEvent e) {
 		String cmd = e.getActionCommand();
-		
-		currentStep = cmd.equals(Constants.NEXT) ?
-							currentStep.getNext() : currentStep.getBack();
-		if (currentStep!=null)
-			currentStep.visit();
+		if (cmd.equals(Constants.NEXT))
+			currentStep.validateAndExecute();
+		else 
+			currentStep.goBack();
+//		currentStep = cmd.equals(Constants.NEXT) ?
+//							currentStep.getNext() : currentStep.getBack();
+//		if (currentStep!=null)
+//			currentStep.visit();
 	}
 	
 	public void initialize(){
@@ -73,7 +74,6 @@ public class SCPanel extends ViewShrinkPanelPlugin implements ActionListener {
 		steps.put(Constants.COMMUNICATION_MODEL_STEP, Step.createStep(Constants.COMMUNICATION_MODEL_STEP, this));
 		steps.put(Constants.CHROMATIC_STEP, Step.createStep(Constants.CHROMATIC_STEP, this));
 		steps.put(Constants.NEXT_ROUND_STEP, Step.createStep(Constants.NEXT_ROUND_STEP, this));
-		
 		startStep = steps.get(Constants.NUMBER_OF_PROCESSES_STEP);
 		currentStep = startStep;
 	}
@@ -128,6 +128,14 @@ public class SCPanel extends ViewShrinkPanelPlugin implements ActionListener {
 
 	public Map<String, Step> getSteps() {
 		return steps;
+	}
+
+	public Step getCurrentStep() {
+		return currentStep;
+	}
+
+	public void setCurrentStep(Step currentStep) {
+		this.currentStep = currentStep;
 	}
 	
 }

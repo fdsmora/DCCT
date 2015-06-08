@@ -42,21 +42,21 @@ public class NextRoundStep extends Step {
 		btnBack.setText(Constants.START_OVER);
 	}
 	
-	@Override
-	public Step getBack(){
-		scPanel.initialize();
-		if (back == null)
-			back = scPanel.getSteps().get(Constants.NUMBER_OF_PROCESSES_STEP);
-		return back;
-	}
-	
-	@Override
-	public Step getNext(){
-
-		if (next == null)
-			next = scPanel.getSteps().get(Constants.NEXT_ROUND_STEP);
-		return back;
-	}
+//	@Override
+//	public Step getBack(){
+//		scPanel.initialize();
+//		if (back == null)
+//			back = scPanel.getSteps().get(Constants.NUMBER_OF_PROCESSES_STEP);
+//		return back;
+//	}
+//	
+//	@Override
+//	public Step getNext(){
+//
+//		if (next == null)
+//			next = scPanel.getSteps().get(Constants.NEXT_ROUND_STEP);
+//		return back;
+//	}
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {

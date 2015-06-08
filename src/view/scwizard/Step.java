@@ -19,8 +19,6 @@ public abstract class Step implements ActionListener {
 	protected SCPanel scPanel = null;
 	protected JButton btnNext =null;
 	protected JButton btnBack =null;
-	protected Step next = null;
-	protected Step back = null;
 	protected Model model = null;
 		
 	public Step(SCPanel p){
@@ -63,22 +61,12 @@ public abstract class Step implements ActionListener {
 		return null;
 	}
 
-	public Step getNext() {
-		return next;
-	}
-
-	public void setNext(Step next) {
-		this.next = next;
-	}
-
-	public Step getBack() {
-		return back;
-	}
-
-	public void setBack(Step back) {
-		this.back = back;
+	public void validateAndExecute(){	
 	}
 	
+	public void goBack(){
+	}
+
 	public void actionPerformed(ActionEvent e) {
 		
 	}
