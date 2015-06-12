@@ -12,19 +12,26 @@ import dctopology.SimplicialComplex;
 import de.jreality.geometry.IndexedFaceSetFactory;
 import de.jreality.geometry.PointSetFactory;
 import de.jreality.plugin.JRViewer;
+import de.jreality.plugin.JRViewer.ContentType;
+import de.jreality.plugin.content.ContentAppearance;
 import de.jreality.plugin.content.ContentLoader;
 import de.jreality.plugin.content.ContentTools;
+import de.jreality.plugin.scripting.PythonConsole;
 import de.jreality.scene.Appearance;
 import de.jreality.scene.SceneGraphComponent;
 import de.jreality.scene.data.Attribute;
 import de.jreality.scene.data.StorageModel;
 import de.jreality.shader.DefaultGeometryShader;
+import de.jreality.shader.DefaultLineShader;
 import de.jreality.shader.DefaultPointShader;
+import de.jreality.shader.DefaultPolygonShader;
 import de.jreality.shader.DefaultTextShader;
 import de.jreality.shader.ShaderUtility;
+import de.jreality.tools.ClickWheelCameraZoomTool;
 import de.jreality.tools.DragEventTool;
 import de.jreality.tools.PointDragEvent;
 import de.jreality.tools.PointDragListener;
+import de.jreality.tools.TranslateTool;
 
 public class jRealityView implements View {
 
@@ -78,7 +85,7 @@ public class jRealityView implements View {
 	public void start(){
 		sgc.removeAllChildren();
 		updateView();
-		setAppearance();
+		//setAppearance();
 		configViewer();
 		viewer.startup();
 	}
@@ -181,6 +188,8 @@ public class jRealityView implements View {
 	protected void configViewer(){
 		sgc.addChild(sgcV);
 		sgc.addTool(dragTool);
+		sgc.addTool(new TranslationTool());
+		sgc.addTool(new ClickWheelCameraZoomTool());
 		
 		dragTool.addPointDragListener(new PointDragListener() {
 			public void pointDragEnd(PointDragEvent e) {
@@ -192,24 +201,33 @@ public class jRealityView implements View {
 			}
 		});
 		
-		viewer.setShowPanelSlots(true,true,true,true);
 		viewer.addBasicUI();
+		
+		viewer.registerPlugin(new ContentAppearance());
 		viewer.registerPlugin(new ContentLoader());
 		viewer.registerPlugin(new ContentTools());
-		viewer.registerPlugin(new SCPanel(model));		
-		viewer.setShowPanelSlots(true, true, false, false);
+		viewer.registerPlugin(new SCPanel(model));
+		//viewer.registerPlugin(new SCOutputConsole());
+		viewer.setShowPanelSlots(true, true, true, true);
 		viewer.setContent(sgc);
 		viewer.addContentUI();
 	}
 	
 	protected void setAppearance(){
 		sgc.setAppearance(new Appearance());
-		DefaultGeometryShader dps = ShaderUtility.createDefaultGeometryShader(sgc.getAppearance(), false);
+		DefaultGeometryShader dgs = ShaderUtility.createDefaultGeometryShader(sgc.getAppearance(), false);
+		 
+		DefaultLineShader dls = (DefaultLineShader) dgs.createLineShader("default");
+		//dls.setDiffuseColor(de.jreality.shader.Color.YELLOW);
+		//dls.setTubeRadius(0.05);
 		
-		DefaultPointShader ps = (DefaultPointShader) dps.getPointShader();
-		ps.setPointRadius(0.2);
+		DefaultPolygonShader dps = (DefaultPolygonShader) dgs.createPolygonShader("default");
+		//dps.setDiffuseColor(de.jreality.shader.Color.GREEN);
+		
+		DefaultPointShader ps = (DefaultPointShader) dgs.getPointShader();
+		//ps.setPointRadius(0.2);
 		//ps.setDiffuseColor(de.jreality.shader.Color.red);
-		dps.setShowPoints(true);
+		dgs.setShowPoints(true);
 		// Labels
 	    DefaultTextShader pts = (DefaultTextShader) ps.getTextShader();
 	    pts.setDiffuseColor(de.jreality.shader.Color.BLACK);
@@ -222,7 +240,7 @@ public class jRealityView implements View {
 	    // the alignment specifies a direction in which the label will be shifted in the 2d-plane of the billboard
 	    pts.setAlignment(SwingConstants.TRAILING);
 	    // here you can specify any available Java font
-	    Font f = new Font("Arial Bold", Font.PLAIN, 20);
+	    Font f = new Font("Arial Bold", Font.PLAIN, 16);
 	    pts.setFont(f);
 	}
 	
