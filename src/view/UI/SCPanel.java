@@ -38,6 +38,7 @@ public class SCPanel extends ViewShrinkPanelPlugin implements ActionListener {
 		btnBack.setActionCommand(Constants.BACK);
 		
 		pMain.setLayout(new BoxLayout(pMain,BoxLayout.Y_AXIS));
+		pMain.setBorder(BorderFactory.createEmptyBorder(50, 50, 50, 50));
 		pButtons.setLayout(new BoxLayout(pButtons,BoxLayout.X_AXIS));
 		pButtons.setBorder(BorderFactory.createEtchedBorder());
 		

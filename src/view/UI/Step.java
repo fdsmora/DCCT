@@ -8,6 +8,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.border.Border;
 
 import model.Model;
 import configuration.Constants;
@@ -27,6 +28,8 @@ public abstract class Step implements ActionListener {
 		pContent.add(lbDesc);
 		pContent.setLayout(new BoxLayout(pContent,BoxLayout.Y_AXIS));
 		pContent.setBorder(BorderFactory.createTitledBorder(Constants.INITIAL_COMPLEX));
+		//Border b = BorderFactory.createEmptyBorder(10,10,10,10);
+		//pContent.setBorder(BorderFactory.createTitledBorder(b, Constants.INITIAL_COMPLEX));
 		
 		btnNext = scPanel.getBtnNext();
 		btnBack = scPanel.getBtnBack();

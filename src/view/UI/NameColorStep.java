@@ -1,6 +1,7 @@
 package view.UI;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -10,6 +11,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JColorChooser;
@@ -18,6 +21,10 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.PlainDocument;
+
 import configuration.Constants;
 
 /***
@@ -48,15 +55,15 @@ public class NameColorStep extends Step {
 		createFields(n);	
 		
 		pProcessNames.setLayout(new BoxLayout(pProcessNames,BoxLayout.PAGE_AXIS));
-		pContent.setLayout(new BoxLayout(pContent,BoxLayout.Y_AXIS));
+		pContent.setLayout(new BoxLayout(pContent,BoxLayout.LINE_AXIS));
 		pContent.add(pProcessNames);
 		
 		String colorMsg = "";
 		
-		pProcessColors.setLayout(new BoxLayout(pProcessColors,BoxLayout.Y_AXIS));
-		createColors(n);
-		pContent.add(pProcessColors);
-		colorMsg = " and colors";
+//		pProcessColors.setLayout(new BoxLayout(pProcessColors,BoxLayout.Y_AXIS));
+//		createColors(n);
+//		pContent.add(pProcessColors);
+//		colorMsg = " and colors";
 		
 		lbDesc.setText("Enter processes names" + colorMsg);
 		
@@ -68,15 +75,35 @@ public class NameColorStep extends Step {
 	
 	protected void createFields(int n){
 		l_processNames = new ArrayList<JTextField>(n);
+		l_processColors = new ArrayList<ColorEditor>(n);
+		
 		pProcessNames.removeAll();
 		
-		for (int i = 0; i<n ; i++){
-			JLabel lbN = new JLabel("Process " + i + "'s name");
-			JTextField txtN = new JTextField(Integer.toString(i));
-			txtN.setSize(new Dimension(15,15));
+		for (int i = 0; i<n ; i++){			
+			JPanel pBody = new JPanel();
+			pBody.setLayout(new BoxLayout(pBody,BoxLayout.LINE_AXIS));
+			
+			JTextField txtN = new JTextField();
+			// For limiting introduced text to one character. 
+			txtN.setDocument(new JTextFieldLimit(1));
+			txtN.setText(Integer.toString(i));
+			Dimension d = new Dimension(20,24);
+			txtN.setPreferredSize(d);
+			txtN.setMinimumSize(d);
+			txtN.setMaximumSize(d);
 			l_processNames.add(txtN);
+			
+			ColorEditor cEditor = new ColorEditor(Constants.DEFAULT_COLORS[i]);
+			l_processColors.add(cEditor);
+			
+			pBody.add(txtN);
+			pBody.add(Box.createRigidArea(new Dimension(10,0)));
+			pBody.add(cEditor.getButton());
+			
+			JLabel lbN = new JLabel("Process " + i + "'s name and color");
+			lbN.setAlignmentX(Component.CENTER_ALIGNMENT);
 			pProcessNames.add(lbN);
-			pProcessNames.add(txtN);
+			pProcessNames.add(pBody);
 		}
 	}
 	
@@ -145,7 +172,9 @@ public class NameColorStep extends Step {
 			button.setActionCommand(EDIT);
 			button.setBorderPainted(false);
 			button.setBackground(currentColor);
-			button.setForeground(currentColor);
+			//button.setForeground(currentColor);
+			button.setContentAreaFilled(false);
+			button.setOpaque(true);
 			dialog = JColorChooser.createDialog(this.button,"Pick a Color",
                     true,  
                     colorChooser,
@@ -176,4 +205,29 @@ public class NameColorStep extends Step {
 
 	}
 
+	/***
+	 * Auxiliary class for limiting the number of characters introduced into a JTextField
+	 * Taken from : http://stackoverflow.com/questions/10136794/limiting-the-number-of-characters-in-a-jtextfield
+	 */
+	private class JTextFieldLimit extends PlainDocument {
+		  private int limit;
+		  JTextFieldLimit(int limit) {
+		    super();
+		    this.limit = limit;		
+		  }
+
+		  JTextFieldLimit(int limit, boolean upper) {
+		    super();
+		    this.limit = limit;
+		  }
+
+		  public void insertString(int offset, String str, AttributeSet attr) throws BadLocationException {
+		    if (str == null)
+		      return;
+
+		    if ((getLength() + str.length()) <= limit) {
+		      super.insertString(offset, str, attr);
+		    }
+		  }
+		}
 }
