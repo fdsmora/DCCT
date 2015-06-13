@@ -1,13 +1,16 @@
 package view.UI;
 
+import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
 import java.util.Map;
+
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JPanel;
+
 import model.Model;
 import configuration.Constants;
 import de.jreality.plugin.basic.ViewShrinkPanelPlugin;
@@ -37,16 +40,14 @@ public class SCPanel extends ViewShrinkPanelPlugin implements ActionListener {
 		btnBack.addActionListener(this);
 		btnBack.setActionCommand(Constants.BACK);
 		
-		pMain.setLayout(new BoxLayout(pMain,BoxLayout.Y_AXIS));
-		pMain.setBorder(BorderFactory.createEmptyBorder(50, 50, 50, 50));
-		pButtons.setLayout(new BoxLayout(pButtons,BoxLayout.X_AXIS));
+		pMain.setLayout(new BorderLayout());
 		pButtons.setBorder(BorderFactory.createEtchedBorder());
 		
 		pButtons.add(btnBack);
 		pButtons.add(btnNext);
 		
-		pMain.add(pContent,0);
-		pMain.add(pButtons);
+		pMain.add(pContent, BorderLayout.CENTER);
+		pMain.add(pButtons, BorderLayout.PAGE_END);
 		
 		setInitialPosition(SHRINKER_LEFT);
 		

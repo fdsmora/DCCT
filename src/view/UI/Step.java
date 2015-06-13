@@ -1,5 +1,7 @@
 package view.UI;
 
+import java.awt.BorderLayout;
+import java.awt.LayoutManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -28,8 +30,6 @@ public abstract class Step implements ActionListener {
 		pContent.add(lbDesc);
 		pContent.setLayout(new BoxLayout(pContent,BoxLayout.Y_AXIS));
 		pContent.setBorder(BorderFactory.createTitledBorder(Constants.INITIAL_COMPLEX));
-		//Border b = BorderFactory.createEmptyBorder(10,10,10,10);
-		//pContent.setBorder(BorderFactory.createTitledBorder(b, Constants.INITIAL_COMPLEX));
 		
 		btnNext = scPanel.getBtnNext();
 		btnBack = scPanel.getBtnBack();
@@ -44,8 +44,10 @@ public abstract class Step implements ActionListener {
 		btnBack.setText(Constants.BACK);
 		btnBack.setEnabled(true);
 		btnBack.setVisible(true);
-		scPanel.getpMain().remove(0);
-		scPanel.getpMain().add(pContent,0);
+		
+		JPanel pMain = scPanel.getpMain();
+		pMain.remove(0);
+		pMain.add(pContent,0);
 	}
 	
 	public static Step createStep(String kind, SCPanel p){
