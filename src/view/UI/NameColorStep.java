@@ -107,16 +107,16 @@ public class NameColorStep extends Step {
 		}
 	}
 	
-	protected void createColors(int n){
-		l_processColors = new ArrayList<ColorEditor>(n);
-		pProcessColors.removeAll();
-		
-		for (int i = 0; i<n ; i++){
-			ColorEditor cEditor = new ColorEditor(Constants.DEFAULT_COLORS[i]);
-			l_processColors.add(cEditor);
-			pProcessColors.add(cEditor.getButton());	
-		}
-	}
+//	protected void createColors(int n){
+//		l_processColors = new ArrayList<ColorEditor>(n);
+//		pProcessColors.removeAll();
+//		
+//		for (int i = 0; i<n ; i++){
+//			ColorEditor cEditor = new ColorEditor(Constants.DEFAULT_COLORS[i]);
+//			l_processColors.add(cEditor);
+//			pProcessColors.add(cEditor.getButton());	
+//		}
+//	}
 	
 	@Override
 	public void validateAndExecute(){

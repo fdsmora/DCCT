@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 public final class Constants {
-	public static final Color[] DEFAULT_COLORS = {Color.BLUE, Color.WHITE, Color.RED, Color.GREEN, Color.YELLOW};
+	public static final Color[] DEFAULT_COLORS = {Color.BLUE, Color.WHITE, Color.GREEN, Color.YELLOW, Color.RED};
 	public static final int MAX_COLORS = 5;
 	public static final String SHARED_MEMORY = "Shared memory";
 	public static final String ATOMIC_IMMEDIATE_SNAPSHOT = "Atomic immediate snapshot";
