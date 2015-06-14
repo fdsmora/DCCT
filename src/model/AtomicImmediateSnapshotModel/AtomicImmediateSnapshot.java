@@ -5,6 +5,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
+import configuration.Constants;
 import model.CommunicationMechanism;
 import dctopology.SimplicialComplex;
 import dctopology.Simplex;
@@ -37,6 +38,7 @@ public class AtomicImmediateSnapshot extends CommunicationMechanism {
 				newSimplices.add(new Simplex(newProcesses));
 			}
 		}
+		rounds++;
 		return new SimplicialComplex(newSimplices);
 	}
 	
@@ -81,6 +83,11 @@ public class AtomicImmediateSnapshot extends CommunicationMechanism {
 		for(int i=0; i<n; i++)
 			indices[i]=Integer.parseInt(String.valueOf(group.charAt(i)));
 		return indices;
+	}
+	
+	@Override 
+	public String toString(){
+		return Constants.ATOMIC_IMMEDIATE_SNAPSHOT + " " + Constants.SHARED_MEMORY ;
 	}
 
 

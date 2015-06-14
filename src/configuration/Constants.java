@@ -28,6 +28,9 @@ public final class Constants {
 	public static final String NON_CHROMATIC = "Non-chromatic";
 	public static final String PROTOCOL_COMPLEX = "Protocol Complex";
 	public static final String INITIAL_COMPLEX = "Initial Complex";
+	public static final String SIMPLICIAL_COMPLEX_CONSOLE = "Simplicial Complex Console";
+	public static final String OUTPUT_CONSOLE_DELIMITER = "===================";
+	public static final String NUMBER_OF_SIMPLICIES = "Number of simplicies:";
 	
 	public static final Map<String, List<String>> availableCommunicationModels;
 	static {

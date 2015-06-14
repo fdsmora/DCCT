@@ -5,8 +5,10 @@ import java.awt.Font;
 
 import javax.swing.SwingConstants;
 
+import model.CommunicationMechanism;
 import model.Model;
 import controller.Controller;
+import view.UI.SCOutputConsole;
 import view.UI.SCPanel;
 import dctopology.SimplicialComplex;
 import de.jreality.geometry.IndexedFaceSetFactory;
@@ -45,6 +47,7 @@ public class jRealityView implements View {
 	protected DragEventTool dragTool = new DragEventTool();
 	protected IndexedFaceSetFactory faceFactory = new IndexedFaceSetFactory();
 	protected PointSetFactory psf = new PointSetFactory();
+	protected SCOutputConsole console = new SCOutputConsole();
 	
 	protected double[][] coordinates;
 	
@@ -57,12 +60,21 @@ public class jRealityView implements View {
 	public void update(String action) {
 		if (action.equals("r")){
 			resetView();
+			console.resetConsole();
 			return;
 		}
-		if (action.equals("i"))
+		if (action.equals("i")){
 			complex = model.getInitialComplex();
-		else 
+			console.setInitialComplexInfo(complex);
+		}
+		else {
 			complex = model.getProtocolComplex();
+			CommunicationMechanism cm = model.getCommunicationMechanism();
+			if (cm.getRounds()==1)
+				console.setModelComplexInfo(cm.toString(), model.isChromatic());
+			console.appendProtocolComplexInfo(complex, cm.getRounds());
+		}
+		console.print();	
 
 		g = new Geometry(complex, 
 				model.isChromatic()? model.getSimplicialComplexColors() : null);
@@ -207,7 +219,8 @@ public class jRealityView implements View {
 		viewer.registerPlugin(new ContentLoader());
 		viewer.registerPlugin(new ContentTools());
 		viewer.registerPlugin(new SCPanel(model));
-		//viewer.registerPlugin(new SCOutputConsole());
+		viewer.registerPlugin(new SCOutputConsole());
+//		viewer.registerPlugin(new PythonConsole());
 		viewer.setShowPanelSlots(true, true, true, true);
 		viewer.setContent(sgc);
 		viewer.addContentUI();

@@ -7,17 +7,20 @@ public class Process implements Cloneable {
 	protected String[] view = null;
 	
 	public String getView() {
+		String result = "";
 		if (this.view == null)
-			return name;
-			//return Integer.toString(this.id);
-		String prefix = "";
-		StringBuilder sb = new StringBuilder();
-		for(String v : this.view){
-			sb.append(prefix);
-			sb.append(v!=null? v: "-");
-			prefix = ",";
+			result = name;
+		else {
+			String prefix = "";
+			StringBuilder sb = new StringBuilder();
+			for(String v : this.view){
+				sb.append(prefix);
+				sb.append(v!=null? v: "-");
+				prefix = ",";
+			}
+			result = sb.toString();
 		}
-		return "(" + sb.toString() + ")";
+		return "(" + result + ")";
 	}
 	
 	public int getId() {

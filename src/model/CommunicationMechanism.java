@@ -6,6 +6,7 @@ import dctopology.SimplicialComplex;
 
 public abstract class CommunicationMechanism {
 	protected int t=0;
+	protected int rounds=0;
 
 	public int get_t(){
 		return t;
@@ -21,4 +22,11 @@ public abstract class CommunicationMechanism {
 			return new AtomicImmediateSnapshot();
 		return null;
 	}
+	
+	public int getRounds(){
+		return rounds;
+	}
+	
+	@Override
+	public abstract String toString();
 }
