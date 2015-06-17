@@ -1,6 +1,7 @@
 package view.UI;
 
 import java.awt.BorderLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
@@ -41,6 +42,10 @@ public class SCPanel extends ViewShrinkPanelPlugin implements ActionListener {
 		btnBack.setActionCommand(Constants.BACK);
 		
 		pMain.setLayout(new BorderLayout());
+		
+		GridLayout gLayout = new GridLayout(0,2);
+		pButtons.setLayout(gLayout);
+		
 		pButtons.setBorder(BorderFactory.createEtchedBorder());
 		
 		pButtons.add(btnBack);

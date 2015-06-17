@@ -63,21 +63,36 @@ public class jRealityView implements View {
 			console.resetConsole();
 			return;
 		}
-		if (action.equals("i")){
-			complex = model.getInitialComplex();
-			console.setInitialComplexInfo(complex);
+		
+		if (action.equals("u")){
+			console.resetProtocolComplexInfo();
+			return;
 		}
-		else {
+		
+		if(action.equals("i"))
+			complex = model.getInitialComplex() ;
+		else if (action.equals("p"))
 			complex = model.getProtocolComplex();
-			CommunicationMechanism cm = model.getCommunicationMechanism();
-			if (cm.getRounds()==1)
-				console.setModelComplexInfo(cm.toString(), model.isChromatic());
-			console.appendProtocolComplexInfo(complex, cm.getRounds());
-		}
-		console.print();	
-
+		
 		g = new Geometry(complex, 
 				model.isChromatic()? model.getSimplicialComplexColors() : null);
+		
+		if (action.equals("i")){
+			console.setInitialComplexInfo(complex.toString());
+		}
+		else if (action.equals("p")) {
+			CommunicationMechanism cm = model.getCommunicationMechanism();
+			console.setCommunicationModel(cm.toString());
+			
+			console.addProtocolComplexInfo(complex.toString(),
+					complex.getSimplices().size(),
+					model.isChromatic()? 0 : g.faces.size());
+		}else if (action.equals("c")){
+			console.addNonChromaticInfo(g.faces.size());
+		}
+							
+		console.print();
+		
 		updateView();
 	}
 	
@@ -220,7 +235,6 @@ public class jRealityView implements View {
 		viewer.registerPlugin(new ContentTools());
 		viewer.registerPlugin(new SCPanel(model));
 		viewer.registerPlugin(new SCOutputConsole());
-//		viewer.registerPlugin(new PythonConsole());
 		viewer.setShowPanelSlots(true, true, true, true);
 		viewer.setContent(sgc);
 		viewer.addContentUI();

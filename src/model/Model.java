@@ -32,7 +32,7 @@ public class Model {
 		pColors = null;
 		communicationMechanism = null;
 		if (view!=null)
-			view.update("r");
+			view.update("r"); // reset
 	}
 	
 	public SimplicialComplex createInitialComplex(List<String> pNames){
@@ -74,7 +74,7 @@ public class Model {
 	public void setChromatic(boolean chromatic) {
 		this.chromatic = chromatic;
 		if (view!=null)
-			view.update("p"); // Chromatic changed
+			view.update("c"); // Chromatic changed
 	}
 	
 	public void registerView(View v){
@@ -99,6 +99,8 @@ public class Model {
 
 	public void setCommunicationMechanism(String c) {
 		this.communicationMechanism = CommunicationMechanism.createCommunicationMechanism(c);
+		if (view!=null)
+			view.update("u"); // Update communication model 
 	}
 
 	public String toString(){

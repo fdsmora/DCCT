@@ -17,6 +17,7 @@ public final class Constants {
 	public static final String NUMBER_OF_PROCESSES_STEP = "NumberOfProcessesStep";
 	public static final String NAME_COLOR_STEP = "NameColorStep";
 	public static final String COMMUNICATION_MODEL_STEP = "CommunicationModelStep";
+	public static final String COMMUNICATION_MODEL = "Communication model";
 	public static final String NEXT_ROUND_STEP = "NextRoundStep";
 	public static final String CHROMATIC_STEP = "ChromaticStep";
 	public static final String EXECUTE_ROUND = "Execute round";
@@ -29,9 +30,11 @@ public final class Constants {
 	public static final String PROTOCOL_COMPLEX = "Protocol Complex";
 	public static final String INITIAL_COMPLEX = "Initial Complex";
 	public static final String SIMPLICIAL_COMPLEX_CONSOLE = "Simplicial Complex Console";
-	public static final String OUTPUT_CONSOLE_DELIMITER = "===================";
-	public static final String NUMBER_OF_SIMPLICIES = "Number of simplicies:";
-	
+	public static final String OUTPUT_CONSOLE_DELIMITER = "===================\n";
+	public static final String NUMBER_OF_SIMPLICIES = "Number of simplicies";
+	public static final String SET_NOTATION_REPRESENTATION = "Set notation representation";
+	public static final String UNKNOWN = "Unknown";
+
 	public static final Map<String, List<String>> availableCommunicationModels;
 	static {
 		availableCommunicationModels = new LinkedHashMap<String, List<String>>();
