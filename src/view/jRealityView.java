@@ -14,26 +14,25 @@ import dctopology.SimplicialComplex;
 import de.jreality.geometry.IndexedFaceSetFactory;
 import de.jreality.geometry.PointSetFactory;
 import de.jreality.plugin.JRViewer;
-import de.jreality.plugin.JRViewer.ContentType;
 import de.jreality.plugin.content.ContentAppearance;
 import de.jreality.plugin.content.ContentLoader;
 import de.jreality.plugin.content.ContentTools;
-import de.jreality.plugin.scripting.PythonConsole;
+import de.jreality.plugin.menu.CameraMenu;
 import de.jreality.scene.Appearance;
 import de.jreality.scene.SceneGraphComponent;
 import de.jreality.scene.data.Attribute;
 import de.jreality.scene.data.StorageModel;
+import de.jreality.scene.tool.InputSlot;
 import de.jreality.shader.DefaultGeometryShader;
 import de.jreality.shader.DefaultLineShader;
 import de.jreality.shader.DefaultPointShader;
 import de.jreality.shader.DefaultPolygonShader;
 import de.jreality.shader.DefaultTextShader;
 import de.jreality.shader.ShaderUtility;
-import de.jreality.tools.ClickWheelCameraZoomTool;
 import de.jreality.tools.DragEventTool;
+import de.jreality.tools.DraggingTool;
 import de.jreality.tools.PointDragEvent;
 import de.jreality.tools.PointDragListener;
-import de.jreality.tools.TranslateTool;
 
 public class jRealityView implements View {
 
@@ -44,7 +43,7 @@ public class jRealityView implements View {
 	protected JRViewer viewer = new JRViewer();
 	protected SceneGraphComponent sgc = new SceneGraphComponent();
 	protected SceneGraphComponent sgcV = new SceneGraphComponent();
-	protected DragEventTool dragTool = new DragEventTool();
+	protected DragEventTool dragVertexTool = new DragEventTool();
 	protected IndexedFaceSetFactory faceFactory = new IndexedFaceSetFactory();
 	protected PointSetFactory psf = new PointSetFactory();
 	protected SCOutputConsole console = new SCOutputConsole();
@@ -214,11 +213,16 @@ public class jRealityView implements View {
 	
 	protected void configViewer(){
 		sgc.addChild(sgcV);
-		sgc.addTool(dragTool);
-		sgc.addTool(new TranslationTool());
-		sgc.addTool(new ClickWheelCameraZoomTool());
+		sgc.addTool(dragVertexTool);
+		// Create DraggingTool to let user drag the geometric object in the visualization.
+		// Need to tweak it a bit in order to enable it back, as this feature was removed 
+		// in the latest versions of jReality. 
+		DraggingTool dragObjectTool = new DraggingTool(InputSlot.getDevice("DragAlongViewDirection"));
+		dragObjectTool.addCurrentSlot(InputSlot.getDevice("DragActivation"));
+		dragObjectTool.addCurrentSlot(InputSlot.getDevice("PointerEvolution"));		
+		sgc.addTool(dragObjectTool);
 		
-		dragTool.addPointDragListener(new PointDragListener() {
+		dragVertexTool.addPointDragListener(new PointDragListener() {
 			public void pointDragEnd(PointDragEvent e) {
 			}
 			public void pointDragStart(PointDragEvent e) {
@@ -229,15 +233,16 @@ public class jRealityView implements View {
 		});
 		
 		viewer.addBasicUI();
+		viewer.getController().getPlugin(CameraMenu.class).setZoomEnabled(true);
 		
 		viewer.registerPlugin(new ContentAppearance());
 		viewer.registerPlugin(new ContentLoader());
 		viewer.registerPlugin(new ContentTools());
 		viewer.registerPlugin(new SCPanel(model));
 		viewer.registerPlugin(new SCOutputConsole());
-		viewer.setShowPanelSlots(true, true, true, true);
+		viewer.setShowPanelSlots(true, false, false, true);
 		viewer.setContent(sgc);
-		viewer.addContentUI();
+		//viewer.addContentUI();
 	}
 	
 	protected void setAppearance(){
