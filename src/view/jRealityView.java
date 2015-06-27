@@ -217,8 +217,11 @@ public class jRealityView implements View {
 		// Create DraggingTool to let user drag the geometric object in the visualization.
 		// Need to tweak it a bit in order to enable it back, as this feature was removed 
 		// in the latest versions of jReality. 
-		DraggingTool dragObjectTool = new DraggingTool(InputSlot.getDevice("DragAlongViewDirection"));
-		dragObjectTool.addCurrentSlot(InputSlot.getDevice("DragActivation"));
+		// "PrimarySelection" is to activate dragging by pressing mouse's right button. 
+		// "DragActivation" is the original behaviour, which activates it with middle button (mouse's wheel)
+		// but not every mouse has a middle button. 
+		DraggingTool dragObjectTool = new DraggingTool(InputSlot.getDevice("PrimarySelection"));
+		dragObjectTool.addCurrentSlot(InputSlot.getDevice("DragAlongViewDirection"));
 		dragObjectTool.addCurrentSlot(InputSlot.getDevice("PointerEvolution"));		
 		sgc.addTool(dragObjectTool);
 		
@@ -275,6 +278,7 @@ public class jRealityView implements View {
 	    Font f = new Font("Arial Bold", Font.PLAIN, 16);
 	    pts.setFont(f);
 	}
+	
 	
 
 }

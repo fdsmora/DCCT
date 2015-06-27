@@ -10,7 +10,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
 
 import configuration.Constants;
-import dctopology.SimplicialComplex;
 import de.jreality.plugin.JRViewer;
 import de.jreality.plugin.basic.View;
 import de.jtem.jrworkspace.plugin.Controller;

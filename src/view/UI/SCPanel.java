@@ -8,7 +8,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
@@ -17,6 +16,7 @@ import configuration.Constants;
 import de.jreality.plugin.basic.ViewShrinkPanelPlugin;
 import de.jtem.jrworkspace.plugin.Controller;
 import de.jtem.jrworkspace.plugin.PluginInfo;
+//import de.jtem.jrworkspace.plugin.flavor.HelpFlavor;
 
 /***
  * 
@@ -72,6 +72,20 @@ public class SCPanel extends ViewShrinkPanelPlugin implements ActionListener {
 //							currentStep.getNext() : currentStep.getBack();
 //		if (currentStep!=null)
 //			currentStep.visit();
+		
+//		String help = this.getHelpDocument();
+//		String x = this.getHelpPath();
+//		String y = this.getHelpStyleSheet();
+//		String z =  this.getHelpTitle();
+//		
+//		this.setHelpListener(new HelpListener(){
+//
+//			@Override
+//			public void showHelpPage(HelpFlavor arg0) {
+//				//this.showHelpPage(arg0);
+//				SCPanel.this.helpCalled();
+//				
+//			}});
 	}
 	
 	public void initialize(){

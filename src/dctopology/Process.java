@@ -7,9 +7,10 @@ public class Process implements Cloneable {
 	protected String[] view = null;
 	
 	public String getView() {
-		String result = "";
+		//String result = "";
 		if (this.view == null)
-			result = name;
+			//result = name;
+			return name;
 		else {
 			String prefix = "";
 			StringBuilder sb = new StringBuilder();
@@ -18,9 +19,10 @@ public class Process implements Cloneable {
 				sb.append(v!=null? v: "-");
 				prefix = ",";
 			}
-			result = sb.toString();
+			//result = sb.toString();
+			return "(" + sb.toString() + ")";
 		}
-		return "(" + result + ")";
+		//return "(" + result + ")";
 	}
 	
 	public int getId() {
