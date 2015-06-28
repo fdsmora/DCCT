@@ -2,7 +2,6 @@ package controller;
 import view.View;
 import view.jRealityView;
 import model.Model;
-import model.AtomicImmediateSnapshotModel.AtomicImmediateSnapshot;
 
 public class Controller {
 

@@ -59,6 +59,7 @@ public class jRealityView implements View {
 	public void update(String action) {
 		if (action.equals("r")){
 			resetView();
+			Geometry.reset();
 			console.resetConsole();
 			return;
 		}
@@ -73,7 +74,9 @@ public class jRealityView implements View {
 		else if (action.equals("p"))
 			complex = model.getProtocolComplex();
 		
-		g = new Geometry(complex, 
+//		g = new Geometry(complex, 
+//				model.isChromatic()? model.getSimplicialComplexColors() : null);
+		g = Geometry.createGeometry(complex, 
 				model.isChromatic()? model.getSimplicialComplexColors() : null);
 		
 		if (action.equals("i")){
@@ -161,11 +164,19 @@ public class jRealityView implements View {
 		faceFactory.update();
 	}
 	
+//	protected int[][] getFaceIndices(){
+//		int[][] faceIndices = new int[g.getFaces().size()][];
+//		int i =0;
+//		for (int[] l : g.getFaces()){
+//			faceIndices[i++]=l;
+//		}
+//		return faceIndices;
+//	}
 	protected int[][] getFaceIndices(){
 		int[][] faceIndices = new int[g.getFaces().size()][];
 		int i =0;
-		for (int[] l : g.getFaces()){
-			faceIndices[i++]=l;
+		for (Geometry.Face f : g.getFaces()){
+			faceIndices[i++]=f.getFaceArray();
 		}
 		return faceIndices;
 	}

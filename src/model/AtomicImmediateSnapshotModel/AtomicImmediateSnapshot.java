@@ -35,7 +35,9 @@ public class AtomicImmediateSnapshot extends CommunicationMechanism {
 					int[] order = toIndices(g);
 					newProcesses.addAll(simulateCommunication(processes, sharedMemory, order));
 				}
-				newSimplices.add(new Simplex(newProcesses));
+				Simplex newSimplex = new Simplex(newProcesses);
+				newSimplex.setParentId(s.getId());
+				newSimplices.add(newSimplex);
 			}
 		}
 		rounds++;

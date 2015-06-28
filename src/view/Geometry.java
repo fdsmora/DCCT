@@ -16,23 +16,41 @@ import dctopology.SimplicialComplex;
 
 public class Geometry {
 	protected Map<String, Vertex> vertices; 
-	protected List<int[]> faces;
+	//protected List<int[]> faces;
 	protected static final Color DEFAULT_COLOR = Color.BLUE;
+	protected List<Face> oldFaces = null;
+	protected List<Face> faces = null;
+	protected static Geometry geometry = null;
 	
-	public Geometry(SimplicialComplex sc, List<Color> colors){
+	public static Geometry createGeometry(SimplicialComplex sc, List<Color> colors){
+		if (geometry!=null){
+			List<Face> oldFaces = geometry.getFaces();
+			geometry = new Geometry(sc, colors);
+			geometry.setOldFaces(oldFaces);
+		}
+		else 
+			geometry = new Geometry(sc, colors);
+		return geometry;
+	}
+	
+	public static void reset(){
+		geometry = null;
+	}
+	
+	private Geometry(SimplicialComplex sc, List<Color> colors){
 		if (sc!=null) {
-			
 			Color[] processColors = new Color[sc.totalDistinctProcesses()];
 			int indexCount = 0;
 			Queue<Color> qColors = null;
 			if (colors!=null)
 				qColors = new LinkedList<Color>(colors) ;
 			
-			vertices = new LinkedHashMap<String, Vertex>();
-			faces = new ArrayList<int[]>(sc.getSimplices().size());
+			vertices = new LinkedHashMap<String, Vertex>(); //The only purpose of this is to control the uniqueness of vertices. 
+			faces = new ArrayList<Face>(sc.getSimplices().size());
 			
 			for (Simplex s : sc.getSimplices()) {
-				int[] face = new int[s.getProcessCount()];
+				//int[] face = new int[s.getProcessCount()];
+				Face face = new Face(s.getId());
 				int i=0;
 				for (Process p : s.getProcesses()) {
 					Vertex v;
@@ -47,7 +65,8 @@ public class Geometry {
 						setColor(v, p, qColors, processColors);
 						vertices.put(pKey,v);
 					}
-					face[i++]=v.index;
+					face.add(v);
+					//face[i++]=v.index;
 				}
 				faces.add(face);
 			}
@@ -58,7 +77,7 @@ public class Geometry {
 		return vertices;
 	}
 
-	public List<int[]> getFaces() {
+	public List<Face> getFaces() {
 		return faces;
 	} 
 	
@@ -90,17 +109,49 @@ public class Geometry {
 			System.out.println(v);
 		System.out.println("-----------Faces=" + faces.size() +"-------------");
 		System.out.print("[");
-		for (int[] f : faces){
+		for (Face f : faces){
 			String prefix = "";
 			System.out.print("[");
-			for(int i=0; i< f.length; i++){
-				System.out.print(prefix + f[i]);
+			for (int i:f.getFaceArray()){
+			//for(int i=0; i< f.length; i++){
+			//	System.out.print(prefix + f[i]);
+				System.out.print(prefix + i);
 				prefix = ",";
 			}
 			System.out.print("]");
 		}
 		System.out.println("]");
 	}
+	
+	public class Face {
+		protected List<Vertex> vertices =  new ArrayList<Vertex>();
+		protected int[] faceArray =null;
+		protected long id = 0;
+		protected long parentId = 0;
+		protected int n = 0;
+		
+		public Face(long id){
+			this.id = id;
+		}
+		public long getId(){
+			return id;
+		}
+		public void add(Vertex v){
+			vertices.add(v);
+		}
+		public int[] getFaceArray(){
+			if (faceArray==null ||
+					n<vertices.size()){ // In case add method was called after the last call of this method, we need to update facesArray.
+				n = vertices.size();
+				faceArray = new int[n];
+				int i = 0;
+				for (Vertex v : vertices)
+					faceArray[i++]=v.index;
+			}
+			return faceArray;
+		}
+	}
+
 	
 	protected class Vertex {
 		
@@ -140,7 +191,7 @@ public class Geometry {
 		
 		Vertex(Process p){
 			if (p!=null){
-				this.label = p.getView();
+				this.label = p.toString();//p.getView();  // Temporal, to highlight id of process
 				this.id = p.toString();
 			}
 		}
@@ -162,5 +213,14 @@ public class Geometry {
 		public int hashCode(){
 			return this.id.hashCode();
 		}
+	}
+
+
+	public List<Face> getOldFaces() {
+		return oldFaces;
+	}
+
+	public void setOldFaces(List<Face> oldFaces) {
+		this.oldFaces = oldFaces;
 	}
 }

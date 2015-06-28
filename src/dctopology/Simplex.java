@@ -8,6 +8,10 @@ import dctopology.Process;
 
 public class Simplex {
 	
+	private static long idCounter = -1;
+	protected long id=0;
+	protected long parentId=-1;
+	
 	public Set<Process> getProcesses() {
 		return processes;
 	}
@@ -15,11 +19,12 @@ public class Simplex {
 	protected Set<Process> processes;
 	
 	public Simplex(Process... processes){
-		this.processes = new LinkedHashSet<Process>(Arrays.asList(processes));
+		this(new LinkedHashSet<Process>(Arrays.asList(processes)));
 	}
 	
 	public Simplex(Set<Process> processes){
 		this.processes = processes;
+		this.id = ++idCounter;
 	}
 	
 	public int dimension(){
@@ -55,6 +60,18 @@ public class Simplex {
 		}
 		sb.append("}");
 		return sb.toString();
+	}
+
+	public long getId() {
+		return id;
+	}
+
+	public long getParentId() {
+		return parentId;
+	}
+	
+	public void setParentId(long parentId) {
+		this.parentId=parentId;
 	}
 	
 }
