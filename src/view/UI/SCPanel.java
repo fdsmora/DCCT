@@ -36,29 +36,27 @@ public class SCPanel extends ViewShrinkPanelPlugin implements ActionListener {
 	
 	public SCPanel(Model m){
 		this.model = m;
+		// Configuring UI controls
 		btnNext.addActionListener(this);
 		btnNext.setActionCommand(Constants.NEXT);
 		btnBack.addActionListener(this);
 		btnBack.setActionCommand(Constants.BACK);
-		
 		pMain.setLayout(new BorderLayout());
-		
 		GridLayout gLayout = new GridLayout(0,2);
 		pButtons.setLayout(gLayout);
-		
 		pButtons.setBorder(BorderFactory.createEtchedBorder());
-		
 		pButtons.add(btnBack);
 		pButtons.add(btnNext);
-		
 		pMain.add(pContent, BorderLayout.CENTER);
 		pMain.add(pButtons, BorderLayout.PAGE_END);
 		
+		// Define the position of the controls within jReality UI
 		setInitialPosition(SHRINKER_LEFT);
 		
 		initialize();
 		currentStep.visit();
 		
+		// Embed this panel in jReality's Shrink Panel.
 		getShrinkPanel().add(pMain);
 	}
 	
@@ -68,11 +66,8 @@ public class SCPanel extends ViewShrinkPanelPlugin implements ActionListener {
 			currentStep.validateAndExecute();
 		else 
 			currentStep.goBack();
-//		currentStep = cmd.equals(Constants.NEXT) ?
-//							currentStep.getNext() : currentStep.getBack();
-//		if (currentStep!=null)
-//			currentStep.visit();
-		
+
+// 		Code for enabling help panels.		
 //		String help = this.getHelpDocument();
 //		String x = this.getHelpPath();
 //		String y = this.getHelpStyleSheet();

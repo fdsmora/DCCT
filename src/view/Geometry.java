@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.Random;
 
+import configuration.Constants;
 import dctopology.Process;
 import dctopology.Simplex;
 import dctopology.SimplicialComplex;
@@ -18,34 +19,36 @@ public class Geometry {
 	protected Map<String, Vertex> vertices; 
 	//protected List<int[]> faces;
 	protected static final Color DEFAULT_COLOR = Color.BLUE;
-	protected List<Face> oldFaces = null;
+//	protected List<Face> initialComplexFaces = null;
+//	protected List<Face> lastProtocolComplexFaces = null;
 	protected List<Face> faces = null;
-	protected static Geometry geometry = null;
+	//protected List<Color> colors = Arrays.asList(Constants.DEFAULT_COLORS);
+//	protected static Geometry geometry = null;
 	
-	public static Geometry createGeometry(SimplicialComplex sc, List<Color> colors){
-		if (geometry!=null){
-			List<Face> oldFaces = geometry.getFaces();
-			geometry = new Geometry(sc, colors);
-			geometry.setOldFaces(oldFaces);
-		}
-		else 
-			geometry = new Geometry(sc, colors);
-		return geometry;
-	}
+//	public static Geometry createGeometry(SimplicialComplex sc, List<Color> colors){
+//		if (geometry!=null){
+//			List<Face> oldFaces = geometry.getFaces();
+//			geometry = new Geometry(sc, colors);
+//			geometry.setParentFaces(oldFaces);
+//		}
+//		else 
+//			geometry = new Geometry(sc, colors);
+//		return geometry;
+//	}
+//	
+//	public static void reset(){
+//		geometry = null;
+//	}
 	
-	public static void reset(){
-		geometry = null;
-	}
-	
-	private Geometry(SimplicialComplex sc, List<Color> colors){
+	public Geometry(SimplicialComplex sc, List<Color> colors){
 		if (sc!=null) {
 			Color[] processColors = new Color[sc.totalDistinctProcesses()];
 			int indexCount = 0;
 			Queue<Color> qColors = null;
-			if (colors!=null)
+			if (sc.isChromatic())
 				qColors = new LinkedList<Color>(colors) ;
 			
-			vertices = new LinkedHashMap<String, Vertex>(); //The only purpose of this is to control the uniqueness of vertices. 
+			vertices = new LinkedHashMap<String, Vertex>(); 
 			faces = new ArrayList<Face>(sc.getSimplices().size());
 			
 			for (Simplex s : sc.getSimplices()) {
@@ -55,14 +58,14 @@ public class Geometry {
 				for (Process p : s.getProcesses()) {
 					Vertex v;
 					// If complex is chromatic, distinguish processes by pair (id, view), otherwise only by view. 
-					String pKey = colors != null? p.toString() : p.getView();
+					String pKey = s.isChromatic()? p.toString() : p.getView();
 					if (vertices.containsKey(pKey)) {
 						v = vertices.get(pKey);
 					} else {
 						v = new Vertex(p);
 						v.index = indexCount++;
 						v.coordinates = randomCoordGenerator(indexCount);
-						setColor(v, p, qColors, processColors);
+						setVertexColor(v, p, qColors, processColors);
 						vertices.put(pKey,v);
 					}
 					face.add(v);
@@ -94,7 +97,7 @@ public class Geometry {
 		return coords;
 	}
 
-	protected void setColor(Vertex v, Process p, Queue<Color> qColors, Color[] pColors){
+	protected void setVertexColor(Vertex v, Process p, Queue<Color> qColors, Color[] pColors){
 		if (qColors != null){ // Chromatic case
 			if (pColors[p.getId()]==null)
 				pColors[p.getId()]= qColors.remove();
@@ -215,12 +218,4 @@ public class Geometry {
 		}
 	}
 
-
-	public List<Face> getOldFaces() {
-		return oldFaces;
-	}
-
-	public void setOldFaces(List<Face> oldFaces) {
-		this.oldFaces = oldFaces;
-	}
 }

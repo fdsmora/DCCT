@@ -19,7 +19,7 @@ public class Model {
 	protected SimplicialComplex initialComplex;
 	protected SimplicialComplex protocolComplex;
 	protected CommunicationMechanism communicationMechanism;
-	protected boolean chromatic = true;
+	//protected boolean chromatic = true;
 	protected View view;
 	protected List<Color> pColors;
 
@@ -28,7 +28,7 @@ public class Model {
 	
 	public void reset(){
 		initialComplex =protocolComplex= null;
-		chromatic = true;
+//		chromatic = true;
 		pColors = null;
 		communicationMechanism = null;
 		if (view!=null)
@@ -68,11 +68,13 @@ public class Model {
 	}
 
 	public boolean isChromatic() {
-		return chromatic;
+		//return chromatic;
+		return protocolComplex.isChromatic();
 	}
 
 	public void setChromatic(boolean chromatic) {
-		this.chromatic = chromatic;
+		//this.chromatic = chromatic;
+		protocolComplex.setChromatic(chromatic);
 		if (view!=null)
 			view.update("c"); // Chromatic changed
 	}
@@ -85,8 +87,16 @@ public class Model {
 		if (communicationMechanism == null)
 			throw new NullPointerException("No communicationMechanism specified");
 		
+		boolean previousColoring = true;
+		if (protocolComplex!=null)
+			previousColoring = protocolComplex.isChromatic();
+		
 		protocolComplex = communicationMechanism
-				.communicationRound(protocolComplex!=null? protocolComplex : initialComplex);
+					.communicationRound(protocolComplex!=null? 
+							protocolComplex : initialComplex);
+		protocolComplex.setChromatic(previousColoring);
+	
+			
 		if (view!=null)
 			view.update("p");
 		//TEST
@@ -118,11 +128,8 @@ public class Model {
 	}
 
 	public List<Color> getSimplicialComplexColors() {
-		if (chromatic){
-			if (pColors == null)
-				return Arrays.asList(Constants.DEFAULT_COLORS);
-		} else return null;
-		
+		if (pColors == null)
+			return Arrays.asList(Constants.DEFAULT_COLORS);
 		return pColors;
 	}
 

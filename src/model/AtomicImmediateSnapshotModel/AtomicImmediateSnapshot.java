@@ -19,8 +19,10 @@ public class AtomicImmediateSnapshot extends CommunicationMechanism {
 	 * protocol complex will be obtained.  
 	 */
 	public SimplicialComplex communicationRound(SimplicialComplex sc) {
-		Set<Simplex> simplices = sc.getSimplices();
+		// The communication round must be performed on chromatic simplices.
+		sc.setChromatic(true);
 		
+		Set<Simplex> simplices = sc.getSimplices();
 		Set<Simplex> newSimplices = new LinkedHashSet<Simplex>();
 		
 		for(Simplex s: simplices){

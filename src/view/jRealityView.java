@@ -57,27 +57,31 @@ public class jRealityView implements View {
 	}
 	
 	public void update(String action) {
+		// Reset
 		if (action.equals("r")){
 			resetView();
-			Geometry.reset();
+			//Geometry.reset();
 			console.resetConsole();
 			return;
 		}
 		
+		// Update
 		if (action.equals("u")){
 			console.resetProtocolComplexInfo();
 			return;
 		}
 		
+		// Initial complex generated
 		if(action.equals("i"))
 			complex = model.getInitialComplex() ;
+		// Protocol complex generated
 		else if (action.equals("p"))
 			complex = model.getProtocolComplex();
 		
-//		g = new Geometry(complex, 
+		g = new Geometry(complex, 
+				model.getSimplicialComplexColors());
+//		g = Geometry.createGeometry(complex, 
 //				model.isChromatic()? model.getSimplicialComplexColors() : null);
-		g = Geometry.createGeometry(complex, 
-				model.isChromatic()? model.getSimplicialComplexColors() : null);
 		
 		if (action.equals("i")){
 			console.setInitialComplexInfo(complex.toString());

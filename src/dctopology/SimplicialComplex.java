@@ -13,6 +13,7 @@ public class SimplicialComplex {
 
 	protected Set<Simplex> simplices;
 	protected int dimension;
+	protected boolean chromatic = true;
 	
 	public SimplicialComplex(Simplex... simplices){
 		this.simplices = new LinkedHashSet<Simplex>(Arrays.asList(simplices));						
@@ -54,6 +55,17 @@ public class SimplicialComplex {
 		}
 		sb.append("}");
 		return sb.toString();
+	}
+
+	public boolean isChromatic() {
+		return chromatic;
+	}
+
+	public void setChromatic(boolean chromatic) {
+		this.chromatic = chromatic;
+		for (Simplex s : simplices){
+			s.setChromatic(chromatic);
+		}
 	}
 	
 }
