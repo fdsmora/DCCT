@@ -25,6 +25,10 @@ public class Process implements Cloneable {
 		//return "(" + result + ")";
 	}
 	
+	public String[] getViewArray(){
+		return view;
+	}
+	
 	public int getId() {
 		return id;
 	}

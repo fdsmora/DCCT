@@ -18,7 +18,7 @@ public abstract class CommunicationMechanism {
 	public abstract SimplicialComplex communicationRound(SimplicialComplex sc);
 	
 	public static CommunicationMechanism createCommunicationMechanism(String name){
-		if (name.equals(Constants.ATOMIC_IMMEDIATE_SNAPSHOT))
+		if (name.equals(Constants.IMMEDIATE_SNAPSHOT))
 			return new AtomicImmediateSnapshot();
 		return null;
 	}

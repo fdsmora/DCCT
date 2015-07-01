@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
-
 import configuration.Constants;
 import model.CommunicationMechanism;
 import dctopology.SimplicialComplex;
@@ -91,7 +90,7 @@ public class AtomicImmediateSnapshot extends CommunicationMechanism {
 	
 	@Override 
 	public String toString(){
-		return Constants.ATOMIC_IMMEDIATE_SNAPSHOT + " " + Constants.SHARED_MEMORY ;
+		return Constants.IMMEDIATE_SNAPSHOT + " " + Constants.SHARED_MEMORY ;
 	}
 
 

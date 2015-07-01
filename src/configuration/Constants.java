@@ -10,7 +10,7 @@ public final class Constants {
 	public static final Color[] DEFAULT_COLORS = {Color.BLUE, Color.WHITE, Color.GREEN, Color.YELLOW, Color.RED};
 	public static final int MAX_COLORS = 5;
 	public static final String SHARED_MEMORY = "Shared memory";
-	public static final String ATOMIC_IMMEDIATE_SNAPSHOT = "Atomic immediate snapshot";
+	public static final String IMMEDIATE_SNAPSHOT = "Immediate snapshot";
 	public static final String NEXT = "Next";
 	public static final String BACK = "Back";
 	public static final String GENERATE = "Generate";
@@ -35,10 +35,15 @@ public final class Constants {
 	public static final String SET_NOTATION_REPRESENTATION = "Set notation representation";
 	public static final String UNKNOWN = "Unknown";
 
+	public static final double[] DEFAULT_0_SIMPLEX_VERTEX_COORDINATES = {0,0,0};
+	public static final double[][] DEFAULT_1_SIMPLEX_VERTEX_COORDINATES = {{-4.5,0,0},{4.5,0,0}};
+	public static final double[][] DEFAULT_2_SIMPLEX_VERTEX_COORDINATES = {{0,3.8,0}, {-4.5,-4,0},{4.5,-4,0}};
+	public static final float EPSILON = 0.4f;
+	
 	public static final Map<String, List<String>> availableCommunicationModels;
 	static {
 		availableCommunicationModels = new LinkedHashMap<String, List<String>>();
-		availableCommunicationModels.put(SHARED_MEMORY, Arrays.asList(ATOMIC_IMMEDIATE_SNAPSHOT));
+		availableCommunicationModels.put(SHARED_MEMORY, Arrays.asList(IMMEDIATE_SNAPSHOT));
 	}
 	
 }

@@ -44,8 +44,6 @@ public class NextRoundStep extends Step {
 		rbChromatic.addActionListener(this);
 		rbNonChromatic.addActionListener(this);
 		
-		rbChromatic.setSelected(true);
-		
 		lbDesc.setText("Select simplicial complex's color");
 	}
 	
@@ -57,6 +55,7 @@ public class NextRoundStep extends Step {
 		btnBack.setText(Constants.START_OVER);
 		btnNext.setText(Constants.NEXT_ROUND);
 		scPanel.getpButtons().add(btnChangeModel,2);
+		rbChromatic.setSelected(true);
 	}
 	
 	@Override

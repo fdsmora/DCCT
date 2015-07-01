@@ -2,9 +2,7 @@ package view;
 
 import java.awt.Color;
 import java.awt.Font;
-
 import javax.swing.SwingConstants;
-
 import model.CommunicationMechanism;
 import model.Model;
 import controller.Controller;
@@ -39,7 +37,8 @@ public class jRealityView implements View {
 	protected Model model;
 	protected Controller controller;
 	protected SimplicialComplex complex;
-	protected Geometry g;
+	protected Geometry initialComplexGeometry;
+	protected Geometry protocolComplexGeometry;
 	protected JRViewer viewer = new JRViewer();
 	protected SceneGraphComponent sgc = new SceneGraphComponent();
 	protected SceneGraphComponent sgcV = new SceneGraphComponent();
@@ -57,32 +56,35 @@ public class jRealityView implements View {
 	}
 	
 	public void update(String action) {
-		// Reset
 		if (action.equals("r")){
 			resetView();
-			//Geometry.reset();
+			resetGeometry();
 			console.resetConsole();
 			return;
 		}
 		
-		// Update
 		if (action.equals("u")){
 			console.resetProtocolComplexInfo();
 			return;
 		}
 		
-		// Initial complex generated
-		if(action.equals("i"))
+		if(action.equals("i")){
 			complex = model.getInitialComplex() ;
-		// Protocol complex generated
-		else if (action.equals("p"))
+			initialComplexGeometry = new Geometry (complex, 
+					null, model.getSimplicialComplexColors());
+		}
+		else if (action.equals("p") || action.equals("c")){
 			complex = model.getProtocolComplex();
+			protocolComplexGeometry = new Geometry(complex, 
+					protocolComplexGeometry!=null? protocolComplexGeometry : initialComplexGeometry, 
+					model.getSimplicialComplexColors());
+			//Test
+			protocolComplexGeometry.test();
+		}
 		
-		g = new Geometry(complex, 
-				model.getSimplicialComplexColors());
-//		g = Geometry.createGeometry(complex, 
+//		g = new Geometry(complex, 
 //				model.isChromatic()? model.getSimplicialComplexColors() : null);
-		
+
 		if (action.equals("i")){
 			console.setInitialComplexInfo(complex.toString());
 		}
@@ -92,9 +94,9 @@ public class jRealityView implements View {
 			
 			console.addProtocolComplexInfo(complex.toString(),
 					complex.getSimplices().size(),
-					model.isChromatic()? 0 : g.faces.size());
+					model.isChromatic()? 0 : protocolComplexGeometry.faces.size());
 		}else if (action.equals("c")){
-			console.addNonChromaticInfo(g.faces.size());
+			console.addNonChromaticInfo(protocolComplexGeometry.faces.size());
 		}
 							
 		console.print();
@@ -124,6 +126,7 @@ public class jRealityView implements View {
 	}
 	
 	protected void configVertices() {
+		Geometry g = getGeometry();
 		if (g!=null){			
 			psf.setVertexCount(g.getVertices().size());
 			psf.setVertexCoordinates(getVertexCoordinates());
@@ -134,9 +137,9 @@ public class jRealityView implements View {
 		}
 	}
 	
-	protected void configFaces() {		
+	protected void configFaces() {
+		Geometry g = getGeometry();
 		if (g!=null) {
-			
 			int f = g.getFaces().size();
 			
 //			Color[] faceColors = new Color[f];
@@ -168,6 +171,16 @@ public class jRealityView implements View {
 		faceFactory.update();
 	}
 	
+	private Geometry getGeometry(){
+		if (protocolComplexGeometry == null)
+			return initialComplexGeometry;
+		else return protocolComplexGeometry;
+	}
+	
+	private void resetGeometry(){
+		initialComplexGeometry = protocolComplexGeometry = null;
+	}
+	
 //	protected int[][] getFaceIndices(){
 //		int[][] faceIndices = new int[g.getFaces().size()][];
 //		int i =0;
@@ -177,37 +190,40 @@ public class jRealityView implements View {
 //		return faceIndices;
 //	}
 	protected int[][] getFaceIndices(){
+		Geometry g = getGeometry();
 		int[][] faceIndices = new int[g.getFaces().size()][];
 		int i =0;
-		for (Geometry.Face f : g.getFaces()){
+		for (Face f : g.getFaces().values()){
 			faceIndices[i++]=f.getFaceArray();
 		}
 		return faceIndices;
 	}
 
 	protected double[][] getVertexCoordinates() {
-	
+		Geometry g = getGeometry();
 		//if (coordinates ==null){
 			coordinates = new double[g.getVertices().size()][3];
 			int i=0;
-			for (Geometry.Vertex v:g.getVertices().values())
+			for (Vertex v:g.getVertices().values())
 				coordinates[i++]=v.getCoordinates();
 		//}
 		return coordinates;
 	}
 	
 	protected Color[] getVertexColors() {
+		Geometry g = getGeometry();
 		Color[] colors = new Color[g.getVertices().size()];
 		int i=0;
-		for (Geometry.Vertex v:g.getVertices().values())
+		for (Vertex v:g.getVertices().values())
 			colors[i++]=v.getColor();
 		return colors;
 	}
 	
 	protected void setVertexLabels(PointSetFactory psf){
+		Geometry g = getGeometry();
 		String[] labels = new String[g.getVertices().size()];
 		int i=0;
-		for (Geometry.Vertex v : g.getVertices().values())
+		for (Vertex v : g.getVertices().values())
 			labels[i++]=v.getLabel();
 		
 		psf.setVertexAttribute(Attribute.LABELS, StorageModel.STRING_ARRAY.createReadOnly(labels));
@@ -293,7 +309,4 @@ public class jRealityView implements View {
 	    Font f = new Font("Arial Bold", Font.PLAIN, 16);
 	    pts.setFont(f);
 	}
-	
-	
-
 }
