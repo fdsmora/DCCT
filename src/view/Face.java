@@ -1,12 +1,11 @@
 package view;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import java.util.HashMap;
+import java.util.Map;
 import configuration.Constants;
 
 public class Face {
-	protected List<Vertex> vertices =  new ArrayList<Vertex>();
+	protected Map<Integer, Vertex> vertices =  new HashMap<Integer, Vertex>();
 	protected int[] faceArray =null;
 	protected long id = 0;
 	protected Face parentFace = null;
@@ -20,7 +19,7 @@ public class Face {
 		return id;
 	}
 	public void add(Vertex v){
-		vertices.add(v);
+		vertices.put(v.getId(), v);
 	}
 	public int[] getFaceArray(){
 		if (faceArray==null ||
@@ -28,7 +27,7 @@ public class Face {
 			n = vertices.size();
 			faceArray = new int[n];
 			int i = 0;
-			for (Vertex v : vertices)
+			for (Vertex v : vertices.values())
 				faceArray[i++]=v.getIndex();
 		}
 		return faceArray;
@@ -47,7 +46,7 @@ public class Face {
 			calculateInitialComplexCoordinates();
 			return;
 		}
-		for (Vertex v : vertices){
+		for (Vertex v : vertices.values()){
 			v.calculateCoordinates(parentFace, chromatic);
 		}
 	}
@@ -67,7 +66,7 @@ public class Face {
 				break;
 		}
 	}
-	public List<Vertex> getVertices() {
+	public Map<Integer,Vertex> getVertices() {
 		return vertices;
 	}
 	

@@ -1,8 +1,7 @@
 package view;
 
 import java.awt.Color;
-import java.util.Arrays;
-import java.util.List;
+import java.util.Map;
 
 import configuration.Constants;
 import dctopology.Process;
@@ -54,21 +53,25 @@ public class Vertex {
 	}
 
 	public void calculateCoordinates(Face parentFace, boolean chromatic){
-		List<Vertex> parentVertices = parentFace.getVertices();
-		if (chromatic){
+		//List<Vertex> parentVertices = parentFace.getVertices();
+		Map<Integer, Vertex> parentVertices = parentFace.getVertices();
+		// I think it can be optimized
+		if (chromatic)
 			coordinates = calculateChromaticCoordinates(parentVertices);
-		}
+
 	}
 	
-	private double[] calculateChromaticCoordinates(List<Vertex> parentVertices) {
+	private double[] calculateChromaticCoordinates(Map<Integer,Vertex> parentVertices) {
 		int count = countProcessViewElements();
 		
 		if (count == 1)
 			return parentVertices.get(id).coordinates;
 		
+		final float EPSILON =Constants.EPSILON_DEFAULT;
+		
 		//int divisor = parentVertices.size();
-		double smallFactor = (1-Constants.EPSILON)/count;
-		double bigFactor = (1+(Constants.EPSILON/(count==3?2:1)))/count;
+		double smallFactor = (1-EPSILON)/count;
+		double bigFactor = (1+(EPSILON/(count==3?2:1)))/count;
 		double[] res = {0.0,0.0,0.0};
 		
 		for (int i = 0; i<processView.length; i++){

@@ -73,13 +73,14 @@ public class jRealityView implements View {
 			initialComplexGeometry = new Geometry (complex, 
 					null, model.getSimplicialComplexColors());
 		}
-		else if (action.equals("p") || action.equals("c")){
+		else if (action.equals("p") || 
+					action.equals("c")){
 			complex = model.getProtocolComplex();
 			protocolComplexGeometry = new Geometry(complex, 
 					protocolComplexGeometry!=null? protocolComplexGeometry : initialComplexGeometry, 
 					model.getSimplicialComplexColors());
 			//Test
-			protocolComplexGeometry.test();
+			//protocolComplexGeometry.test();
 		}
 		
 //		g = new Geometry(complex, 
@@ -94,9 +95,9 @@ public class jRealityView implements View {
 			
 			console.addProtocolComplexInfo(complex.toString(),
 					complex.getSimplices().size(),
-					model.isChromatic()? 0 : protocolComplexGeometry.faces.size());
+					model.isChromatic()? 0 : protocolComplexGeometry.getFaces().size());
 		}else if (action.equals("c")){
-			console.addNonChromaticInfo(protocolComplexGeometry.faces.size());
+			console.addNonChromaticInfo(protocolComplexGeometry.getFaces().size());
 		}
 							
 		console.print();

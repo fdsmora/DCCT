@@ -1,8 +1,6 @@
 package view;
 
 import java.awt.Color;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -10,7 +8,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Random;
-
 import dctopology.Process;
 import dctopology.Simplex;
 import dctopology.SimplicialComplex;
@@ -18,7 +15,7 @@ import dctopology.SimplicialComplex;
 public class Geometry {
 	protected Map<String, Vertex> vertices; 
 	protected static final Color DEFAULT_COLOR = Color.BLUE;
-	private Map<Long, Face> faces = null;
+	protected Map<Long, Face> faces = null;
 	protected static Geometry geometry = null;
 		
 	public Geometry(SimplicialComplex sc, Geometry parentGeometry, List<Color> colors){
@@ -55,8 +52,8 @@ public class Geometry {
 						vertices.put(pKey,v);
 					}
 					face.add(v);
-					face.calculateCoordinates();
 				}
+				face.calculateCoordinates();
 				faces.put(face.id,face);
 			}
 		}

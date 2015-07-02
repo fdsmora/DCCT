@@ -1,6 +1,7 @@
 package dctopology;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
@@ -26,17 +27,36 @@ public class Simplex {
 
 	}
 	
+	//TEMPORAL, PLEASE REPLACE FOR SOMETHING BETTER
+	private int countProcessViewElements(String[] processView){
+		int c = 0;
+		for (int i =0; i<processView.length; i++){
+			if (processView[i]!=null)
+				c++;
+		}
+		return c;
+	}
+	
 	private void buildNonChromaticProcesses() {
 		Map<String, Process> map = new LinkedHashMap<String, Process>();
+		nonChromaticProcesses = new LinkedHashSet<Process>(map.size());
 		for (Process p : chromaticProcesses){
 			String view = p.getView();
-			if (!map.containsKey(view))
+			if (!map.containsKey(view)){
+				Process ncp = (Process) p.clone(); // non-Chromatic process
+				String[] processView = p.getViewArray();
+				int id = countProcessViewElements(processView)-1;
+				ncp.setView(processView);
+				ncp.setId(id);
+				nonChromaticProcesses.add(ncp);
 				map.put(view, p);
+			}
+
 		}
-		nonChromaticProcesses = new LinkedHashSet<Process>(map.size());
-		for (String view : map.keySet()){
-			nonChromaticProcesses.add(map.get(view));
-		}
+//		nonChromaticProcesses = new LinkedHashSet<Process>(map.size());
+//		for (String view : map.keySet()){
+//			nonChromaticProcesses.add(map.get(view));
+//		}
 	}
 
 	public Simplex(Process... processes){
