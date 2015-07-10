@@ -5,7 +5,6 @@ import java.awt.Font;
 import javax.swing.SwingConstants;
 import model.CommunicationMechanism;
 import model.Model;
-import controller.Controller;
 import view.UI.SCOutputConsole;
 import view.UI.SCPanel;
 import dctopology.SimplicialComplex;
@@ -35,24 +34,21 @@ import de.jreality.tools.PointDragListener;
 public class jRealityView implements View {
 
 	protected Model model;
-	protected Controller controller;
 	protected SimplicialComplex complex;
 	protected Geometry initialComplexGeometry;
 	protected Geometry protocolComplexGeometry;
 	protected JRViewer viewer = new JRViewer();
 	protected SceneGraphComponent sgc = new SceneGraphComponent();
 	protected SceneGraphComponent sgcV = new SceneGraphComponent();
-	protected DragEventTool dragVertexTool = new DragEventTool();
 	protected IndexedFaceSetFactory faceFactory = new IndexedFaceSetFactory();
 	protected PointSetFactory psf = new PointSetFactory();
 	protected SCOutputConsole console = new SCOutputConsole();
 	
 	protected double[][] coordinates;
 	
-	public jRealityView(Model m, Controller c){
+	public jRealityView(Model m){
 		model = m;
 		model.registerView(this);
-		controller = c;
 	}
 	
 	public void update(String action) {
@@ -119,8 +115,8 @@ public class jRealityView implements View {
 	}
 
 	public void start(){
-		sgc.removeAllChildren();
-		updateView();
+		//sgc.removeAllChildren();
+		//updateView();
 		//setAppearance();
 		configViewer();
 		viewer.startup();
@@ -245,18 +241,19 @@ public class jRealityView implements View {
 	
 	protected void configViewer(){
 		sgc.addChild(sgcV);
-		sgc.addTool(dragVertexTool);
-		// Create DraggingTool to let user drag the geometric object in the visualization.
-		// Need to tweak it a bit in order to enable it back, as this feature was removed 
-		// in the latest versions of jReality. 
-		// "PrimarySelection" is to activate dragging by pressing mouse's right button. 
-		// "DragActivation" is the original behaviour, which activates it with middle button (mouse's wheel)
-		// but not every mouse has a middle button. 
+
+/*		 Create DraggingTool to let user drag the geometric object in the visualization space.
+		 Needed to tweak it a bit in order to enable it back, as this feature was removed 
+		 in the latest versions of jReality. 
+		 "PrimarySelection" is to activate dragging by pressing mouse's right button. 
+		 "DragActivation" is the original behaviour, which activates it with middle button (mouse's wheel)
+		 but not every mouse has a middle button (e.g. Mac) */
 		DraggingTool dragObjectTool = new DraggingTool(InputSlot.getDevice("PrimarySelection"));
 		dragObjectTool.addCurrentSlot(InputSlot.getDevice("DragAlongViewDirection"));
 		dragObjectTool.addCurrentSlot(InputSlot.getDevice("PointerEvolution"));		
 		sgc.addTool(dragObjectTool);
 		
+		DragEventTool dragVertexTool = new DragEventTool();
 		dragVertexTool.addPointDragListener(new PointDragListener() {
 			public void pointDragEnd(PointDragEvent e) {
 			}
@@ -266,8 +263,10 @@ public class jRealityView implements View {
 				jRealityView.this.pointDragged(e);
 			}
 		});
+		sgc.addTool(dragVertexTool);
 		
 		viewer.addBasicUI();
+		// We enable zoom tool by default. 
 		viewer.getController().getPlugin(CameraMenu.class).setZoomEnabled(true);
 		
 		viewer.registerPlugin(new ContentAppearance());
@@ -277,7 +276,6 @@ public class jRealityView implements View {
 		viewer.registerPlugin(new SCOutputConsole());
 		viewer.setShowPanelSlots(true, false, false, true);
 		viewer.setContent(sgc);
-		//viewer.addContentUI();
 	}
 	
 	protected void setAppearance(){
