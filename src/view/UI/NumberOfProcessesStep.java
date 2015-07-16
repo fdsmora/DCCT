@@ -14,7 +14,7 @@ public class NumberOfProcessesStep extends Step {
 	protected boolean modified = false;
 	protected int n = 0;
 	
-	public NumberOfProcessesStep(SCPanel p){
+	public NumberOfProcessesStep(SimplicialComplexPanel p){
 		super(p);
 		model.reset();
 					

@@ -37,7 +37,7 @@ public class NameColorStep extends Step {
 	protected List<ColorEditor> l_processColors;
 	protected int n = 0;
 
-	public NameColorStep(SCPanel p) {
+	public NameColorStep(SimplicialComplexPanel p) {
 		super(p);
 	}
 	

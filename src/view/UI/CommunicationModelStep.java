@@ -13,7 +13,7 @@ public class CommunicationModelStep extends Step {
 	protected JComboBox<String> communicationModelOptions = new JComboBox<String>();
 	protected JComboBox<String> communicationModelSubOptions = new JComboBox<String>();
 	
-	public CommunicationModelStep(SCPanel p){
+	public CommunicationModelStep(SimplicialComplexPanel p){
 		super(p);
 		
 		pContent.setBorder(BorderFactory.createTitledBorder(Constants.PROTOCOL_COMPLEX));

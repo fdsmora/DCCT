@@ -19,7 +19,7 @@ public class NextRoundStep extends Step {
 	protected JRadioButton rbChromatic = new JRadioButton(Constants.CHROMATIC);
 	protected JRadioButton rbNonChromatic = new JRadioButton(Constants.NON_CHROMATIC);
 	
-	public NextRoundStep(SCPanel p){
+	public NextRoundStep(SimplicialComplexPanel p){
 		super(p);	
 		
 		lbMaxReached.setForeground(Color.RED);

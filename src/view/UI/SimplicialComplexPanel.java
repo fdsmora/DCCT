@@ -6,27 +6,20 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
 import java.util.Map;
-
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JPanel;
-
 import model.Model;
 import configuration.Constants;
-import de.jreality.plugin.basic.ViewShrinkPanelPlugin;
-import de.jtem.jrworkspace.plugin.Controller;
-import de.jtem.jrworkspace.plugin.PluginInfo;
-//import de.jtem.jrworkspace.plugin.flavor.HelpFlavor;
 
 /***
  * 
- * @author Fausto
+ * @author Fausto Salazar
  *
  */
-public class SCPanel extends ViewShrinkPanelPlugin implements ActionListener {
+public class SimplicialComplexPanel extends JPanel implements ActionListener {
 	protected Model model = null;
 	protected JPanel pContent = new JPanel();
-	protected JPanel pMain = new JPanel();
 	protected JPanel pButtons = new JPanel();
 	protected JButton btnNext = new JButton(Constants.NEXT);
 	protected JButton btnBack = new JButton(Constants.BACK);
@@ -34,30 +27,25 @@ public class SCPanel extends ViewShrinkPanelPlugin implements ActionListener {
 	protected Step currentStep = null;
 	protected Map<String, Step> steps;
 	
-	public SCPanel(Model m){
+	public SimplicialComplexPanel(Model m){
 		this.model = m;
 		// Configuring UI controls
 		btnNext.addActionListener(this);
 		btnNext.setActionCommand(Constants.NEXT);
 		btnBack.addActionListener(this);
 		btnBack.setActionCommand(Constants.BACK);
-		pMain.setLayout(new BorderLayout());
+		setLayout(new BorderLayout());
 		GridLayout gLayout = new GridLayout(0,2);
 		pButtons.setLayout(gLayout);
 		pButtons.setBorder(BorderFactory.createEtchedBorder());
 		pButtons.add(btnBack);
 		pButtons.add(btnNext);
-		pMain.add(pContent, BorderLayout.CENTER);
-		pMain.add(pButtons, BorderLayout.PAGE_END);
-		
-		// Define the position of the controls within jReality UI
-		setInitialPosition(SHRINKER_LEFT);
+		add(pContent, BorderLayout.CENTER);
+		add(pButtons, BorderLayout.PAGE_END);
 		
 		initialize();
 		currentStep.visit();
-		
-		// Embed this panel in jReality's Shrink Panel.
-		getShrinkPanel().add(pMain);
+
 	}
 	
 	public void actionPerformed(ActionEvent e) {
@@ -66,21 +54,6 @@ public class SCPanel extends ViewShrinkPanelPlugin implements ActionListener {
 			currentStep.validateAndExecute();
 		else 
 			currentStep.goBack();
-
-// 		Code for enabling help panels.		
-//		String help = this.getHelpDocument();
-//		String x = this.getHelpPath();
-//		String y = this.getHelpStyleSheet();
-//		String z =  this.getHelpTitle();
-//		
-//		this.setHelpListener(new HelpListener(){
-//
-//			@Override
-//			public void showHelpPage(HelpFlavor arg0) {
-//				//this.showHelpPage(arg0);
-//				SCPanel.this.helpCalled();
-//				
-//			}});
 	}
 	
 	public void initialize(){
@@ -118,28 +91,12 @@ public class SCPanel extends ViewShrinkPanelPlugin implements ActionListener {
 		this.btnBack = btnBack;
 	}
 	
-	public JPanel getpMain() {
-		return pMain;
-	}
-	
 	public Model getModel() {
 		return model;
 	}
 
 	public void setModel(Model model) {
 		this.model = model;
-	}
-	
-	public PluginInfo getPluginInfo() {
-		return new PluginInfo("Simplicial Complex Panel");
-	}
-	
-	public void install(Controller c) throws Exception{
-		super.install(c);
-	}
-	
-	public void uninstall(Controller c) throws Exception {
-		super.uninstall(c);
 	}
 
 	public Map<String, Step> getSteps() {

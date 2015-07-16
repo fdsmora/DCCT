@@ -14,12 +14,12 @@ public abstract class Step implements ActionListener {
 	
 	protected JLabel lbDesc = new JLabel();
 	protected JPanel pContent = new JPanel();
-	protected SCPanel scPanel = null;
+	protected SimplicialComplexPanel scPanel = null;
 	protected JButton btnNext =null;
 	protected JButton btnBack =null;
 	protected Model model = null;
 		
-	public Step(SCPanel p){
+	public Step(SimplicialComplexPanel p){
 		this.scPanel = p;
 		
 		pContent.add(lbDesc);
@@ -40,12 +40,11 @@ public abstract class Step implements ActionListener {
 		btnBack.setEnabled(true);
 		btnBack.setVisible(true);
 		
-		JPanel pMain = scPanel.getpMain();
-		pMain.remove(0);
-		pMain.add(pContent,0);
+		scPanel.remove(0);
+		scPanel.add(pContent,0);
 	}
 	
-	public static Step createStep(String kind, SCPanel p){
+	public static Step createStep(String kind, SimplicialComplexPanel p){
 		if (kind.equals(Constants.NUMBER_OF_PROCESSES_STEP)){
 			return new NumberOfProcessesStep(p);
 		}

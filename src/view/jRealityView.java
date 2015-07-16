@@ -3,14 +3,16 @@ package view;
 import java.awt.Color;
 import java.awt.Font;
 import javax.swing.SwingConstants;
+import configuration.Constants;
 import model.CommunicationMechanism;
 import model.Model;
 import view.UI.SCOutputConsole;
-import view.UI.SCPanel;
+import view.UI.SimplicialComplexPanel;
 import dctopology.SimplicialComplex;
 import de.jreality.geometry.IndexedFaceSetFactory;
 import de.jreality.geometry.PointSetFactory;
 import de.jreality.plugin.JRViewer;
+import de.jreality.plugin.basic.ViewShrinkPanelPlugin;
 import de.jreality.plugin.content.ContentAppearance;
 import de.jreality.plugin.content.ContentLoader;
 import de.jreality.plugin.content.ContentTools;
@@ -30,6 +32,7 @@ import de.jreality.tools.DragEventTool;
 import de.jreality.tools.DraggingTool;
 import de.jreality.tools.PointDragEvent;
 import de.jreality.tools.PointDragListener;
+import de.jtem.jrworkspace.plugin.PluginInfo;
 
 public class jRealityView implements View {
 
@@ -265,14 +268,31 @@ public class jRealityView implements View {
 		});
 		sgc.addTool(dragVertexTool);
 		
+		ViewShrinkPanelPlugin simplicialComplexPanelPlugin =  new ViewShrinkPanelPlugin(){
+			
+			// Instance initializer
+			{
+				// Define the position of the controls within jReality UI
+				setInitialPosition(SHRINKER_LEFT);
+				SimplicialComplexPanel scPanel = new SimplicialComplexPanel(model);
+				// Embed this panel in jReality's Shrink Panel.
+				getShrinkPanel().add(scPanel);
+			}
+			
+			public PluginInfo getPluginInfo() {
+				return new PluginInfo(Constants.SIMPLICIAL_COMPLEX_PANEL);
+			}
+			
+		};
+		
 		viewer.addBasicUI();
+		
 		// We enable zoom tool by default. 
 		viewer.getController().getPlugin(CameraMenu.class).setZoomEnabled(true);
-		
 		viewer.registerPlugin(new ContentAppearance());
 		viewer.registerPlugin(new ContentLoader());
 		viewer.registerPlugin(new ContentTools());
-		viewer.registerPlugin(new SCPanel(model));
+		viewer.registerPlugin(simplicialComplexPanelPlugin);
 		viewer.registerPlugin(new SCOutputConsole());
 		viewer.setShowPanelSlots(true, false, false, true);
 		viewer.setContent(sgc);
