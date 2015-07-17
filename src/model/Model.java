@@ -16,8 +16,15 @@ public class Model {
 	//protected boolean chromatic = true;
 	protected View view;
 	protected List<Color> pColors;
-
-	public Model(){
+	
+	// Singleton design pattern
+	private static Model instance = null;
+	public static Model getInstance(){
+		if (instance == null)
+			instance = new Model();
+		return instance;
+	}
+	private Model(){
 	}
 	
 	public void reset(){

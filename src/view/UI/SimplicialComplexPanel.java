@@ -18,17 +18,23 @@ import configuration.Constants;
  *
  */
 public class SimplicialComplexPanel extends JPanel implements ActionListener {
-	protected Model model = null;
-	protected JPanel pContent = new JPanel();
-	protected JPanel pButtons = new JPanel();
-	protected JButton btnNext = new JButton(Constants.NEXT);
-	protected JButton btnBack = new JButton(Constants.BACK);
-	protected Step startStep = null;
-	protected Step currentStep = null;
-	protected Map<String, Step> steps;
+//	private Model model = null;
+	private JPanel pContent = new JPanel();
+	private JPanel pButtons = new JPanel();
+	private JButton btnNext = new JButton(Constants.NEXT);
+	private JButton btnBack = new JButton(Constants.BACK);
+	private Step startStep = null;
+	private Step currentStep = null;
 	
-	public SimplicialComplexPanel(Model m){
-		this.model = m;
+	// Implementing Singleton design pattern
+	private static SimplicialComplexPanel instance = null;
+	public static SimplicialComplexPanel getInstance(){
+		if (instance == null){
+			instance = new SimplicialComplexPanel();
+		}
+		return instance;
+	}
+	private SimplicialComplexPanel(){
 		// Configuring UI controls
 		btnNext.addActionListener(this);
 		btnNext.setActionCommand(Constants.NEXT);
@@ -43,9 +49,9 @@ public class SimplicialComplexPanel extends JPanel implements ActionListener {
 		add(pContent, BorderLayout.CENTER);
 		add(pButtons, BorderLayout.PAGE_END);
 		
-		initialize();
-		currentStep.visit();
-
+		Step.initializeAllSteps(this);
+		startStep = currentStep = Step.steps.get(NumberOfProcessesStep.class.getName());
+		startStep.visit();
 	}
 	
 	public void actionPerformed(ActionEvent e) {
@@ -56,17 +62,7 @@ public class SimplicialComplexPanel extends JPanel implements ActionListener {
 			currentStep.goBack();
 	}
 	
-	public void initialize(){
-		steps = new HashMap<String, Step>();
-		steps.put(Constants.NUMBER_OF_PROCESSES_STEP, Step.createStep(Constants.NUMBER_OF_PROCESSES_STEP, this));
-		steps.put(Constants.NAME_COLOR_STEP, Step.createStep(Constants.NAME_COLOR_STEP, this));
-		steps.put(Constants.COMMUNICATION_MODEL_STEP, Step.createStep(Constants.COMMUNICATION_MODEL_STEP, this));
-		steps.put(Constants.CHROMATIC_STEP, Step.createStep(Constants.CHROMATIC_STEP, this));
-		steps.put(Constants.NEXT_ROUND_STEP, Step.createStep(Constants.NEXT_ROUND_STEP, this));
-		startStep = steps.get(Constants.NUMBER_OF_PROCESSES_STEP);
-		currentStep = startStep;
-	}
-	
+
 	public JPanel getpContent() {
 		return pContent;
 	}
@@ -91,17 +87,17 @@ public class SimplicialComplexPanel extends JPanel implements ActionListener {
 		this.btnBack = btnBack;
 	}
 	
-	public Model getModel() {
-		return model;
-	}
+//	public Model getModel() {
+//		return model;
+//	}
 
-	public void setModel(Model model) {
-		this.model = model;
-	}
+//	public void setModel(Model model) {
+//		this.model = model;
+//	}
 
-	public Map<String, Step> getSteps() {
-		return steps;
-	}
+//	public Map<String, Step> getSteps() {
+//		return steps;
+//	}
 
 	public Step getCurrentStep() {
 		return currentStep;

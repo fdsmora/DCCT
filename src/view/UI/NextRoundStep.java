@@ -11,7 +11,7 @@ import javax.swing.JRadioButton;
 
 import configuration.Constants;
 
-public class NextRoundStep extends Step {
+class NextRoundStep extends Step {
 	protected JButton btnChangeModel = new JButton(Constants.CHANGE_MODEL);
 	protected static final int MAX_ALLOWED_ROUNDS = 3;
 	protected JLabel lbMaxReached = new JLabel(Constants.MAX_ROUNDS_REACHED_MSG);
@@ -61,8 +61,9 @@ public class NextRoundStep extends Step {
 	@Override
 	public void goBack(){
 		scPanel.getpButtons().remove(2);
-		scPanel.initialize();
-		Step back = scPanel.getSteps().get(Constants.NUMBER_OF_PROCESSES_STEP);
+		Step.initializeAllSteps(scPanel);
+		Step back = Step.steps.get(NumberOfProcessesStep.class.getName());
+		scPanel.setCurrentStep(back);
 		back.visit();
 	}
 	
@@ -81,8 +82,8 @@ public class NextRoundStep extends Step {
 		String cmd = e.getActionCommand();
 		if (cmd.equals("h")){
 			scPanel.getpButtons().remove(2);
-			Step next = scPanel.getSteps().get(Constants.COMMUNICATION_MODEL_STEP);
-			scPanel.currentStep=next;
+			Step next = Step.steps.get(CommunicationModelStep.class.getName());
+			scPanel.setCurrentStep(next);
 			next.visit();
 		}else{
 		//	model.setChromatic(cmd=="c");

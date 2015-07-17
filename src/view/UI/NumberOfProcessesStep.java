@@ -7,7 +7,7 @@ import javax.swing.JRadioButton;
 
 import configuration.Constants;
 
-public class NumberOfProcessesStep extends Step {
+class NumberOfProcessesStep extends Step {
 	protected JRadioButton rbOneP = new JRadioButton("1");
 	protected JRadioButton rbTwoP = new JRadioButton("2");
 	protected JRadioButton rbThreeP = new JRadioButton("3");
@@ -50,17 +50,10 @@ public class NumberOfProcessesStep extends Step {
 		btnBack.setVisible(false);
 	}
 	
-	@Override
 	public void validateAndExecute(){
-		Step next = scPanel.getSteps().get(Constants.NAME_COLOR_STEP);
+		Step next = Step.steps.get(NameColorStep.class.getName());
 		scPanel.setCurrentStep(next);
 		next.visit();
-	}
-	@Override
-	public void goBack(){
-		Step back = scPanel.getSteps().get(Constants.NUMBER_OF_PROCESSES_STEP);
-		scPanel.setCurrentStep(back);
-		back.visit();
 	}
 	
 	@Override

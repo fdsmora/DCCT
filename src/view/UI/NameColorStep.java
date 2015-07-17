@@ -30,7 +30,7 @@ import configuration.Constants;
  * @author Fausto
  *
  */
-public class NameColorStep extends Step {
+class NameColorStep extends Step {
 	protected JPanel pProcessNames = new JPanel();
 	protected JPanel pProcessColors = new JPanel();
 	protected List<JTextField> l_processNames;
@@ -45,8 +45,10 @@ public class NameColorStep extends Step {
 	public void visit(){
 		super.visit();
 		
-		int n = ((NumberOfProcessesStep)(scPanel.getSteps()
-						.get(Constants.NUMBER_OF_PROCESSES_STEP))).getN();
+//		int n = ((NumberOfProcessesStep)(scPanel.getSteps()
+//						.get(Constants.NUMBER_OF_PROCESSES_STEP))).getN();
+		int n = ((NumberOfProcessesStep)(Step.steps
+				.get(NumberOfProcessesStep.class.getName()))).getN();
 		
 		pContent.removeAll();
 		
@@ -145,14 +147,14 @@ public class NameColorStep extends Step {
 		model.setSimplicialComplexColors(lprocColors);
 		model.createInitialComplex(lprocNames);
 		
-		Step nextStep = scPanel.getSteps().get(Constants.COMMUNICATION_MODEL_STEP);
+		Step nextStep = Step.steps.get(CommunicationModelStep.class.getName());
 		scPanel.setCurrentStep(nextStep);
 		nextStep.visit();
 	}
 	
 	@Override
 	public void goBack(){
-		Step back = scPanel.getSteps().get(Constants.NUMBER_OF_PROCESSES_STEP);
+		Step back = Step.steps.get(NumberOfProcessesStep.class.getName());
 		scPanel.setCurrentStep(back);
 		back.visit();		
 	}

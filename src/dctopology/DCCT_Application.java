@@ -6,8 +6,7 @@ import view.jRealityView;
 
 public class DCCT_Application {
 	public static void main(String[] args){
-		Model model = new Model();
-		View view = new jRealityView(model);
+		View view = jRealityView.getInstance();
 		view.start();
 	}
 }

@@ -9,7 +9,7 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import configuration.Constants;
 
-public class CommunicationModelStep extends Step {
+class CommunicationModelStep extends Step {
 	protected JComboBox<String> communicationModelOptions = new JComboBox<String>();
 	protected JComboBox<String> communicationModelSubOptions = new JComboBox<String>();
 	
@@ -61,15 +61,15 @@ public class CommunicationModelStep extends Step {
 		model.setProtocolComplex(null);
 		model.executeRound();		
 		
-		Step nextStep = scPanel.getSteps().get(Constants.NEXT_ROUND_STEP);
+		Step nextStep = Step.steps.get(NextRoundStep.class.getName());
 		scPanel.setCurrentStep(nextStep);
 		nextStep.visit();	
 	}
 	
 	@Override
 	public void goBack(){
-		scPanel.initialize();
-		Step back = scPanel.getSteps().get(Constants.NUMBER_OF_PROCESSES_STEP);
+		Step.initializeAllSteps(scPanel);
+		Step back = Step.steps.get(NumberOfProcessesStep.class.getName());
 		back.visit();
 	}
 	

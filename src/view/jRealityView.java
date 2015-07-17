@@ -49,8 +49,15 @@ public class jRealityView implements View {
 	
 	protected double[][] coordinates;
 	
-	public jRealityView(Model m){
-		model = m;
+	private static jRealityView instance = null;
+	public static jRealityView getInstance(){
+		if (instance == null)
+			instance = new jRealityView();
+		return instance;
+	}
+	
+	private jRealityView(){
+		model = Model.getInstance();
 		model.registerView(this);
 	}
 	
@@ -274,7 +281,7 @@ public class jRealityView implements View {
 			{
 				// Define the position of the controls within jReality UI
 				setInitialPosition(SHRINKER_LEFT);
-				SimplicialComplexPanel scPanel = new SimplicialComplexPanel(model);
+				SimplicialComplexPanel scPanel = SimplicialComplexPanel.getInstance();
 				// Embed this panel in jReality's Shrink Panel.
 				getShrinkPanel().add(scPanel);
 			}
