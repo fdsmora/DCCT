@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -23,6 +24,7 @@ import javax.swing.JTextField;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.PlainDocument;
+
 import configuration.Constants;
 
 /***
@@ -31,12 +33,11 @@ import configuration.Constants;
  *
  */
 class NameColorStep extends Step {
-	protected JPanel pProcessNames = new JPanel();
-	protected JPanel pProcessColors = new JPanel();
-	protected List<JTextField> l_processNames;
-	protected List<ColorEditor> l_processColors;
-	protected int n = 0;
-
+	private JPanel pProcessNames = new JPanel();
+	private List<JTextField> l_processNames;
+	private List<ColorEditor> l_processColors;
+	private int n = 0;
+	
 	public NameColorStep(SimplicialComplexPanel p) {
 		super(p);
 	}
@@ -107,17 +108,6 @@ class NameColorStep extends Step {
 		}
 	}
 	
-//	protected void createColors(int n){
-//		l_processColors = new ArrayList<ColorEditor>(n);
-//		pProcessColors.removeAll();
-//		
-//		for (int i = 0; i<n ; i++){
-//			ColorEditor cEditor = new ColorEditor(Constants.DEFAULT_COLORS[i]);
-//			l_processColors.add(cEditor);
-//			pProcessColors.add(cEditor.getButton());	
-//		}
-//	}
-	
 	@Override
 	public void validateAndExecute(){
 		Set<String> procNames = new LinkedHashSet<String>();
@@ -172,7 +162,6 @@ class NameColorStep extends Step {
 			button.setActionCommand(EDIT);
 			button.setBorderPainted(false);
 			button.setBackground(currentColor);
-			//button.setForeground(currentColor);
 			button.setContentAreaFilled(false);
 			button.setOpaque(true);
 			dialog = JColorChooser.createDialog(this.button,"Pick a Color",

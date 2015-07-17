@@ -12,13 +12,13 @@ import javax.swing.JRadioButton;
 import configuration.Constants;
 
 class NextRoundStep extends Step {
-	protected JButton btnChangeModel = new JButton(Constants.CHANGE_MODEL);
-	protected static final int MAX_ALLOWED_ROUNDS = 3;
-	protected JLabel lbMaxReached = new JLabel(Constants.MAX_ROUNDS_REACHED_MSG);
-	protected int roundCount = 1;
-	protected JRadioButton rbChromatic = new JRadioButton(Constants.CHROMATIC);
-	protected JRadioButton rbNonChromatic = new JRadioButton(Constants.NON_CHROMATIC);
-	
+	private JButton btnChangeModel = new JButton(Constants.CHANGE_MODEL);
+	private static final int MAX_ALLOWED_ROUNDS = 3;
+	private JLabel lbMaxReached = new JLabel(Constants.MAX_ROUNDS_REACHED_MSG);
+	private int roundCount = 1;
+	private JRadioButton rbChromatic = new JRadioButton(Constants.CHROMATIC);
+	private JRadioButton rbNonChromatic = new JRadioButton(Constants.NON_CHROMATIC);
+
 	public NextRoundStep(SimplicialComplexPanel p){
 		super(p);	
 		
@@ -61,7 +61,7 @@ class NextRoundStep extends Step {
 	@Override
 	public void goBack(){
 		scPanel.getpButtons().remove(2);
-		Step.initializeAllSteps(scPanel);
+		Step.resetAllSteps(scPanel);
 		Step back = Step.steps.get(NumberOfProcessesStep.class.getName());
 		scPanel.setCurrentStep(back);
 		back.visit();

@@ -3,15 +3,12 @@ package view.UI;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Map;
-
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-
 import model.Model;
 import configuration.Constants;
 
@@ -23,12 +20,7 @@ abstract class Step implements ActionListener {
 	protected JButton btnNext =null;
 	protected JButton btnBack =null;
 	protected Model model = null;
-	protected static Map<String, Step> steps; 
-	
-	protected static Step instance = null;
-	public static Step getInstance(SimplicialComplexPanel p){
-		return instance;
-	}	
+	protected static Map<String, Step> steps ; 	
 	
 	public Step(SimplicialComplexPanel p){
 		this.scPanel = p;
@@ -42,7 +34,7 @@ abstract class Step implements ActionListener {
 		
 		model = Model.getInstance();
 	}
-		
+			
 	public void visit(){
 		btnNext.setText(Constants.NEXT);
 		btnNext.setEnabled(true);
@@ -55,33 +47,8 @@ abstract class Step implements ActionListener {
 		scPanel.add(pContent,0);
 	}
 	
-//	public static Step createStep(String kind, SimplicialComplexPanel p){
-//		if (kind.equals(Constants.NUMBER_OF_PROCESSES_STEP)){
-//			return new NumberOfProcessesStep(p);
-//		}
-//		else if (kind.equals(Constants.NAME_COLOR_STEP)){
-//			return new NameColorStep(p);
-//		}
-//		else if (kind.equals(Constants.COMMUNICATION_MODEL_STEP)){
-//			return new CommunicationModelStep(p);
-//		}
-//		else if (kind.equals(Constants.NEXT_ROUND_STEP)){
-//			return new NextRoundStep(p);
-//		}
-//		return null;
-//	}
-	
-	public static void initializeAllSteps(SimplicialComplexPanel scPanel){
-						
-//		steps = new HashMap<String, Step>();
-//		steps.put(Constants.NUMBER_OF_PROCESSES_STEP, Step.createStep(Constants.NUMBER_OF_PROCESSES_STEP, this));
-//		steps.put(Constants.NAME_COLOR_STEP, Step.createStep(Constants.NAME_COLOR_STEP, this));
-//		steps.put(Constants.COMMUNICATION_MODEL_STEP, Step.createStep(Constants.COMMUNICATION_MODEL_STEP, this));
-//		steps.put(Constants.CHROMATIC_STEP, Step.createStep(Constants.CHROMATIC_STEP, this));
-//		steps.put(Constants.NEXT_ROUND_STEP, Step.createStep(Constants.NEXT_ROUND_STEP, this));
-//		startStep = steps.get(Constants.NUMBER_OF_PROCESSES_STEP);
-//		currentStep = startStep;
-		
+	public static void resetAllSteps(SimplicialComplexPanel scPanel){
+				
 		steps = new HashMap<String, Step>();
 		steps.put(NumberOfProcessesStep.class.getName(), new NumberOfProcessesStep(scPanel));
 		steps.put(NameColorStep.class.getName(), new NameColorStep(scPanel));
@@ -90,21 +57,12 @@ abstract class Step implements ActionListener {
 
 	}
 	
-//	public static Map<String, Step> getSteps(){
-//		if (steps==null)
-//			initializeAllSteps();
-//		return steps;
-//	}
-	
-
-	public void validateAndExecute(){	
-	}
+	public abstract void validateAndExecute();
 	
 	public void goBack(){
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		
 	}
 
 }

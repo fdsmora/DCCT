@@ -5,14 +5,12 @@ import java.awt.event.ActionEvent;
 import javax.swing.ButtonGroup;
 import javax.swing.JRadioButton;
 
-import configuration.Constants;
-
 class NumberOfProcessesStep extends Step {
-	protected JRadioButton rbOneP = new JRadioButton("1");
-	protected JRadioButton rbTwoP = new JRadioButton("2");
-	protected JRadioButton rbThreeP = new JRadioButton("3");
-	protected boolean modified = false;
-	protected int n = 0;
+	private JRadioButton rbOneP = new JRadioButton("1");
+	private JRadioButton rbTwoP = new JRadioButton("2");
+	private JRadioButton rbThreeP = new JRadioButton("3");
+	private boolean modified = false;
+	private int n = 0;
 	
 	public NumberOfProcessesStep(SimplicialComplexPanel p){
 		super(p);
@@ -69,4 +67,6 @@ class NumberOfProcessesStep extends Step {
 	public int getN(){
 		return n;
 	}
+
+
 }

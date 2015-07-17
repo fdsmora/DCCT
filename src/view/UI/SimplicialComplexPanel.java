@@ -4,12 +4,9 @@ import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.HashMap;
-import java.util.Map;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JPanel;
-import model.Model;
 import configuration.Constants;
 
 /***
@@ -23,7 +20,7 @@ public class SimplicialComplexPanel extends JPanel implements ActionListener {
 	private JPanel pButtons = new JPanel();
 	private JButton btnNext = new JButton(Constants.NEXT);
 	private JButton btnBack = new JButton(Constants.BACK);
-	private Step startStep = null;
+	//private Step startStep = null;
 	private Step currentStep = null;
 	
 	// Implementing Singleton design pattern
@@ -49,9 +46,9 @@ public class SimplicialComplexPanel extends JPanel implements ActionListener {
 		add(pContent, BorderLayout.CENTER);
 		add(pButtons, BorderLayout.PAGE_END);
 		
-		Step.initializeAllSteps(this);
-		startStep = currentStep = Step.steps.get(NumberOfProcessesStep.class.getName());
-		startStep.visit();
+		Step.resetAllSteps(this);
+		currentStep = Step.steps.get(NumberOfProcessesStep.class.getName());
+		currentStep.visit();
 	}
 	
 	public void actionPerformed(ActionEvent e) {
@@ -86,18 +83,6 @@ public class SimplicialComplexPanel extends JPanel implements ActionListener {
 	public void setBtnBack(JButton btnBack) {
 		this.btnBack = btnBack;
 	}
-	
-//	public Model getModel() {
-//		return model;
-//	}
-
-//	public void setModel(Model model) {
-//		this.model = model;
-//	}
-
-//	public Map<String, Step> getSteps() {
-//		return steps;
-//	}
 
 	public Step getCurrentStep() {
 		return currentStep;

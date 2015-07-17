@@ -7,6 +7,7 @@ import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
+
 import configuration.Constants;
 
 class CommunicationModelStep extends Step {
@@ -68,8 +69,9 @@ class CommunicationModelStep extends Step {
 	
 	@Override
 	public void goBack(){
-		Step.initializeAllSteps(scPanel);
+		Step.resetAllSteps(scPanel);
 		Step back = Step.steps.get(NumberOfProcessesStep.class.getName());
+		scPanel.setCurrentStep(back);
 		back.visit();
 	}
 	
