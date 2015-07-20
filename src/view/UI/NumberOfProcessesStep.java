@@ -9,8 +9,7 @@ class NumberOfProcessesStep extends Step {
 	private JRadioButton rbOneP = new JRadioButton("1");
 	private JRadioButton rbTwoP = new JRadioButton("2");
 	private JRadioButton rbThreeP = new JRadioButton("3");
-	private boolean modified = false;
-	private int n = 0;
+	private int selected_n = 0;
 	
 	public NumberOfProcessesStep(SimplicialComplexPanel p){
 		super(p);
@@ -32,16 +31,19 @@ class NumberOfProcessesStep extends Step {
 		rbTwoP.addActionListener(this);
 		rbThreeP.setActionCommand(rbThreeP.getText());
 		rbThreeP.addActionListener(this);
+		
+		rbThreeP.setSelected(true);
+		selected_n = 3;
 	}
 	
 	@Override
 	public void visit(){
 		super.visit();
 		
-		if (!modified){
-			btnNext.setEnabled(false);
-			btnNext.setVisible(true);
-		}
+		//if (!modified){
+//			btnNext.setEnabled(false);
+//			btnNext.setVisible(true);
+		//}
 		
 		lbTitle.setText("Select number of processes");
 
@@ -56,16 +58,16 @@ class NumberOfProcessesStep extends Step {
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		modified = true;			
-		btnNext.setVisible(true);
-		btnNext.setEnabled(true);
+//		//modified = true;			
+//		btnNext.setVisible(true);
+//		btnNext.setEnabled(true);
 		
 		String command = e.getActionCommand();
-		n = Integer.parseInt(command);
+		selected_n = Integer.parseInt(command);
 	}	
 	
-	public int getN(){
-		return n;
+	public int getSelected_n(){
+		return selected_n;
 	}
 
 

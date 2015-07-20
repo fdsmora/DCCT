@@ -49,7 +49,7 @@ class NameColorStep extends Step {
 //		int n = ((NumberOfProcessesStep)(scPanel.getSteps()
 //						.get(Constants.NUMBER_OF_PROCESSES_STEP))).getN();
 		int n = ((NumberOfProcessesStep)(Step.steps
-				.get(NumberOfProcessesStep.class.getName()))).getN();
+				.get(NumberOfProcessesStep.class.getName()))).getSelected_n();
 		
 		pContent.removeAll();
 		
