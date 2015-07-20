@@ -14,7 +14,7 @@ import configuration.Constants;
 
 abstract class Step implements ActionListener {
 	
-	protected JLabel lbDesc = new JLabel();
+	protected JLabel lbTitle = new JLabel();
 	protected JPanel pContent = new JPanel();
 	protected SimplicialComplexPanel scPanel = null;
 	protected JButton btnNext =null;
@@ -25,7 +25,7 @@ abstract class Step implements ActionListener {
 	public Step(SimplicialComplexPanel p){
 		this.scPanel = p;
 		
-		pContent.add(lbDesc);
+		pContent.add(lbTitle);
 		pContent.setLayout(new BoxLayout(pContent,BoxLayout.Y_AXIS));
 		pContent.setBorder(BorderFactory.createTitledBorder(Constants.INITIAL_COMPLEX));
 		

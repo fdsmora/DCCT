@@ -66,7 +66,7 @@ class NameColorStep extends Step {
 //		pContent.add(pProcessColors);
 //		colorMsg = " and colors";
 		
-		lbDesc.setText("Enter processes names" + colorMsg);
+		lbTitle.setText("Enter processes names" + colorMsg);
 		
 		btnNext.setEnabled(true);
 		btnNext.setVisible(true);
@@ -74,7 +74,7 @@ class NameColorStep extends Step {
 		btnBack.setVisible(true);
 	}
 	
-	protected void createFields(int n){
+	private void createFields(int n){
 		l_processNames = new ArrayList<JTextField>(n);
 		l_processColors = new ArrayList<ColorEditor>(n);
 		

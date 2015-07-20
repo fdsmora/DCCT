@@ -21,7 +21,7 @@ class NumberOfProcessesStep extends Step {
 		nprocGroup.add(rbTwoP);
 		nprocGroup.add(rbThreeP);
 		
-		pContent.add(lbDesc);
+		pContent.add(lbTitle);
 		pContent.add(rbOneP);
 		pContent.add(rbTwoP);
 		pContent.add(rbThreeP);
@@ -43,7 +43,7 @@ class NumberOfProcessesStep extends Step {
 			btnNext.setVisible(true);
 		}
 		
-		lbDesc.setText("Select number of processes");
+		lbTitle.setText("Select number of processes");
 
 		btnBack.setVisible(false);
 	}

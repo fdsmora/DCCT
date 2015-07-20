@@ -34,7 +34,7 @@ class NextRoundStep extends Step {
 		chromGroup.add(rbChromatic);
 		chromGroup.add(rbNonChromatic);
 
-		pContent.add(lbDesc);
+		pContent.add(lbTitle);
 		pContent.add(rbChromatic);
 		pContent.add(rbNonChromatic);
 		
@@ -44,7 +44,7 @@ class NextRoundStep extends Step {
 		rbChromatic.addActionListener(this);
 		rbNonChromatic.addActionListener(this);
 		
-		lbDesc.setText("Select simplicial complex's color");
+		lbTitle.setText("Select simplicial complex's color");
 	}
 	
 	@Override

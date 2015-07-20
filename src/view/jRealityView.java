@@ -282,7 +282,7 @@ public class jRealityView implements View {
 				// Define the position of the controls within jReality UI
 				setInitialPosition(SHRINKER_LEFT);
 				SimplicialComplexPanel scPanel = SimplicialComplexPanel.getInstance();
-				// Embed this panel in jReality's Shrink Panel.
+				// Embed this panel into jReality's Shrink Panel.
 				getShrinkPanel().add(scPanel);
 			}
 			
