@@ -3,19 +3,23 @@ package model;
 import java.awt.Color;
 import java.util.Arrays;
 import java.util.List;
+
 import configuration.Constants;
+import view.InitialComplexCommand;
+import view.ProtocolComplexCommand;
+import view.ResetViewCommand;
 import view.View;
 import dctopology.Simplex;
 import dctopology.SimplicialComplex;
 import dctopology.Process;
 
 public class Model {
-	protected SimplicialComplex initialComplex;
-	protected SimplicialComplex protocolComplex;
-	protected CommunicationMechanism communicationMechanism;
+	private SimplicialComplex initialComplex;
+	private SimplicialComplex protocolComplex;
+	private CommunicationMechanism communicationMechanism;
 	//protected boolean chromatic = true;
-	protected View view;
-	protected List<Color> pColors;
+	private View view;
+	private List<Color> pColors;
 	
 	// Singleton design pattern
 	private static Model instance = null;
@@ -33,7 +37,7 @@ public class Model {
 		pColors = null;
 		communicationMechanism = null;
 		if (view!=null)
-			view.update("r"); // reset
+			view.update(new ResetViewCommand(view,null)); // reset
 	}
 	
 	public SimplicialComplex createInitialComplex(List<String> pNames){
@@ -47,7 +51,7 @@ public class Model {
 		initialComplex = new SimplicialComplex(new Simplex(processes));
 		protocolComplex = null;
 		if (view!=null)
-			view.update("i");
+			view.update(new InitialComplexCommand(view, initialComplex));
 		
 		return initialComplex;
 	}
@@ -76,8 +80,8 @@ public class Model {
 	public void setChromatic(boolean chromatic) {
 		//this.chromatic = chromatic;
 		protocolComplex.setChromatic(chromatic);
-		if (view!=null)
-			view.update("c"); // Chromatic changed
+		//if (view!=null)
+			//view.update("c"); // Chromatic changed
 	}
 	
 	public void registerView(View v){
@@ -99,7 +103,7 @@ public class Model {
 	
 			
 		if (view!=null)
-			view.update("p");
+			view.update(new ProtocolComplexCommand(view, protocolComplex));
 		//TEST
 		toString();
 	}
@@ -110,8 +114,8 @@ public class Model {
 
 	public void setCommunicationMechanism(String c) {
 		this.communicationMechanism = CommunicationMechanism.createCommunicationMechanism(c);
-		if (view!=null)
-			view.update("u"); // Update communication model 
+//		if (view!=null)
+//			view.update("u"); // Update communication model 
 	}
 
 	public String toString(){

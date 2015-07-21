@@ -2,11 +2,12 @@ package view;
 
 import java.awt.Color;
 import java.awt.Font;
+
 import javax.swing.SwingConstants;
+
 import configuration.Constants;
 import model.CommunicationMechanism;
 import model.Model;
-import view.UI.SCOutputConsole;
 import view.UI.SimplicialComplexPanel;
 import dctopology.SimplicialComplex;
 import de.jreality.geometry.IndexedFaceSetFactory;
@@ -36,16 +37,16 @@ import de.jtem.jrworkspace.plugin.PluginInfo;
 
 public class jRealityView implements View {
 
-	protected Model model;
-	protected SimplicialComplex complex;
-	protected Geometry initialComplexGeometry;
-	protected Geometry protocolComplexGeometry;
-	protected JRViewer viewer = new JRViewer();
-	protected SceneGraphComponent sgc = new SceneGraphComponent();
-	protected SceneGraphComponent sgcV = new SceneGraphComponent();
-	protected IndexedFaceSetFactory faceFactory = new IndexedFaceSetFactory();
-	protected PointSetFactory psf = new PointSetFactory();
-	protected SCOutputConsole console = new SCOutputConsole();
+	private Model model;
+	private SimplicialComplex complex;
+	private Geometry initialComplexGeometry;
+	private Geometry protocolComplexGeometry;
+	private JRViewer viewer = new JRViewer();
+	private SceneGraphComponent sgc = new SceneGraphComponent();
+	private SceneGraphComponent sgcV = new SceneGraphComponent();
+	private IndexedFaceSetFactory faceFactory = new IndexedFaceSetFactory();
+	private PointSetFactory psf = new PointSetFactory();
+	private SCOutputConsole console = new SCOutputConsole();
 	
 	protected double[][] coordinates;
 	
@@ -61,57 +62,59 @@ public class jRealityView implements View {
 		model.registerView(this);
 	}
 	
-	public void update(String action) {
-		if (action.equals("r")){
-			resetView();
-			resetGeometry();
-			console.resetConsole();
-			return;
-		}
-		
-		if (action.equals("u")){
-			console.resetProtocolComplexInfo();
-			return;
-		}
-		
-		if(action.equals("i")){
-			complex = model.getInitialComplex() ;
-			initialComplexGeometry = new Geometry (complex, 
-					null, model.getSimplicialComplexColors());
-		}
-		else if (action.equals("p") || 
-					action.equals("c")){
-			complex = model.getProtocolComplex();
-			protocolComplexGeometry = new Geometry(complex, 
-					protocolComplexGeometry!=null? protocolComplexGeometry : initialComplexGeometry, 
-					model.getSimplicialComplexColors());
-			//Test
-			//protocolComplexGeometry.test();
-		}
-		
-//		g = new Geometry(complex, 
-//				model.isChromatic()? model.getSimplicialComplexColors() : null);
-
-		if (action.equals("i")){
-			console.setInitialComplexInfo(complex.toString());
-		}
-		else if (action.equals("p")) {
-			CommunicationMechanism cm = model.getCommunicationMechanism();
-			console.setCommunicationModel(cm.toString());
-			
-			console.addProtocolComplexInfo(complex.toString(),
-					complex.getSimplices().size(),
-					model.isChromatic()? 0 : protocolComplexGeometry.getFaces().size());
-		}else if (action.equals("c")){
-			console.addNonChromaticInfo(protocolComplexGeometry.getFaces().size());
-		}
-							
-		console.print();
-		
-		updateView();
+	public void update(Command action) {
+		action.execute();
+//		if (action.equals("r")){
+//			resetView();
+//			resetGeometry();
+//			console.resetConsole();
+//			return;
+//		}
+//		
+//		if (action.equals("u")){
+//			console.resetProtocolComplexInfo();
+//			return;
+//		}
+//		
+//		if(action.equals("i")){
+//			complex = model.getInitialComplex() ;
+//			initialComplexGeometry = new Geometry (complex, 
+//					null, model.getSimplicialComplexColors());
+//		}
+//		else if (action.equals("p") || 
+//					action.equals("c")){
+//			complex = model.getProtocolComplex();
+//			protocolComplexGeometry = new Geometry(complex, 
+//					protocolComplexGeometry!=null? protocolComplexGeometry : initialComplexGeometry, 
+//					model.getSimplicialComplexColors());
+//			//Test
+//			//protocolComplexGeometry.test();
+//		}
+//		
+////		g = new Geometry(complex, 
+////				model.isChromatic()? model.getSimplicialComplexColors() : null);
+//
+//		if (action.equals("i")){
+//			console.setInitialComplexInfo(complex.toString());
+//		}
+//		else if (action.equals("p")) {
+//			CommunicationMechanism cm = model.getCommunicationMechanism();
+//			console.setCommunicationModel(cm.toString());
+//			
+//			console.addProtocolComplexInfo(complex.toString(),
+//					complex.getSimplices().size(),
+//					model.isChromatic()? 0 : protocolComplexGeometry.getFaces().size());
+//		}else if (action.equals("c")){
+//			console.addNonChromaticInfo(protocolComplexGeometry.getFaces().size());
+//		}
+//							
+//		console.print();
+//		
+//		updateView();
 	}
 	
-	public void resetView(){
+	public void reset(){
+		initialComplexGeometry = protocolComplexGeometry = null;
 		sgcV.setGeometry(null);
 		sgcV.removeAllChildren();
 		sgc.setGeometry(null);
@@ -119,7 +122,7 @@ public class jRealityView implements View {
 		sgc.addChild(sgcV);
 	}
 
-	private void updateView() {
+	public void updateView() {
 		configVertices();
 		configFaces();
 	}
@@ -184,9 +187,6 @@ public class jRealityView implements View {
 		else return protocolComplexGeometry;
 	}
 	
-	private void resetGeometry(){
-		initialComplexGeometry = protocolComplexGeometry = null;
-	}
 	
 //	protected int[][] getFaceIndices(){
 //		int[][] faceIndices = new int[g.getFaces().size()][];
@@ -300,7 +300,7 @@ public class jRealityView implements View {
 		viewer.registerPlugin(new ContentLoader());
 		viewer.registerPlugin(new ContentTools());
 		viewer.registerPlugin(simplicialComplexPanelPlugin);
-		viewer.registerPlugin(new SCOutputConsole());
+		//viewer.registerPlugin(new SCOutputConsole());
 		viewer.setShowPanelSlots(true, false, false, true);
 		viewer.setContent(sgc);
 	}
@@ -334,5 +334,18 @@ public class jRealityView implements View {
 	    // here you can specify any available Java font
 	    Font f = new Font("Arial Bold", Font.PLAIN, 16);
 	    pts.setFont(f);
+	}
+
+	public void createInitialComplexGeometry(SimplicialComplex complex) {
+		this.initialComplexGeometry = new Geometry (complex, 
+				null, Model.getInstance().getSimplicialComplexColors());
+		updateView();
+	}
+	
+	public void createProtocolComplexGeometry(SimplicialComplex complex) {
+		protocolComplexGeometry =new Geometry(complex, 
+				protocolComplexGeometry!=null? protocolComplexGeometry : initialComplexGeometry, 
+						Model.getInstance().getSimplicialComplexColors());
+		updateView();		
 	}
 }

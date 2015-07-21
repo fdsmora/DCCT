@@ -1,6 +1,6 @@
 package view;
 
 public interface View {
-	void update(String action);
+	void update(Command action);
 	void start();
 }

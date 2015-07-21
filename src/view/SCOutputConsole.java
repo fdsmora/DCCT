@@ -1,22 +1,19 @@
-package view.UI;
+package view;
 
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
-
 import configuration.Constants;
 import de.jreality.plugin.JRViewer;
-import de.jreality.plugin.basic.View;
 import de.jtem.jrworkspace.plugin.Controller;
 import de.jtem.jrworkspace.plugin.sidecontainer.SideContainerPerspective;
 import de.jtem.jrworkspace.plugin.sidecontainer.template.ShrinkPanelPlugin;
 
-public class SCOutputConsole extends ShrinkPanelPlugin {
+public class SCOutputConsole extends ShrinkPanelPlugin implements View{
 	protected JTextPane textPane = JRViewer.scriptingTextPane;
 	protected Controller controller = null;
 	protected JScrollPane contentPanel = new JScrollPane();
@@ -129,7 +126,7 @@ public class SCOutputConsole extends ShrinkPanelPlugin {
 
 	@Override
 	public Class<? extends SideContainerPerspective> getPerspectivePluginClass() {
-		return View.class;
+		return de.jreality.plugin.basic.View.class;
 	}
 
 	public String getConsoleContent() {
@@ -142,6 +139,17 @@ public class SCOutputConsole extends ShrinkPanelPlugin {
 
 	public void setCommunicationModel(String communicationModel) {
 		this.communicationModel = communicationModel;
+	}
+
+	@Override
+	public void update(Command action) {
+		action.execute();
+	}
+
+	@Override
+	public void start() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
