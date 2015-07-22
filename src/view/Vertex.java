@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.util.Map;
 
 import configuration.Constants;
+import dctopology.LinearAlgebraHelper;
 import dctopology.Process;
 
 public class Vertex {
@@ -76,32 +77,16 @@ public class Vertex {
 		
 		for (int i = 0; i<processView.length; i++){
 			if (i==id)
-				res = vectorSum(
-						scalarVectorMultiply(smallFactor,parentVertices.get(id).getCoordinates())
+				res = LinearAlgebraHelper.vectorSum(
+						LinearAlgebraHelper.scalarVectorMultiply(smallFactor,parentVertices.get(id).getCoordinates())
 						,res);
 			else {
 				double[] coords = (processView[i]==null? new double[3] : 
 										parentVertices.get(i).getCoordinates());
-				res = vectorSum(
-						scalarVectorMultiply(bigFactor, coords)
+				res = LinearAlgebraHelper.vectorSum(
+						LinearAlgebraHelper.scalarVectorMultiply(bigFactor, coords)
 						,res);
 			}
-		}
-		return res;
-	}
-	
-	public static double[] scalarVectorMultiply(double scalar, double[] vector){
-		double[] res = vector.clone();
-		for (int i = 0; i<vector.length; i++){
-			res[i]*=scalar;
-		}
-		return res;
-	}
-	
-	public static double[] vectorSum(double[] vector1, double[] vector2){
-		double[] res = new double[vector1.length];
-		for (int i = 0; i<vector1.length; i++){
-			res[i]=vector1[i]+vector2[i];
 		}
 		return res;
 	}

@@ -21,8 +21,10 @@ public class AtomicImmediateSnapshot extends CommunicationMechanism {
 		// The communication round must be performed on chromatic simplices.
 		sc.setChromatic(true);
 		
-		Set<Simplex> simplices = sc.getSimplices();
-		Set<Simplex> newSimplices = new LinkedHashSet<Simplex>();
+//		Set<Simplex> simplices = sc.getSimplices();
+//		Set<Simplex> newSimplices = new LinkedHashSet<Simplex>();
+		List<Simplex> simplices = sc.getSimplices();
+		List<Simplex> newSimplices = new ArrayList<Simplex>();
 		
 		for(Simplex s: simplices){
 			String strAllScenarios = PartitionGenerator.generate(s.dimension());
@@ -31,7 +33,8 @@ public class AtomicImmediateSnapshot extends CommunicationMechanism {
 				String[] groups = scn.split("\\" + String.valueOf(PartitionGenerator.getDelimiter()));
 				List<Process> processes = new ArrayList<Process>(s.getProcesses());
 				String[] sharedMemory = new String[processes.size()];
-				Set<Process> newProcesses = new LinkedHashSet<Process>(processes.size());
+//				Set<Process> newProcesses = new LinkedHashSet<Process>(processes.size());
+				List<Process> newProcesses = new ArrayList<Process>(processes.size());
 				for (String g : groups) {
 					int[] order = toIndices(g);
 					newProcesses.addAll(simulateCommunication(processes, sharedMemory, order));

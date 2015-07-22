@@ -4,23 +4,25 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 public class SimplicialComplex {
-	public Set<Simplex> getSimplices() {
+	public List<Simplex> getSimplices() {
 		return simplices;
 	}
 
-	protected Set<Simplex> simplices;
+	protected List<Simplex> simplices;
 	protected int dimension;
 	protected boolean chromatic = true;
 	
 	public SimplicialComplex(Simplex... simplices){
-		this.simplices = new LinkedHashSet<Simplex>(Arrays.asList(simplices));						
+		//this.simplices = new LinkedHashSet<Simplex>(Arrays.asList(simplices));
+		this.simplices = Arrays.asList(simplices);
 		computeDimension();
 	}
 	
-	public SimplicialComplex(Set<Simplex> simplices){
+	public SimplicialComplex(List<Simplex> simplices){
 		this.simplices = simplices;
 		computeDimension();
 	}

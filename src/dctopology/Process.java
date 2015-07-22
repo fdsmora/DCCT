@@ -2,9 +2,9 @@ package dctopology;
 
 public class Process implements Cloneable {
 
-	protected int id = -1;
-	protected String name = "";
-	protected String[] view = null;
+	private int id = -1;
+	private String name = "";
+	private String[] view = null;
 	
 	public String getView() {
 		//String result = "";

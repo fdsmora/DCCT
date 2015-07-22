@@ -36,9 +36,14 @@ public final class Constants {
 	public static final String SET_NOTATION_REPRESENTATION = "Set notation representation";
 	public static final String UNKNOWN = "Unknown";
 
-	public static final double[] DEFAULT_0_SIMPLEX_VERTEX_COORDINATES = {0,0,0};
+	public static final double[][] DEFAULT_0_SIMPLEX_VERTEX_COORDINATES = {{0,0,0}};
 	public static final double[][] DEFAULT_1_SIMPLEX_VERTEX_COORDINATES = {{-4.5,0,0},{4.5,0,0}};
 	public static final double[][] DEFAULT_2_SIMPLEX_VERTEX_COORDINATES = {{0,3.8,0}, {-4.5,-4,0},{4.5,-4,0}};
+	public static final double[][][] DEFAULT_SIMPLEX_VERTEX_COORDINATES = { DEFAULT_0_SIMPLEX_VERTEX_COORDINATES,
+																			DEFAULT_1_SIMPLEX_VERTEX_COORDINATES,
+																			DEFAULT_2_SIMPLEX_VERTEX_COORDINATES};
+																				
+	
 	public static final float EPSILON_DEFAULT = 0.4f;
 	
 	public static final Map<String, List<String>> availableCommunicationModels;

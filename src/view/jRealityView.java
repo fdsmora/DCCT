@@ -4,9 +4,7 @@ import java.awt.Color;
 import java.awt.Font;
 
 import javax.swing.SwingConstants;
-
 import configuration.Constants;
-import model.CommunicationMechanism;
 import model.Model;
 import view.UI.SimplicialComplexPanel;
 import dctopology.SimplicialComplex;

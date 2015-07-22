@@ -53,7 +53,7 @@ public class Face {
 	private void calculateInitialComplexCoordinates(){
 		switch(vertices.size()){
 			case 1: 
-				vertices.get(0).setCoordinates(Constants.DEFAULT_0_SIMPLEX_VERTEX_COORDINATES);
+				vertices.get(0).setCoordinates(Constants.DEFAULT_0_SIMPLEX_VERTEX_COORDINATES[0]);
 				break;
 			case 2: 
 				vertices.get(0).setCoordinates(Constants.DEFAULT_1_SIMPLEX_VERTEX_COORDINATES[0]);
