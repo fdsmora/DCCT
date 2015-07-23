@@ -53,6 +53,9 @@ public class Model {
 		if (view!=null)
 			view.update(new InitialComplexCommand(view, initialComplex));
 		
+		//Test
+		toString();
+		
 		return initialComplex;
 	}
 	
@@ -132,13 +135,13 @@ public class Model {
 		return null;
 	}
 
-	public List<Color> getSimplicialComplexColors() {
+	public List<Color> getColors() {
 		if (pColors == null)
 			return Arrays.asList(Constants.DEFAULT_COLORS);
 		return pColors;
 	}
 
-	public void setSimplicialComplexColors(List<Color> pColors) {
+	public void setColors(List<Color> pColors) {
 		// Add additional colors to prevent cases when there are less colors than processes.
 		if (pColors.size()<Constants.MAX_COLORS){
 			for (int i=Constants.MAX_COLORS-pColors.size(); i>0; i--){

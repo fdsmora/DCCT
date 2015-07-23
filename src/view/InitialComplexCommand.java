@@ -7,6 +7,6 @@ public class InitialComplexCommand extends Command{
 		super(receiver, complex);
 	}
 	public void execute(){
-		((jRealityView)receiver).createInitialComplexGeometry(complex);
+		((jRealityView)receiver).displayComplex(complex);
 	}
 }

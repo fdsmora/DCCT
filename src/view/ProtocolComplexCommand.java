@@ -7,6 +7,6 @@ public class ProtocolComplexCommand extends Command {
 		super(receiver,complex);
 	}
 	public void execute() {
-		((jRealityView)receiver).createProtocolComplexGeometry(complex);
+		((jRealityView)receiver).displayComplex(complex);
 	}
 }

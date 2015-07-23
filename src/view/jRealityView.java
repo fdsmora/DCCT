@@ -2,7 +2,6 @@ package view;
 
 import java.awt.Color;
 import java.awt.Font;
-
 import javax.swing.SwingConstants;
 import configuration.Constants;
 import model.Model;
@@ -37,18 +36,14 @@ public class jRealityView implements View {
 
 	private Model model;
 	private SimplicialComplex complex;
-	private Geometry initialComplexGeometry;
-	private Geometry protocolComplexGeometry;
 	private JRViewer viewer = new JRViewer();
 	private SceneGraphComponent sgc = new SceneGraphComponent();
 	private SceneGraphComponent sgcV = new SceneGraphComponent();
 	private IndexedFaceSetFactory faceFactory = new IndexedFaceSetFactory();
 	private PointSetFactory psf = new PointSetFactory();
-	private SCOutputConsole console = new SCOutputConsole();
-	
-	protected double[][] coordinates;
-	
+	private SCOutputConsole console = new SCOutputConsole();	
 	private static jRealityView instance = null;
+	
 	public static jRealityView getInstance(){
 		if (instance == null)
 			instance = new jRealityView();
@@ -112,7 +107,6 @@ public class jRealityView implements View {
 	}
 	
 	public void reset(){
-		initialComplexGeometry = protocolComplexGeometry = null;
 		sgcV.setGeometry(null);
 		sgcV.removeAllChildren();
 		sgc.setGeometry(null);
@@ -121,8 +115,8 @@ public class jRealityView implements View {
 	}
 
 	public void updateView() {
-		configVertices();
-		configFaces();
+		setVertices();
+		setFaces();
 	}
 
 	public void start(){
@@ -133,108 +127,44 @@ public class jRealityView implements View {
 		viewer.startup();
 	}
 	
-	protected void configVertices() {
-		Geometry g = getGeometry();
-		if (g!=null){			
-			psf.setVertexCount(g.getVertices().size());
-			psf.setVertexCoordinates(getVertexCoordinates());
-			psf.setVertexColors(toDoubleArray(getVertexColors()));
-			setVertexLabels(psf);
+	private void setVertices() {
+
+		if (complex!=null){
+			psf.setVertexCount(complex.getTotalProcessCount());
+			psf.setVertexCoordinates(complex.getCoordinates());
+			// Need to convert colors to a double array, otherwise doesn't work. 
+			psf.setVertexColors(toDoubleArray(complex.getProcessColors()));
+			psf.setVertexAttribute(Attribute.LABELS, StorageModel.STRING_ARRAY.createReadOnly(complex.getProcessLabels()));
 			psf.update();
-			sgcV.setGeometry(psf.getPointSet());			
+			sgcV.setGeometry(psf.getPointSet());
 		}
 	}
 	
-	protected void configFaces() {
-		Geometry g = getGeometry();
-		if (g!=null) {
-			int f = g.getFaces().size();
-			
-//			Color[] faceColors = new Color[f];
-//			for (int i=0 ; i<f; i++){
-//				faceColors[i]=Color.ORANGE;
-//			}
-//			faceFactory.setFaceColors(toDoubleArray(faceColors));
-			
-			faceFactory.setVertexCount(g.getVertices().size());
-			faceFactory.setVertexCoordinates(getVertexCoordinates());
-			faceFactory.setFaceCount(f);
-			faceFactory.setFaceIndices(getFaceIndices());
+	private void setFaces() {
+		if (complex!=null){
+			faceFactory.setVertexCount(complex.getTotalProcessCount());
+			faceFactory.setVertexCoordinates(complex.getCoordinates());
+			faceFactory.setFaceCount(complex.getSimplices().size());
+			faceFactory.setFaceIndices(complex.getFaces());
 			faceFactory.setGenerateFaceNormals(true);
 			faceFactory.setGenerateEdgesFromFaces(true);
 			faceFactory.update();
-			
 			sgc.setGeometry(faceFactory.getPointSet());
 		}
 	}
 	
 	public void pointDragged(PointDragEvent e) {
+		double[][] coordinates = complex.getCoordinates(); 
 		coordinates[e.getIndex()][0]=e.getX();
 		coordinates[e.getIndex()][1]=e.getY();
 		coordinates[e.getIndex()][2]=e.getZ();
-		//psf.setVertexCoordinates(getVertexCoordinates());
 		psf.setVertexCoordinates(coordinates);
 		psf.update();
 		faceFactory.setVertexCoordinates(coordinates);
 		faceFactory.update();
 	}
-	
-	private Geometry getGeometry(){
-		if (protocolComplexGeometry == null)
-			return initialComplexGeometry;
-		else return protocolComplexGeometry;
-	}
-	
-	
-//	protected int[][] getFaceIndices(){
-//		int[][] faceIndices = new int[g.getFaces().size()][];
-//		int i =0;
-//		for (int[] l : g.getFaces()){
-//			faceIndices[i++]=l;
-//		}
-//		return faceIndices;
-//	}
-	protected int[][] getFaceIndices(){
-		Geometry g = getGeometry();
-		int[][] faceIndices = new int[g.getFaces().size()][];
-		int i =0;
-		for (Face f : g.getFaces().values()){
-			faceIndices[i++]=f.getFaceArray();
-		}
-		return faceIndices;
-	}
 
-	protected double[][] getVertexCoordinates() {
-		Geometry g = getGeometry();
-		//if (coordinates ==null){
-			coordinates = new double[g.getVertices().size()][3];
-			int i=0;
-			for (Vertex v:g.getVertices().values())
-				coordinates[i++]=v.getCoordinates();
-		//}
-		return coordinates;
-	}
-	
-	protected Color[] getVertexColors() {
-		Geometry g = getGeometry();
-		Color[] colors = new Color[g.getVertices().size()];
-		int i=0;
-		for (Vertex v:g.getVertices().values())
-			colors[i++]=v.getColor();
-		return colors;
-	}
-	
-	protected void setVertexLabels(PointSetFactory psf){
-		Geometry g = getGeometry();
-		String[] labels = new String[g.getVertices().size()];
-		int i=0;
-		for (Vertex v : g.getVertices().values())
-			labels[i++]=v.getLabel();
-		
-		psf.setVertexAttribute(Attribute.LABELS, StorageModel.STRING_ARRAY.createReadOnly(labels));
-	}
-	
-	protected static double [] toDoubleArray( Color [] color ) {
+	private static double [] toDoubleArray( Color [] color ) {
 		float [] c = new float[5];
 		double [] array = new double[color.length * 4 ];
 		for( int i=0, j=0; i<array.length; i+=4, j++ ) {
@@ -247,7 +177,7 @@ public class jRealityView implements View {
 		return array;
 	}
 	
-	protected void configViewer(){
+	private void configViewer(){
 		sgc.addChild(sgcV);
 
 /*		 Create DraggingTool to let user drag the geometric object in the visualization space.
@@ -303,7 +233,7 @@ public class jRealityView implements View {
 		viewer.setContent(sgc);
 	}
 	
-	protected void setAppearance(){
+	private void setAppearance(){
 		sgc.setAppearance(new Appearance());
 		DefaultGeometryShader dgs = ShaderUtility.createDefaultGeometryShader(sgc.getAppearance(), false);
 		 
@@ -334,16 +264,12 @@ public class jRealityView implements View {
 	    pts.setFont(f);
 	}
 
-	public void createInitialComplexGeometry(SimplicialComplex complex) {
-		this.initialComplexGeometry = new Geometry (complex, 
-				null, Model.getInstance().getSimplicialComplexColors());
+	public void displayComplex(SimplicialComplex complex) {
+		this.complex = complex;
+		
+
 		updateView();
 	}
 	
-	public void createProtocolComplexGeometry(SimplicialComplex complex) {
-		protocolComplexGeometry =new Geometry(complex, 
-				protocolComplexGeometry!=null? protocolComplexGeometry : initialComplexGeometry, 
-						Model.getInstance().getSimplicialComplexColors());
-		updateView();		
-	}
+
 }

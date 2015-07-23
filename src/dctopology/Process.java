@@ -82,4 +82,13 @@ public class Process implements Cloneable {
 	public void setName(String name) {
 		this.name = name;
 	}
+	
+	public static int countViewElements(String[] processView){
+		int c = 0;
+		for (int i =0; i<processView.length; i++){
+			if (processView[i]!=null)
+				c++;
+		}
+		return c;
+	}
 }
