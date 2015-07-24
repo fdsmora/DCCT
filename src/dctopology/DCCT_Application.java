@@ -1,6 +1,5 @@
 package dctopology;
 
-import model.Model;
 import view.View;
 import view.jRealityView;
 

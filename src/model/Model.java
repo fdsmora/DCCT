@@ -122,7 +122,7 @@ public class Model {
 	}
 
 	public String toString(){
-		System.out.println("InitialComplex\n===================");
+		System.out.println("\nInitialComplex\n===================");
 		if (initialComplex!=null)
 			System.out.println(initialComplex.toString());
 		else 

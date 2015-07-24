@@ -29,7 +29,7 @@ public class AtomicImmediateSnapshot extends CommunicationMechanism {
 		for(Simplex s: simplices){
 			String strAllScenarios = PartitionGenerator.generate(s.dimension());
 			//Test
-			System.out.println("\n" + strAllScenarios);
+			//System.out.println("\n" + strAllScenarios);
 			String[] scenarios = strAllScenarios.split("\n");
 			for (String scn : scenarios) {
 				String[] groups = scn.split("\\" + String.valueOf(PartitionGenerator.getDelimiter()));
@@ -43,6 +43,7 @@ public class AtomicImmediateSnapshot extends CommunicationMechanism {
 				}
 				Simplex newSimplex = new Simplex(newProcesses);
 				newSimplex.setParent(s);
+				//newSimplex.setParentId(s.getid);
 				newSimplices.add(newSimplex);
 			}
 		}

@@ -6,7 +6,6 @@ import javax.swing.SwingConstants;
 import configuration.Constants;
 import model.Model;
 import view.UI.SimplicialComplexPanel;
-import dctopology.SimplicialComplex;
 import de.jreality.geometry.IndexedFaceSetFactory;
 import de.jreality.geometry.PointSetFactory;
 import de.jreality.plugin.JRViewer;
@@ -35,7 +34,7 @@ import de.jtem.jrworkspace.plugin.PluginInfo;
 public class jRealityView implements View {
 
 	private Model model;
-	private SimplicialComplex complex;
+	private GeometricComplex gComplex;
 	private JRViewer viewer = new JRViewer();
 	private SceneGraphComponent sgc = new SceneGraphComponent();
 	private SceneGraphComponent sgcV = new SceneGraphComponent();
@@ -128,24 +127,24 @@ public class jRealityView implements View {
 	}
 	
 	private void setVertices() {
-
-		if (complex!=null){
-			psf.setVertexCount(complex.getTotalProcessCount());
-			psf.setVertexCoordinates(complex.getCoordinates());
+		if (gComplex!=null){
+			psf.setVertexCount(gComplex.getVertexCount());
+			psf.setVertexCoordinates(gComplex.getCoordinates());
 			// Need to convert colors to a double array, otherwise doesn't work. 
-			psf.setVertexColors(toDoubleArray(complex.getProcessColors()));
-			psf.setVertexAttribute(Attribute.LABELS, StorageModel.STRING_ARRAY.createReadOnly(complex.getProcessLabels()));
+			psf.setVertexColors(toDoubleArray(gComplex.getVertexColors()));
+			psf.setVertexAttribute(Attribute.LABELS, StorageModel.STRING_ARRAY.createReadOnly(gComplex.getVertexLabels()));
 			psf.update();
 			sgcV.setGeometry(psf.getPointSet());
 		}
 	}
 	
 	private void setFaces() {
-		if (complex!=null){
-			faceFactory.setVertexCount(complex.getTotalProcessCount());
-			faceFactory.setVertexCoordinates(complex.getCoordinates());
-			faceFactory.setFaceCount(complex.getSimplices().size());
-			faceFactory.setFaceIndices(complex.getFaces());
+		if (gComplex!=null){
+			faceFactory.setVertexCount(gComplex.getVertexCount());
+			faceFactory.setVertexCoordinates(gComplex.getCoordinates());
+			int[][] faces = gComplex.getFacesIndices();
+			faceFactory.setFaceCount(faces.length);
+			faceFactory.setFaceIndices(faces);
 			faceFactory.setGenerateFaceNormals(true);
 			faceFactory.setGenerateEdgesFromFaces(true);
 			faceFactory.update();
@@ -154,7 +153,7 @@ public class jRealityView implements View {
 	}
 	
 	public void pointDragged(PointDragEvent e) {
-		double[][] coordinates = complex.getCoordinates(); 
+		double[][] coordinates = gComplex.getCoordinates(); 
 		coordinates[e.getIndex()][0]=e.getX();
 		coordinates[e.getIndex()][1]=e.getY();
 		coordinates[e.getIndex()][2]=e.getZ();
@@ -264,11 +263,10 @@ public class jRealityView implements View {
 	    pts.setFont(f);
 	}
 
-	public void displayComplex(SimplicialComplex complex) {
-		this.complex = complex;
-		
-
+	public void displayComplex(GeometricComplex complex) {
+		this.gComplex = complex;
 		updateView();
+		System.out.println(complex.toString());
 	}
 	
 

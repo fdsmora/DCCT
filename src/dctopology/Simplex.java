@@ -7,16 +7,23 @@ import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
+
+import view.Face;
 import model.Model;
 import configuration.Constants;
 import dctopology.Process;
 
 public class Simplex {
 	
+//	private static int idCounter = 0;
 	private boolean chromatic = true;
 	private Simplex parent = null;
+	private Face associatedFace = null;
 	private int n = 0;
 	private List<Process> processes;
+	private double[][] coordinates;
+//	private int id = 0;
+//	private int parentId = -1;
 	
 	public List<Process> getProcesses() {
 //		if (chromatic)
@@ -67,6 +74,8 @@ public class Simplex {
 		
 		this.processes = processes;
 		this.n = getProcesses().size();
+		
+//		this.id = idCounter++;
 	}
 	
 	public int dimension(){
@@ -112,74 +121,79 @@ public class Simplex {
 	public void setChromatic(boolean chromatic) {
 		this.chromatic = chromatic;
 	}
-	
-	public double[][] getCoordinates(){
-		if (parent==null){
-			return Constants.DEFAULT_SIMPLEX_VERTEX_COORDINATES[dimension()];
-		}
-		double[][] coordinates = new double[n][]; 
-		if (chromatic)
-			for (Process p : processes)
-				coordinates[p.getId()] = calculateChromaticCoordinates(p);
-			
-		return coordinates;
-	}
-	
-	public String[] getProcessLabels(){
-		String[] labels = new String[n];
-		for (Process p: processes)
-			labels[p.getId()]=p.getView();
-		return labels;
-	}
-	
-	public int[][] getFaces(){
-		int[][] face = new int[1][n];
-		for (Process p : processes){
-			face[0][p.getId()] = p.getId();
-		}
-		return face;
-	}
-	
-	public Color[] getProcessColors(){
-		Color[] colors = new Color[n];
-		Queue<Color> qColors = new LinkedList<Color>(Model.getInstance().getColors());
-		for (Process p:processes){
-			colors[p.getId()]=qColors.remove();
-		}
-		return colors;
-	}
-
-	private double[] calculateChromaticCoordinates(Process p) {
-		String[] processView = p.getViewArray();
-		int count = Process.countViewElements(processView);
-		int pid = p.getId();
-		
-		// If process only saw himself during communication round.
-		if (count == 1)
-			return parent.getCoordinates()[pid];
-		
-		final float EPSILON = Constants.EPSILON_DEFAULT;
-		
-		//int divisor = parentVertices.size();
-		double smallFactor = (1-EPSILON)/count;
-		double bigFactor = (1+(EPSILON/(count==3?2:1)))/count;
-		double[] res = {0.0,0.0,0.0};
-		
-		for (int i = 0; i<n; i++){
-			if (i==pid)
-				res = LinearAlgebraHelper.vectorSum(
-						LinearAlgebraHelper.scalarVectorMultiply(smallFactor,parent.getCoordinates()[pid])
-						,res);
-			else {
-				double[] coords = (processView[i]==null? 
-						new double[3] : parent.getCoordinates()[i]);
-														
-				res = LinearAlgebraHelper.vectorSum(
-						LinearAlgebraHelper.scalarVectorMultiply(bigFactor, coords),res);
-			}
-		}
-		return res;
-	}
+//	
+//	public double[][] getCoordinates(){
+//		if (coordinates == null)
+//			coordinates = calculateCoordinates();
+//		return coordinates;
+//	}
+//	
+//	private double[][] calculateCoordinates() {	
+//		if (parent==null){
+//			return Constants.DEFAULT_SIMPLEX_VERTEX_COORDINATES[dimension()];
+//		}
+//		double[][] coordinates = new double[n][]; 
+//		if (chromatic)
+//			for (Process p : processes)
+//				coordinates[p.getId()] = calculateChromaticCoordinates(p);
+//		return coordinates;
+//	}
+//
+//	public String[] getProcessLabels(){
+//		String[] labels = new String[n];
+//		for (Process p: processes)
+//			labels[p.getId()]=p.getView();
+//		return labels;
+//	}
+//	
+//	public int[][] getFaces(){
+//		int[][] face = new int[1][n];
+//		for (Process p : processes){
+//			face[0][p.getId()] = p.getId();
+//		}
+//		return face;
+//	}
+//	
+//	public Color[] getProcessColors(){
+//		Color[] colors = new Color[n];
+//		Queue<Color> qColors = new LinkedList<Color>(Model.getInstance().getColors());
+//		for (Process p:processes){
+//			colors[p.getId()]=qColors.remove();
+//		}
+//		return colors;
+//	}
+//
+//	private double[] calculateChromaticCoordinates(Process p) {
+//		String[] processView = p.getViewArray();
+//		int count = Process.countViewElements(processView);
+//		int pid = p.getId();
+//		
+//		// If process only saw himself during communication round.
+//		if (count == 1)
+//			return parent.getCoordinates()[pid];
+//		
+//		final float EPSILON = Constants.EPSILON_DEFAULT;
+//		
+//		//int divisor = parentVertices.size();
+//		double smallFactor = (1-EPSILON)/count;
+//		double bigFactor = (1+(EPSILON/(count==3?2:1)))/count;
+//		double[] res = {0.0,0.0,0.0};
+//		
+//		for (int i = 0; i<n; i++){
+//			if (i==pid)
+//				res = LinearAlgebraHelper.vectorSum(
+//						LinearAlgebraHelper.scalarVectorMultiply(smallFactor,parent.getCoordinates()[pid])
+//						,res);
+//			else {
+//				double[] coords = (processView[i]==null? 
+//						new double[3] : parent.getCoordinates()[i]);
+//														
+//				res = LinearAlgebraHelper.vectorSum(
+//						LinearAlgebraHelper.scalarVectorMultiply(bigFactor, coords),res);
+//			}
+//		}
+//		return res;
+//	}
 
 	public Simplex getParent() {
 		return parent;
@@ -188,6 +202,26 @@ public class Simplex {
 	public void setParent(Simplex parent) {
 		this.parent = parent;
 	}
+
+	public Face getFace() {
+		return associatedFace;
+	}
+
+	public void setFace(Face face) {
+		this.associatedFace = face;
+	}
+
+//	public int getParentId() {
+//		return parentId;
+//	}
+
+//	public void setParentId(int parentId) {
+//		this.parentId = parentId;
+//	}
+//
+//	public int getId() {
+//		return id;
+//	}
 	
 }
 
