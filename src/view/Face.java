@@ -84,7 +84,7 @@ public class Face {
 	
 	private double[] calculateChromaticCoordinates(Process p) {
 		String[] processView = p.getViewArray();
-		int count = Process.countViewElements(processView);
+		int count = p.getViewElementsCount();
 		int pid = p.getId();
 		
 		// If process only saw himself during communication round.

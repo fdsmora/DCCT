@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import configuration.Constants;
+import configuration.Constants.ProcessViewBrackets;
 import view.InitialComplexCommand;
 import view.ProtocolComplexCommand;
 import view.ResetViewCommand;
@@ -149,6 +150,9 @@ public class Model {
 			}
 		}
 		this.pColors = pColors;
+	}
+	public String getSelectedBrackets() {
+		return ProcessViewBrackets.DEFAULT.getBrackets();
 	}
 	
 	

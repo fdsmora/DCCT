@@ -1,32 +1,37 @@
 package dctopology;
 
+import model.Model;
+import configuration.Constants;
+
 public class Process implements Cloneable {
 
 	private int id = -1;
 	private String name = "";
-	private String[] view = null;
+	private View view = null;
+	private boolean chromatic = true;
 	
 	public String getView() {
+		return view.getView();
 		//String result = "";
-		if (this.view == null)
-			//result = name;
-			return name;
-		else {
-			String prefix = "";
-			StringBuilder sb = new StringBuilder();
-			for(String v : this.view){
-				sb.append(prefix);
-				sb.append(v!=null? v: "-");
-				prefix = ",";
-			}
-			//result = sb.toString();
-			return "(" + sb.toString() + ")";
-		}
+//		if (this.view == null)
+//			//result = name;
+//			return name;
+//		else {
+//			String prefix = "";
+//			StringBuilder sb = new StringBuilder();
+//			for(String v : this.view){
+//				sb.append(prefix);
+//				sb.append(v!=null? v: "-");
+//				prefix = ",";
+//			}
+//			//result = sb.toString();
+//			return "(" + sb.toString() + ")";
+//		}
 		//return "(" + result + ")";
 	}
 	
 	public String[] getViewArray(){
-		return view;
+		return view.getViewArray();
 	}
 	
 	public int getId() {
@@ -37,11 +42,12 @@ public class Process implements Cloneable {
 	}
 	
 	public void setView(String[] view) {
-		this.view = view;
+		this.view.viewArray = view;
 	}
 	
 	public Process(int id){
 		this.id = id;
+		this.view = new View(this);
 	}
 	
 	@Override 
@@ -55,7 +61,7 @@ public class Process implements Cloneable {
 		try {
 			p = (Process) super.clone();
 			if (this.view != null)
-				p.view = this.view.clone();
+				p.view = (View) this.view.clone();
 		} catch (CloneNotSupportedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -83,12 +89,87 @@ public class Process implements Cloneable {
 		this.name = name;
 	}
 	
-	public static int countViewElements(String[] processView){
-		int c = 0;
-		for (int i =0; i<processView.length; i++){
-			if (processView[i]!=null)
-				c++;
+	public int getViewElementsCount(){
+		return view.getViewElementsCount();
+	}
+	
+	public boolean isChromatic() {
+		return chromatic;
+	}
+
+	public void setChromatic(boolean chromatic) {
+		this.chromatic = chromatic;
+	}
+	
+	private class View implements Cloneable{
+		private String[] viewArray;
+		private Process process;
+		public View(Process p){
+			this.process = p;
 		}
-		return c;
+		
+		public String getView(){
+			if (this.viewArray == null)
+				return process.name;
+			if (process.chromatic)
+				return getChromaticView();
+			return getNonChromaticView();
+		}
+		
+		private String getNonChromaticView() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		private String getChromaticView() {
+				String prefix = "";
+				StringBuilder sb = new StringBuilder();
+				for(String v : this.viewArray){
+					sb.append(prefix);
+					sb.append(v!=null? v: "-");
+					prefix = ",";
+				}
+				//result = sb.toString();
+
+				return String.format(Model.getInstance().getSelectedBrackets(), sb.toString());
+				//return "(" + sb.toString() + ")";
+			}
+		public String[] getViewArray(){
+			return viewArray;
+		}
+		public int getViewElementsCount(){
+			int c = 0;
+			if (viewArray != null){
+				for (int i =0; i<viewArray.length; i++){
+					if (viewArray[i]!=null)
+						c++;
+				}
+			}
+			return c;
+		}
+		@Override
+		public Object clone() {
+			View v = null;
+			try {
+				v = (View) super.clone();
+				if (this.viewArray != null)
+					v.viewArray = this.viewArray.clone();
+			} catch (CloneNotSupportedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return v;
+		}
+		@Override 
+		public boolean equals(Object o){
+			if (!(o instanceof View)) 
+			    return false;
+			return true;
+		}
+		@Override 
+		public int hashCode(){
+			return this.getView().hashCode();
+			//return this.getView().hashCode();
+		}
 	}
 }

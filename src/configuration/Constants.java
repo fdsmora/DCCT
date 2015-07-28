@@ -2,6 +2,7 @@ package configuration;
 
 import java.awt.Color;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,7 +43,31 @@ public final class Constants {
 	public static final double[][][] DEFAULT_SIMPLEX_VERTEX_COORDINATES = { DEFAULT_0_SIMPLEX_VERTEX_COORDINATES,
 																			DEFAULT_1_SIMPLEX_VERTEX_COORDINATES,
 																			DEFAULT_2_SIMPLEX_VERTEX_COORDINATES};
-																				
+											
+	public enum ProcessViewBrackets{
+		ROUND("(%s)"),
+		SQUARE("[%s]"),
+		CURLY("{%s}"),
+		ANGLE("<%s>");
+		
+		private String formatString;
+		ProcessViewBrackets(String format){
+			this.formatString = format;
+		}
+		public String getBrackets(){
+			return formatString;
+		}
+		public static final ProcessViewBrackets DEFAULT = CURLY;
+	}
+	
+//	public static final Map<String, String> VIEW_BRACKETS = new HashMap<String, String>(4);
+//	static {
+//		VIEW_BRACKETS.put("()", "(%)");
+//		VIEW_BRACKETS.put("[]", "[%]");
+//		VIEW_BRACKETS.put("{}", "{%}");
+//		VIEW_BRACKETS.put("<>", "<%>");
+//	}
+//	public static final String DEFAULT_BRACKET = "()";
 	
 	public static final float EPSILON_DEFAULT = 0.4f;
 	
