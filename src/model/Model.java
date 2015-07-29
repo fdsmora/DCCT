@@ -105,7 +105,6 @@ public class Model {
 							protocolComplex : initialComplex);
 		protocolComplex.setChromatic(previousColoring);
 	
-			
 		if (view!=null)
 			view.update(new ProtocolComplexCommand(view, protocolComplex));
 		//TEST

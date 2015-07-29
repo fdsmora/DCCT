@@ -117,7 +117,13 @@ public class Process implements Cloneable {
 		}
 		
 		private String getNonChromaticView() {
-			// TODO Auto-generated method stub
+			String prefix = "";
+			StringBuilder sb = new StringBuilder();
+			for(String v : this.viewArray){
+				sb.append(prefix);
+				sb.append(v!=null? v: "-");
+				prefix = ",";
+			}
 			return null;
 		}
 
@@ -125,8 +131,10 @@ public class Process implements Cloneable {
 				String prefix = "";
 				StringBuilder sb = new StringBuilder();
 				for(String v : this.viewArray){
-					sb.append(prefix);
-					sb.append(v!=null? v: "-");
+					if (process.chromatic)
+						sb.append(prefix);
+					sb.append(v!=null? v: 
+								process.chromatic? "-" : "");
 					prefix = ",";
 				}
 				//result = sb.toString();

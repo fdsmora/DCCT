@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+
 import view.Face;
 import dctopology.Process;
 
@@ -12,17 +13,14 @@ public class Simplex {
 	private boolean chromatic = true;
 	private Simplex parent = null;
 	private Face associatedFace = null;
-	private int n = 0;
-	private List<Process> processes;
-	
-	public List<Process> getProcesses() {
-//		if (chromatic)
-//			return processes;
-//		if (nonChromaticProcesses==null)
-//			buildNonChromaticProcesses();
-//		return nonChromaticProcesses;
-		return processes;
+	//private int n = 0;
+	private List<Process> chromaticProcesses;
+	private List<Process> nonChromaticProcesses;
 
+	public List<Process> getProcesses() {
+		if (chromatic)
+			return chromaticProcesses;
+		return nonChromaticProcesses;
 	}
 		
 //	private void buildNonChromaticProcesses() {
@@ -46,6 +44,18 @@ public class Simplex {
 ////			nonChromaticProcesses.add(map.get(view));
 ////		}
 //	}
+	
+	
+	public void setNonChromaticSimplex(Process... nonChromaticProcesses){
+		setNonChromaticSimplex(Arrays.asList(nonChromaticProcesses));
+	}
+	
+	public void setNonChromaticSimplex(List<Process> nonChromaticProcesses){
+		for (Process p : nonChromaticProcesses){
+			p.setChromatic(false);
+		}
+		this.nonChromaticProcesses = nonChromaticProcesses;
+	}
 
 	public Simplex(Process... processes){
 		this(Arrays.asList(processes));
@@ -62,16 +72,16 @@ public class Simplex {
 			
 		});
 		
-		this.processes = processes;
-		this.n = getProcesses().size();
+		this.chromaticProcesses = processes;
+		//this.n = getProcesses().size();
 	}
 	
 	public int dimension(){
-		return n-1;
+		return getProcesses().size() -1;
 	}
 	
 	public int getProcessCount(){
-		return n;
+		return getProcesses().size();
 	}
 	@Override 
 	public boolean equals(Object o){
@@ -82,7 +92,7 @@ public class Simplex {
 	@Override 
 	public int hashCode(){
 		int hashC =0;
-		for (Process p : processes)
+		for (Process p : getProcesses())
 			hashC+=p.hashCode();
 		return hashC;
 	}
@@ -107,6 +117,12 @@ public class Simplex {
 	}
 
 	public void setChromatic(boolean chromatic) {
+//		if (!chromatic && nonChromaticProcesses == null)
+//			try {
+//				throw new Exception("The method 'setNonChromaticSimplex(List<Process> nonChromaticProcesses)' must be called before calling this method with a 'false' argument. ");
+//			} catch (Exception e) {
+//				e.printStackTrace();
+//			}
 		this.chromatic = chromatic;
 	}
 

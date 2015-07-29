@@ -1,4 +1,4 @@
-package model.AtomicImmediateSnapshotModel;
+package model.ImmediateSnapshotModel;
 
 import java.util.ArrayList;
 import java.util.List;
