@@ -1,9 +1,13 @@
 package dctopology;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import view.Face;
 import dctopology.Process;
@@ -13,15 +17,11 @@ public class Simplex {
 	private boolean chromatic = true;
 	private Simplex parent = null;
 	private Face associatedFace = null;
-	//private int n = 0;
-	private List<Process> chromaticProcesses;
-	private List<Process> nonChromaticProcesses;
+	private int n = 0;
+	private List<Process> processes;
+//	private List<Process> nonChromaticProcesses;
 
-	public List<Process> getProcesses() {
-		if (chromatic)
-			return chromaticProcesses;
-		return nonChromaticProcesses;
-	}
+
 		
 //	private void buildNonChromaticProcesses() {
 //		Map<String, Process> map = new LinkedHashMap<String, Process>();
@@ -46,42 +46,95 @@ public class Simplex {
 //	}
 	
 	
-	public void setNonChromaticSimplex(Process... nonChromaticProcesses){
-		setNonChromaticSimplex(Arrays.asList(nonChromaticProcesses));
+//	public void setNonChromaticSimplex(Process... nonChromaticProcesses){
+//		setNonChromaticSimplex(Arrays.asList(nonChromaticProcesses));
+//	}
+	
+//	public void setNonChromaticSimplex(List<Process> nonChromaticProcesses){
+//		
+//		Map<String, Process> uniqueProcesses = new HashMap<String, Process>(nonChromaticProcesses.size());
+//		
+//		int idCounter = 0;
+//		for (Process p : nonChromaticProcesses){
+//			if (!uniqueProcesses.containsKey(p.getView())){
+//				uniqueProcesses.put(p.getView(), p);
+//				p.setChromatic(false);
+//				// Re-set process ids
+//				p.setId(idCounter++);
+//			}
+//		}
+//		nonChromaticProcesses = new ArrayList<Process>(uniqueProcesses.values());
+//		sortProcesses(nonChromaticProcesses);
+//		
+//		this.nonChromaticProcesses = nonChromaticProcesses;
+//	}
+
+	public Simplex(boolean chromatic, Process... processes){
+		this(chromatic, Arrays.asList(processes));
 	}
 	
-	public void setNonChromaticSimplex(List<Process> nonChromaticProcesses){
-		for (Process p : nonChromaticProcesses){
-			p.setChromatic(false);
+	public Simplex(boolean chromatic, List<Process> processes){
+		this.chromatic = chromatic;
+		if (!chromatic)
+			this.processes = makeProcessesNonChromatic(processes);
+		else 
+			this.processes = processes;
+		
+		sortProcesses(this.processes);
+
+		//this.chromaticProcesses = processes;
+		this.n = this.processes.size();
+	}
+	
+	private List<Process> makeProcessesNonChromatic(List<Process> processes) {
+		Map<String, Process> uniqueProcesses = new HashMap<String, Process>(processes.size());
+		
+		int idCounter = 0;
+		for (Process p : processes){
+			if (!uniqueProcesses.containsKey(p.getView())){
+				Process _p = (Process)p.clone();
+				uniqueProcesses.put(p.getView(), _p);
+				_p.setChromatic(false);
+				// Re-set process ids
+				_p.setId(idCounter++);
+			}
 		}
-		this.nonChromaticProcesses = nonChromaticProcesses;
+		return new ArrayList<Process>(uniqueProcesses.values());
 	}
 
 	public Simplex(Process... processes){
-		this(Arrays.asList(processes));
+		this(true, Arrays.asList(processes));
 	}
 	
 	public Simplex(List<Process> processes){
-		
+		this(true, processes);
+	}
+	
+	private void sortProcesses(List<Process> processes){
 		// Processes must be sorted in increasing order by id.
 		Collections.sort(processes, new Comparator<Process>(){
 			@Override
 			public int compare(Process p1, Process p2) {
 				return Integer.compare(p1.getId(), p2.getId());
 			}
-			
 		});
-		
-		this.chromaticProcesses = processes;
-		//this.n = getProcesses().size();
+	}
+	
+	public List<Process> getProcesses() {
+		return processes;
+//		if (chromatic)
+//			return chromaticProcesses;
+//		return nonChromaticProcesses;
 	}
 	
 	public int dimension(){
-		return getProcesses().size() -1;
+		return n -1 ;
+		//return getProcesses().size() -1;
 	}
 	
 	public int getProcessCount(){
-		return getProcesses().size();
+		return n;
+		//return getProcesses().size();
 	}
 	@Override 
 	public boolean equals(Object o){
@@ -104,8 +157,9 @@ public class Simplex {
 		sb.append("{");
 		for (Process p : getProcesses()){
 			sb.append(prefix);
-			sb.append(chromatic? 
-					p.toString() : p.getView());
+//			sb.append(chromatic? 
+//					p.toString() : p.getView());
+			sb.append(p.toString());
 			prefix = ",";
 		}
 		sb.append("}");

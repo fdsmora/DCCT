@@ -11,7 +11,9 @@ import dctopology.SimplicialComplex;
 
 public class GeometricComplex {
 	private SimplicialComplex complex;
-	private List<Face> faces;
+	private boolean chromatic = true;
+	private List<Face> chromaticFaces;
+	private List<Face> nonChromaticFaces;
 	private int[][] faceIndices; 	
 	private double[][] coordinates;
 	private Color[] colors;
@@ -20,23 +22,46 @@ public class GeometricComplex {
 
 	public GeometricComplex(SimplicialComplex complex){
 		this.complex = complex;
-		faces = new ArrayList<Face>(complex.getSimplexCount());
-		// Set a Face for each simplex
-		for (Simplex s : complex.getSimplices()){
-			Face f;
-			Simplex parent = s.getParent();
-			f = parent != null? new Face(s, parent.getFace()) : new Face(s); 
-			faces.add(f);
-			s.setFace(f);
-		}
+		
+		boolean originalChromaticState = complex.isChromatic();
+
+		complex.setChromatic(true);
+		chromaticFaces = buildFaces(complex);
+		// Think in a better solution.
+		complex.setChromatic(false);
+		nonChromaticFaces = buildFaces(complex);
+		
+		this.chromatic = originalChromaticState;
+		
+		// Leave it as it was
+		complex.setChromatic(originalChromaticState);
+		
 		setVertices();
 		setFaceIndices();
+		
 	}
 	
+	private List<Face> buildFaces(SimplicialComplex complex) {
+		List<Face> faces = null;
+		// Set a Face for each simplex
+		List<Simplex> simplices = complex.getSimplices();
+		if (simplices !=null){
+			faces = new ArrayList<Face>(complex.getSimplexCount());
+			for (Simplex s : simplices){
+				Face f;
+				Simplex parent = s.getParent();
+				f = parent != null? new Face(s, parent.getFace()) : new Face(s); 
+				faces.add(f);
+				s.setFace(f);
+			}
+		}
+		return faces;
+	}
+
 	private void setVertices() {
 		
 		int indexCount = 0;
-		for (Face f : faces){
+		for (Face f : getFaces()){
 			for (Vertex v : f.getVertices()){
 				String key = v.getProcess().toString();
 				if(vertices.containsKey(key)){
@@ -99,10 +124,16 @@ public class GeometricComplex {
 		return faceIndices;
 	}
 	
+	private List<Face> getFaces(){
+		if (chromatic)
+			return chromaticFaces;
+		return nonChromaticFaces;
+	}
+	
 	private void setFaceIndices(){
-		faceIndices = new int[faces.size()][];
+		faceIndices = new int[getFaces().size()][];
 		int i=0;
-		for (Face f : faces){
+		for (Face f : getFaces()){
 			int[] face_idx = new int[f.getVertexCount()];
 			int j = 0;
 			for (Vertex v : f.getVertices()){

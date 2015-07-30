@@ -60,8 +60,10 @@ public class Process implements Cloneable {
 		Process p = null;
 		try {
 			p = (Process) super.clone();
-			if (this.view != null)
+			if (this.view != null){
 				p.view = (View) this.view.clone();
+				p.view.process = p;
+			}
 		} catch (CloneNotSupportedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -111,11 +113,20 @@ public class Process implements Cloneable {
 		public String getView(){
 			if (this.viewArray == null)
 				return process.name;
-			if (process.chromatic)
-				return getChromaticView();
-			return getNonChromaticView();
+			String prefix = "";
+			String value = "";
+			StringBuilder sb = new StringBuilder();
+			for(String v : this.viewArray){
+				value = v!=null? v : process.isChromatic()? "-" : "";
+				if (!value.equals("")){
+					sb.append(prefix);
+					sb.append(value);
+					prefix =",";
+				}
+			}
+			return String.format(Model.getInstance().getSelectedBrackets(), sb.toString());
 		}
-		
+
 		private String getNonChromaticView() {
 			String prefix = "";
 			StringBuilder sb = new StringBuilder();

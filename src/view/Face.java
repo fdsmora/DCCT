@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
-
 import model.Model;
 import configuration.Constants;
 import dctopology.LinearAlgebraHelper;
@@ -44,13 +43,25 @@ public class Face {
 	
 	private void setColors() {
 		colors = new Color[simplex.getProcessCount()];
-		Queue<Color> qColors = new LinkedList<Color>(Model.getInstance().getColors());
-		for (Vertex v:vertices){
-			Process p = v.getProcess();
-			Color c = qColors.remove();
-			v.setColor(c);
-			colors[p.getId()]=c;
-		}		
+		boolean chromatic = simplex.isChromatic();
+		if (chromatic){
+			Queue<Color> qColors = new LinkedList<Color>(Model.getInstance().getColors());
+			for (Vertex v:vertices){
+				Process p = v.getProcess();
+				Color c = qColors.remove();
+				v.setColor(c);
+				colors[p.getId()]= c;
+			}	
+		}
+		else 
+		{
+			for (Vertex v:vertices){
+				Process p = v.getProcess();
+				Color c = Color.GRAY;
+				v.setColor(c);
+				colors[p.getId()]= c;
+			}	 
+		}
 	}
 
 	private void setLabels() {
@@ -72,17 +83,17 @@ public class Face {
 			coordinates= Constants.DEFAULT_SIMPLEX_VERTEX_COORDINATES[dimension];
 			return;
 		}
-		boolean chromatic = simplex.isChromatic();
+		//boolean chromatic = simplex.isChromatic();
 		coordinates = new double[simplex.getProcessCount()][]; 
-		if (chromatic)
+		//if (chromatic)
 			for (Vertex v : vertices){
 				Process p = v.getProcess();
-				v.setCoordinates(calculateChromaticCoordinates(p));
+				v.setCoordinates(calculateCoordinates(p));
 				coordinates[p.getId()] = v.getCoordinates();
 			}
 	}
 	
-	private double[] calculateChromaticCoordinates(Process p) {
+	private double[] calculateCoordinates(Process p) {
 		String[] processView = p.getViewArray();
 		int count = p.getViewElementsCount();
 		int pid = p.getId();
@@ -91,7 +102,8 @@ public class Face {
 		if (count == 1)
 			return parent.getCoordinates()[pid];
 		
-		final float EPSILON = Constants.EPSILON_DEFAULT;
+		// EPSILON >0 only for chromatic simplices. 
+		final float EPSILON = simplex.isChromatic() ? Constants.EPSILON_DEFAULT : 0.0f ;
 		
 		double smallFactor = (1-EPSILON)/count;
 		double bigFactor = (1+(EPSILON/(count==3?2:1)))/count;

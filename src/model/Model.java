@@ -1,6 +1,7 @@
 package model;
 
 import java.awt.Color;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -43,13 +44,21 @@ public class Model {
 	
 	public SimplicialComplex createInitialComplex(List<String> pNames){
 		int n = pNames.size();
-		Process[] processes = new Process[n];
-		for (int i = 0; i<n; i++){
-			processes[i]= new Process(i);
-			processes[i].setName(pNames.get(i));
+		List<Process> processes = new ArrayList<Process>(n);
+		int idCounter = 0;
+		for (String pName : pNames){
+			Process p = new Process(idCounter++);
+			p.setName(pName);
+			processes.add(p);
 		}
+//		Process[] processes = new Process[n];
+//		for (int i = 0; i<n; i++){
+//			processes[i]= new Process(i);
+//			processes[i].setName(pNames.get(i));
+//		}
 		
 		initialComplex = new SimplicialComplex(new Simplex(processes));
+		initialComplex.setNonChromaticSimplices(new Simplex(false,processes));
 		protocolComplex = null;
 		if (view!=null)
 			view.update(new InitialComplexCommand(view, initialComplex));
@@ -96,14 +105,14 @@ public class Model {
 		if (communicationMechanism == null)
 			throw new NullPointerException("No communicationMechanism specified");
 		
-		boolean previousColoring = true;
-		if (protocolComplex!=null)
-			previousColoring = protocolComplex.isChromatic();
+//		boolean previousColoring = true;
+//		if (protocolComplex!=null)
+//			previousColoring = protocolComplex.isChromatic();
 		
 		protocolComplex = communicationMechanism
 					.communicationRound(protocolComplex!=null? 
 							protocolComplex : initialComplex);
-		protocolComplex.setChromatic(previousColoring);
+//		protocolComplex.setChromatic(previousColoring);
 	
 		if (view!=null)
 			view.update(new ProtocolComplexCommand(view, protocolComplex));
@@ -128,8 +137,13 @@ public class Model {
 		else 
 			System.out.println("null");
 		System.out.println("ProtocolComplex\n===================");
-		if (protocolComplex!=null)
+		if (protocolComplex!=null){
 			System.out.println(protocolComplex.toString());
+			System.out.println("<<<<Non-chromatic version>>>>");
+			protocolComplex.setChromatic(false);
+			System.out.println(protocolComplex.toString());
+			protocolComplex.setChromatic(true);
+		}
 		else 
 			System.out.println("null");
 		return null;
