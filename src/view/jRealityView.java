@@ -268,6 +268,11 @@ public class jRealityView implements View {
 		updateView();
 		System.out.println(complex.toString());
 	}
+
+	public void updateChromacity(boolean chromatic) {
+		gComplex.setChromatic(chromatic);
+		updateView();
+	}
 	
 
 }

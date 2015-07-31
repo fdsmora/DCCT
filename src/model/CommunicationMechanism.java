@@ -32,17 +32,19 @@ public abstract class CommunicationMechanism{
 	
 	private void generateOrCompleteNewComplex(SimplicialComplex originalComplex){
 		List<Simplex> originalSimplices=originalComplex.getSimplices();
-		boolean chromatic = originalComplex.isChromatic();
 
-		List<Simplex> allNewSimplices = generateAllNewSimplices(originalSimplices, chromatic);
-		if (newComplex!=null){
-			if (chromatic)
-				newComplex.setChromaticSimplices(allNewSimplices);
-			else
-				newComplex.setNonChromaticSimplices(allNewSimplices);
-		}
-		else{
-			newComplex = new SimplicialComplex(allNewSimplices);
+		if (originalSimplices!=null){
+			boolean chromatic = originalComplex.isChromatic();
+			List<Simplex> allNewSimplices = generateAllNewSimplices(originalSimplices, chromatic);
+			if (newComplex!=null){
+				if (chromatic)
+					newComplex.setChromaticSimplices(allNewSimplices);
+				else
+					newComplex.setNonChromaticSimplices(allNewSimplices);
+			}
+			else{
+				newComplex = new SimplicialComplex(allNewSimplices);
+			}
 		}
 		
 	}

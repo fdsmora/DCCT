@@ -2,32 +2,28 @@ package view;
 
 import java.awt.Color;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Queue;
-import model.Model;
 import configuration.Constants;
-import dctopology.LinearAlgebraHelper;
 import dctopology.Process;
 import dctopology.Simplex;
 
-public class Face {
-	private Simplex simplex;
-	private double[][] coordinates;
-	private Color[] colors;
-	private String[] labels;
-	private Face parent;
-	private List<Vertex> vertices;
-	private int[][] faceIndices;
-	
-	public Face(Simplex simplex){
-		this(simplex,null);
-	}
-	
-	public Face(Simplex simplex, Face parent){
+public abstract class Face {
+	protected Simplex simplex;
+	protected double[][] coordinates;
+	protected Color[] colors;
+	protected String[] labels;
+	protected Face parent;
+	protected List<Vertex> vertices;
+	protected int[][] faceIndices;
+		
+	Face(Simplex simplex, Simplex pSimplex){
 		this.simplex = simplex;
-		this.parent = parent;
+		if (pSimplex !=null) 
+			this.parent = pSimplex.getFace();
 		setVertices();
+		setLabels();
+		setColors();
+		setCoordinates();
 		setFaceIndices();
 	}
 	
@@ -36,33 +32,18 @@ public class Face {
 		for (Process p : simplex.getProcesses()){
 			vertices.add(new Vertex(p));
 		}
-		setCoordinates();
-		setLabels();
-		setColors();
 	}
 	
-	private void setColors() {
+	private void setColors(){
 		colors = new Color[simplex.getProcessCount()];
-		boolean chromatic = simplex.isChromatic();
-		if (chromatic){
-			Queue<Color> qColors = new LinkedList<Color>(Model.getInstance().getColors());
-			for (Vertex v:vertices){
-				Process p = v.getProcess();
-				Color c = qColors.remove();
-				v.setColor(c);
-				colors[p.getId()]= c;
-			}	
-		}
-		else 
-		{
-			for (Vertex v:vertices){
-				Process p = v.getProcess();
-				Color c = Color.GRAY;
-				v.setColor(c);
-				colors[p.getId()]= c;
-			}	 
-		}
+		for (Vertex v:vertices){
+			Color c = getColor();
+			v.setColor(c);
+			colors[v.getProcess().getId()]= c;
+		}	
 	}
+	
+	protected abstract Color getColor();
 
 	private void setLabels() {
 		labels = new String[simplex.getProcessCount()];
@@ -83,47 +64,17 @@ public class Face {
 			coordinates= Constants.DEFAULT_SIMPLEX_VERTEX_COORDINATES[dimension];
 			return;
 		}
-		//boolean chromatic = simplex.isChromatic();
+		
 		coordinates = new double[simplex.getProcessCount()][]; 
-		//if (chromatic)
-			for (Vertex v : vertices){
-				Process p = v.getProcess();
-				v.setCoordinates(calculateCoordinates(p));
-				coordinates[p.getId()] = v.getCoordinates();
-			}
+		for (Vertex v : vertices){
+			Process p = v.getProcess();
+			double[] vCoords = calculateCoordinates(p);
+			v.setCoordinates(vCoords);
+			coordinates[p.getId()] = vCoords;
+		}
 	}
 	
-	private double[] calculateCoordinates(Process p) {
-		String[] processView = p.getViewArray();
-		int count = p.getViewElementsCount();
-		int pid = p.getId();
-		
-		// If process only saw himself during communication round.
-		if (count == 1)
-			return parent.getCoordinates()[pid];
-		
-		// EPSILON >0 only for chromatic simplices. 
-		final float EPSILON = simplex.isChromatic() ? Constants.EPSILON_DEFAULT : 0.0f ;
-		
-		double smallFactor = (1-EPSILON)/count;
-		double bigFactor = (1+(EPSILON/(count==3?2:1)))/count;
-		double[] res = {0.0,0.0,0.0};
-		
-		for (int i = 0; i<simplex.getProcessCount(); i++){
-			if (i==pid)
-				res = LinearAlgebraHelper.vectorSum(
-						LinearAlgebraHelper.scalarVectorMultiply(smallFactor,parent.getCoordinates()[pid])
-						,res);
-			else {
-				double[] coords = (processView[i]==null? 
-						new double[3] : parent.getCoordinates()[i]);
-														
-				res = LinearAlgebraHelper.vectorSum(
-						LinearAlgebraHelper.scalarVectorMultiply(bigFactor, coords),res);
-			}
-		}
-		return res;
-	}
+	protected abstract double[] calculateCoordinates(Process p);
 	
 	private void setFaceIndices() {
 		faceIndices = new int[1][simplex.getProcessCount()];
@@ -131,7 +82,6 @@ public class Face {
 			faceIndices[0][p.getId()] = p.getId();
 		}		
 	}
-
 
 	public String[] getVertexLabels(){
 		return labels;

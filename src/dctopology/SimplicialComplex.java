@@ -9,66 +9,52 @@ public class SimplicialComplex {
 	private List<Simplex> chromaticSimplices;
 	private List<Simplex> nonChromaticSimplices;
 	private int dimension;
-	private boolean chromatic = true;
+	private boolean chromatic;
 	private int totalProcessCount = 0;
 	
 	public SimplicialComplex(Simplex... simplices){
-		this(true, Arrays.asList(simplices));
-	}
-	
-	public SimplicialComplex(List<Simplex> simplices){
-		this(true, simplices);
-	}
-	
-	public SimplicialComplex( boolean chromatic, Simplex... simplices){
 		this(Arrays.asList(simplices));
 	}
 	
-	public SimplicialComplex(boolean chromatic, List<Simplex> simplices){
-		this.chromatic=chromatic;
-		if (chromatic){
-			setChromaticSimplices(simplices);
-		}
-		else 
-			setNonChromaticSimplices(simplices);
+	public SimplicialComplex(List<Simplex> simplices){
+		this.chromatic=true;
+		setChromaticSimplices(simplices);
 
 		computeDimension();
-		computeTotalProcessCount();
+		computeTotalProcessCount();	
 	}
-
+	
 	private void verifyChromacity(boolean chromatic){
 		if (chromatic){
 			for (Simplex s : chromaticSimplices)
 				if (!s.isChromatic())
 					throw new IllegalArgumentException("This complex is chromatic, so all simplices must be chromatic.");
-		}else
+		} else
 			for (Simplex s : nonChromaticSimplices)
 				if (s.isChromatic())
 					throw new IllegalArgumentException("This complex is non-chromatic, so all simplices must be non-chromatic.");
 	}
 	
 	public List<Simplex> getSimplices() {
-		if (chromatic)
-			return chromaticSimplices;
-		 
-		return nonChromaticSimplices;
-//		List<Simplex> simplices = null;
-//		try{
-//			if (chromatic){
-//				simplices = chromaticSimplices;
-//				if (simplices==null)
-//					throw new IllegalStateException("This complex is chromatic, but its chromatic simplices have not been supplied.");
-//				return chromaticSimplices;
-//			}
-//			else {
-//				simplices = nonChromaticSimplices;
-//				if (simplices==null)
-//					throw new IllegalStateException("This complex is non-chromatic, but its non-chromatic simplices have not been supplied.");
-//				return nonChromaticSimplices;
-//			}
-//		}
-//		catch(Exception e){}
-//		return simplices;
+//		if (chromatic)
+//			return chromaticSimplices;
+//		 
+//		return nonChromaticSimplices;
+		List<Simplex> simplices = null;
+		try{
+			if (chromatic){
+				simplices = chromaticSimplices;
+				if (simplices==null)
+					throw new IllegalStateException("This complex is chromatic, but its chromatic simplices have not been supplied.");
+			}
+			else {
+				simplices = nonChromaticSimplices;
+				if (simplices==null)
+					throw new IllegalStateException("This complex is non-chromatic, but its non-chromatic simplices have not been supplied.");
+			}
+		}
+		catch(Exception e){}
+		return simplices;
 	}
 	
 	public int dimension()
@@ -80,17 +66,23 @@ public class SimplicialComplex {
 		return dimension+1;
 	}
 	private void computeTotalProcessCount(){
-		for (Simplex s: getSimplices())
-			totalProcessCount+= s.getProcessCount();
+		List<Simplex> simplices =  getSimplices();
+		if (simplices!=null){
+			for (Simplex s: simplices)
+				totalProcessCount+= s.getProcessCount();
+		}
 	}
 	
 	private void computeDimension(){
-		// Get the maximum dimension of this complex's containing simplices. 
-		this.dimension = Collections.max(this.getSimplices(),
-				new Comparator<Simplex>(){
-					public int compare(Simplex s, Simplex t){
-						return Integer.compare(s.dimension(),t.dimension());
-					}}).dimension();
+		List<Simplex> simplices =  getSimplices();
+		if (simplices!=null){
+			// Get the maximum dimension of this complex's containing simplices. 
+			this.dimension = Collections.max(simplices,
+					new Comparator<Simplex>(){
+						public int compare(Simplex s, Simplex t){
+							return Integer.compare(s.dimension(),t.dimension());
+						}}).dimension();
+		}
 	}
 	
 	@Override
@@ -98,12 +90,14 @@ public class SimplicialComplex {
 		StringBuilder sb = new StringBuilder();
 		String prefix = "";
 		sb.append("{");
-		for (Simplex s : getSimplices()){
-			sb.append(prefix);
-			sb.append(s.toString());
-			prefix = ",";
+		List<Simplex> simplices =  getSimplices();
+		if (simplices!=null){
+			for (Simplex s : simplices){
+				sb.append(prefix);
+				sb.append(s.toString());
+				prefix = ",";
+			}
 		}
-		
 		sb.append("}");
 		
 		return sb.toString();
@@ -114,10 +108,10 @@ public class SimplicialComplex {
 	}
 
 	public void setChromatic(boolean chromatic) {
-		if (chromatic && chromaticSimplices==null)
-			throw new IllegalStateException("Chromatic simplices must be supplied before setting this complex chromatic.");
-		else if (!chromatic && nonChromaticSimplices == null)
-			throw new IllegalStateException("Non-chromatic simplices must be supplied before setting this complex non-chromatic.");
+//		if (chromatic && chromaticSimplices==null)
+//			throw new IllegalStateException("Chromatic simplices must be supplied before setting this complex chromatic.");
+//		else if (!chromatic && nonChromaticSimplices == null)
+//			throw new IllegalStateException("Non-chromatic simplices must be supplied before setting this complex non-chromatic.");
 
 		this.chromatic = chromatic;
 
@@ -128,7 +122,12 @@ public class SimplicialComplex {
 	}
 	
 	public int getSimplexCount(){
-		return getSimplices().size();
+		int size = 0;
+		List<Simplex> simplices =  getSimplices();
+		if (simplices!=null){
+			size = simplices.size();
+		}
+		return size;
 	}
 
 	public void setChromaticSimplices(Simplex... chromaticSimplices) {

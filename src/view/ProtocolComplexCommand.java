@@ -7,9 +7,7 @@ public class ProtocolComplexCommand extends Command {
 		super(receiver,complex);
 	}
 	public void execute() {
-		
-		//TEST
-		//complex.setChromatic(false);
 		((jRealityView)receiver).displayComplex(new GeometricComplex(complex));
 	}
+	
 }

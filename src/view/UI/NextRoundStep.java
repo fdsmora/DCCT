@@ -86,7 +86,7 @@ class NextRoundStep extends Step {
 			scPanel.setCurrentStep(next);
 			next.visit();
 		}else{
-		//	model.setChromatic(cmd=="c");
+			model.setChromatic(cmd=="c");
 		}
 	}	
 		

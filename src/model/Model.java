@@ -7,6 +7,7 @@ import java.util.List;
 
 import configuration.Constants;
 import configuration.Constants.ProcessViewBrackets;
+import view.ChromaticityChangedCommand;
 import view.InitialComplexCommand;
 import view.ProtocolComplexCommand;
 import view.ResetViewCommand;
@@ -93,8 +94,9 @@ public class Model {
 	public void setChromatic(boolean chromatic) {
 		//this.chromatic = chromatic;
 		protocolComplex.setChromatic(chromatic);
-		//if (view!=null)
-			//view.update("c"); // Chromatic changed
+		// Chromatic changed
+		if (view!=null)
+			view.update(new ChromaticityChangedCommand(view, protocolComplex)); 
 	}
 	
 	public void registerView(View v){
@@ -105,14 +107,14 @@ public class Model {
 		if (communicationMechanism == null)
 			throw new NullPointerException("No communicationMechanism specified");
 		
-//		boolean previousColoring = true;
-//		if (protocolComplex!=null)
-//			previousColoring = protocolComplex.isChromatic();
+		boolean previousColoring = true;
+		if (protocolComplex!=null)
+			previousColoring = protocolComplex.isChromatic();
 		
 		protocolComplex = communicationMechanism
 					.communicationRound(protocolComplex!=null? 
 							protocolComplex : initialComplex);
-//		protocolComplex.setChromatic(previousColoring);
+		protocolComplex.setChromatic(previousColoring);
 	
 		if (view!=null)
 			view.update(new ProtocolComplexCommand(view, protocolComplex));

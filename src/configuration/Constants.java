@@ -60,18 +60,10 @@ public final class Constants {
 		public static final ProcessViewBrackets DEFAULT = CURLY;
 	}
 	
-//	public static final Map<String, String> VIEW_BRACKETS = new HashMap<String, String>(4);
-//	static {
-//		VIEW_BRACKETS.put("()", "(%)");
-//		VIEW_BRACKETS.put("[]", "[%]");
-//		VIEW_BRACKETS.put("{}", "{%}");
-//		VIEW_BRACKETS.put("<>", "<%>");
-//	}
-//	public static final String DEFAULT_BRACKET = "()";
-	
-	public static final float EPSILON_DEFAULT = 0.4f;
+	public static final float EPSILON_DEFAULT = 0.35f;
 	
 	public static final Map<String, List<String>> availableCommunicationModels;
+	public static final Color DEFAULT_NON_CHROMATIC_COLOR = Color.GRAY;
 	static {
 		availableCommunicationModels = new LinkedHashMap<String, List<String>>();
 		availableCommunicationModels.put(SHARED_MEMORY, Arrays.asList(IMMEDIATE_SNAPSHOT));

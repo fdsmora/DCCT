@@ -10,7 +10,6 @@ import dctopology.Simplex;
 import dctopology.SimplicialComplex;
 
 public class GeometricComplex {
-	private SimplicialComplex complex;
 	private boolean chromatic = true;
 	private List<Face> chromaticFaces;
 	private List<Face> nonChromaticFaces;
@@ -18,16 +17,15 @@ public class GeometricComplex {
 	private double[][] coordinates;
 	private Color[] colors;
 	private String[] labels;
-	private Map<String, Vertex> vertices = new LinkedHashMap<String, Vertex>();
+	private Map<String, Vertex> vertices;
 
 	public GeometricComplex(SimplicialComplex complex){
-		this.complex = complex;
 		
 		boolean originalChromaticState = complex.isChromatic();
 
 		complex.setChromatic(true);
 		chromaticFaces = buildFaces(complex);
-		// Think in a better solution.
+
 		complex.setChromatic(false);
 		nonChromaticFaces = buildFaces(complex);
 		
@@ -36,34 +34,47 @@ public class GeometricComplex {
 		// Leave it as it was
 		complex.setChromatic(originalChromaticState);
 		
-		setVertices();
-		setFaceIndices();
+		update();
 		
 	}
 	
 	private List<Face> buildFaces(SimplicialComplex complex) {
 		List<Face> faces = null;
-		// Set a Face for each simplex
-		List<Simplex> simplices = complex.getSimplices();
-		if (simplices !=null){
+		
+		List<Simplex> simplices =  complex.getSimplices();
+		if (simplices!=null){
+			// Set a Face for each simplex
 			faces = new ArrayList<Face>(complex.getSimplexCount());
+			boolean chromatic = complex.isChromatic();
 			for (Simplex s : simplices){
 				Face f;
 				Simplex parent = s.getParent();
-				f = parent != null? new Face(s, parent.getFace()) : new Face(s); 
+				if (chromatic)
+					f = new ChromaticFace(s, parent);
+				else
+					f = new NonChromaticFace(s, parent);
+						
 				faces.add(f);
 				s.setFace(f);
 			}
 		}
 		return faces;
 	}
+	
+	private void update(){
+		setVertices();
+		setCoordinates();
+		setLabels();
+		setColors();
+		setFaceIndices();
+	}
 
 	private void setVertices() {
-		
 		int indexCount = 0;
+		vertices = new LinkedHashMap<String, Vertex>();
 		for (Face f : getFaces()){
 			for (Vertex v : f.getVertices()){
-				String key = v.getProcess().toString();
+				String key = chromatic ? v.getProcess().toString() : v.getProcess().getView();
 				if(vertices.containsKey(key)){
 					Vertex dup = vertices.get(key);
 					v.setIndex(dup.getIndex());
@@ -74,9 +85,6 @@ public class GeometricComplex {
 				}
 			}			
 		}	
-		setCoordinates();
-		setLabels();
-		setColors();
 	}
 
 	private void setColors() {
@@ -153,6 +161,15 @@ public class GeometricComplex {
 		sb.append("All colors:"+Arrays.deepToString(colors)+"\n");
 		sb.append("All faces:"+Arrays.deepToString(faceIndices)+"\n");
 		return sb.toString();
+	}
+
+	public boolean isChromatic() {
+		return chromatic;
+	}
+
+	public void setChromatic(boolean chromatic) {
+		this.chromatic = chromatic;
+		update();
 	}
 		
 }
