@@ -49,19 +49,6 @@ public abstract class CommunicationMechanism{
 		
 	}
 	
-//    private void generateNonChromaticSimplex(Simplex s, Scenario scenario,
-//			Simplex newSimplex, List<Process> newProcesses) {
-//    	
-//    	s.setChromatic(false);
-//		newSimplex.setChromatic(false);
-//		List<Process> originalNonChromaticProcesses = s.getProcesses();
-//		if (originalNonChromaticProcesses!=null)
-//			newProcesses = scenario.execute(originalNonChromaticProcesses);
-//		newSimplex.setNonChromaticSimplex(newProcesses);
-//		s.setChromatic(true);
-//		newSimplex.setChromatic(true);
-//	}
-	
 	private List<Simplex> generateAllNewSimplices(List<Simplex> allSimplices, boolean chromatic){
 		List<Simplex> allNewSimplices = new ArrayList<Simplex>();
 

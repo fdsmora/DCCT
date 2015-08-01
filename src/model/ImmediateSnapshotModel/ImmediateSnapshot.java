@@ -15,11 +15,14 @@ import dctopology.Process;
 
 public class ImmediateSnapshot extends CommunicationMechanism {
 	
+	private String[] allScenariosPerDimension = new String[3];
+	
+	
 	public ImmediateSnapshot(){}
 
 	@Override
 	protected ScenarioGenerator createScenarioGenerator(Simplex s) {
-		String allScenarios = PartitionGenerator.generate(s.dimension());
+		String allScenarios = getAllScenarios(s.dimension());
 		return new ScenarioGenerator(){
 
 			@Override
@@ -115,6 +118,12 @@ public class ImmediateSnapshot extends CommunicationMechanism {
 	@Override 
 	public String toString(){
 		return Constants.IMMEDIATE_SNAPSHOT + " " + Constants.SHARED_MEMORY ;
+	}
+	
+	private String getAllScenarios(int dimension){
+		if (allScenariosPerDimension[dimension]==null)
+			allScenariosPerDimension[dimension] = PartitionGenerator.generate(dimension);
+		return allScenariosPerDimension[dimension];
 	}
 	
 	private class ImmediateSnapshotIterator implements Iterator<Scenario>{

@@ -140,11 +140,13 @@ public class Model {
 			System.out.println("null");
 		System.out.println("ProtocolComplex\n===================");
 		if (protocolComplex!=null){
+			boolean originalChromacity = protocolComplex.isChromatic();
+			protocolComplex.setChromatic(true);
 			System.out.println(protocolComplex.toString());
 			System.out.println("<<<<Non-chromatic version>>>>");
 			protocolComplex.setChromatic(false);
 			System.out.println(protocolComplex.toString());
-			protocolComplex.setChromatic(true);
+			protocolComplex.setChromatic(originalChromacity);
 		}
 		else 
 			System.out.println("null");
