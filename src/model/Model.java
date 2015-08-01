@@ -23,6 +23,7 @@ public class Model {
 	//protected boolean chromatic = true;
 	private View view;
 	private List<Color> pColors;
+	private ProcessViewBrackets selectedBrackets = ProcessViewBrackets.DEFAULT;
 	
 	// Singleton design pattern
 	private static Model instance = null;
@@ -169,7 +170,10 @@ public class Model {
 		this.pColors = pColors;
 	}
 	public String getSelectedBrackets() {
-		return ProcessViewBrackets.DEFAULT.getBrackets();
+		return selectedBrackets.getBracketsWithFormat();
+	}
+	public void setSelectedBrackets(ProcessViewBrackets selectedBrackets) {
+		this.selectedBrackets = selectedBrackets;
 	}
 	
 	

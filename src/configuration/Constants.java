@@ -45,17 +45,21 @@ public final class Constants {
 																			DEFAULT_2_SIMPLEX_VERTEX_COORDINATES};
 											
 	public enum ProcessViewBrackets{
+		CURLY("{%s}"),
 		ROUND("(%s)"),
 		SQUARE("[%s]"),
-		CURLY("{%s}"),
 		ANGLE("<%s>");
 		
 		private String formatString;
 		ProcessViewBrackets(String format){
 			this.formatString = format;
 		}
-		public String getBrackets(){
+		public String getBracketsWithFormat(){
 			return formatString;
+		}
+		@Override
+		public String toString(){
+			return String.format(formatString, " ");
 		}
 		public static final ProcessViewBrackets DEFAULT = CURLY;
 	}

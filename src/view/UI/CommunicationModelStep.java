@@ -1,14 +1,22 @@
 package view.UI;
 
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 
+import model.Model;
 import configuration.Constants;
+import configuration.Constants.ProcessViewBrackets;
 
 class CommunicationModelStep extends Step {
 	protected JComboBox<String> communicationModelOptions = new JComboBox<String>();
@@ -24,9 +32,12 @@ class CommunicationModelStep extends Step {
 		communicationModelSubOptions.addActionListener(this);
 		communicationModelSubOptions.setActionCommand("smo");
 		
+		JPanel pCustomizations = createCustomizationsPanel();
+		
 		pContent.add(communicationModelOptions);
 		pContent.add(communicationModelSubOptions);
-		
+		pContent.add(pCustomizations);
+
 		displayModelOptions();
 	}
 	
@@ -37,7 +48,7 @@ class CommunicationModelStep extends Step {
 		btnBack.setText(Constants.START_OVER);
 	}
 	
-	protected void displayModelOptions() {			
+	private void displayModelOptions() {			
 		List<String> options = new ArrayList<String>(Constants.availableCommunicationModels.keySet());
 		String[] optionsArr = new String[options.size()];
 		options.toArray(optionsArr);
@@ -46,13 +57,40 @@ class CommunicationModelStep extends Step {
 		displayModelSubOptions(options.get(0));
 	}
 
-	protected void displayModelSubOptions(String selectedModel) {			
+	private void displayModelSubOptions(String selectedModel) {			
 		List<String> subOptions = Constants.availableCommunicationModels.get(Constants.SHARED_MEMORY);
 		
 		String[] subOptionsArr = new String[subOptions.size()];
 		subOptions.toArray(subOptionsArr);
 		
 		communicationModelSubOptions.setModel(new DefaultComboBoxModel<String>(subOptionsArr));
+	}
+	
+	private JPanel createCustomizationsPanel(){
+		new JPanel();
+		JPanel pCustomizations = new JPanel();
+		pCustomizations.setLayout(new BoxLayout(pCustomizations,BoxLayout.LINE_AXIS));
+		pCustomizations.setBorder(BorderFactory.createTitledBorder("Personalize"));
+		
+		JLabel lbSelectBrackets = new JLabel("Select brackets for process views");
+		JComboBox<ProcessViewBrackets> cbBrackets = new JComboBox<ProcessViewBrackets>(ProcessViewBrackets.values());
+		
+		cbBrackets.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				Model m = Model.getInstance();
+				m.setSelectedBrackets((ProcessViewBrackets)cbBrackets.getSelectedItem());
+			}
+			
+		});
+		cbBrackets.setActionCommand("br");
+		
+		pCustomizations.add(lbSelectBrackets);
+		pCustomizations.add(Box.createRigidArea(new Dimension(10,0)));
+		pCustomizations.add(cbBrackets);
+		
+		return pCustomizations;
 	}
 	
 	@Override
