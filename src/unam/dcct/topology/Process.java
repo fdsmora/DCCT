@@ -12,22 +12,6 @@ public class Process implements Cloneable {
 	
 	public String getView() {
 		return view.getView();
-		//String result = "";
-//		if (this.view == null)
-//			//result = name;
-//			return name;
-//		else {
-//			String prefix = "";
-//			StringBuilder sb = new StringBuilder();
-//			for(String v : this.view){
-//				sb.append(prefix);
-//				sb.append(v!=null? v: "-");
-//				prefix = ",";
-//			}
-//			//result = sb.toString();
-//			return "(" + sb.toString() + ")";
-//		}
-		//return "(" + result + ")";
 	}
 	
 	public String[] getViewArray(){
@@ -127,32 +111,6 @@ public class Process implements Cloneable {
 			return String.format(Model.getInstance().getSelectedBrackets(), sb.toString());
 		}
 
-		private String getNonChromaticView() {
-			String prefix = "";
-			StringBuilder sb = new StringBuilder();
-			for(String v : this.viewArray){
-				sb.append(prefix);
-				sb.append(v!=null? v: "-");
-				prefix = ",";
-			}
-			return null;
-		}
-
-		private String getChromaticView() {
-				String prefix = "";
-				StringBuilder sb = new StringBuilder();
-				for(String v : this.viewArray){
-					if (process.chromatic)
-						sb.append(prefix);
-					sb.append(v!=null? v: 
-								process.chromatic? "-" : "");
-					prefix = ",";
-				}
-				//result = sb.toString();
-
-				return String.format(Model.getInstance().getSelectedBrackets(), sb.toString());
-				//return "(" + sb.toString() + ")";
-			}
 		public String[] getViewArray(){
 			return viewArray;
 		}
@@ -188,7 +146,6 @@ public class Process implements Cloneable {
 		@Override 
 		public int hashCode(){
 			return this.getView().hashCode();
-			//return this.getView().hashCode();
 		}
 	}
 }

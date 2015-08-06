@@ -22,6 +22,7 @@ public class Model {
 	private Set<View> views = new HashSet<View>(5);
 	private List<Color> pColors;
 	private ProcessViewBrackets selectedBrackets = ProcessViewBrackets.DEFAULT;
+	private int roundCount = 0;
 	
 	// Singleton design pattern
 	private static Model instance = null;
@@ -38,6 +39,7 @@ public class Model {
 		pColors = null;
 		communicationMechanism = null;
 		selectedBrackets = ProcessViewBrackets.DEFAULT;
+		roundCount = 0;
 		updateViews(Constants.RESET_VIEW_COMMAND, null);
 //		if (view!=null)
 //			view.update(new ResetViewCommand(view,null)); // reset
@@ -118,11 +120,10 @@ public class Model {
 					.communicationRound(protocolComplex!=null? 
 							protocolComplex : initialComplex);
 		protocolComplex.setChromatic(previousColoring);
+		++roundCount;
 		
 		updateViews(Constants.COMPLEX_UPDATE_COMMAND, protocolComplex);
 
-//		if (view!=null)
-//			view.update(new ProtocolComplexCommand(view, protocolComplex));
 		//TEST
 		//toString();
 	}
@@ -178,6 +179,9 @@ public class Model {
 	}
 	public void setSelectedBrackets(ProcessViewBrackets selectedBrackets) {
 		this.selectedBrackets = selectedBrackets;
+	}
+	public int getRoundCount() {
+		return roundCount;
 	}
 	
 	
