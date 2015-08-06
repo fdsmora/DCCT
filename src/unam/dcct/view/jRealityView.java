@@ -8,6 +8,7 @@ import javax.swing.SwingConstants;
 
 import unam.dcct.misc.Constants;
 import unam.dcct.model.Model;
+import unam.dcct.topology.SimplicialComplex;
 import unam.dcct.view.UI.SimplicialComplexPanel;
 import unam.dcct.view.geometry.GeometricComplex;
 import de.jreality.geometry.IndexedFaceSetFactory;
@@ -315,8 +316,8 @@ public class jRealityView implements View {
 	    pts.setFont(f);
 	}
 
-	public void displayComplex(GeometricComplex complex) {
-		this.gComplex = complex;
+	public void displayComplex(SimplicialComplex complex) {
+		this.gComplex = new GeometricComplex(complex);
 		updateView();
 		System.out.println(complex.toString());
 	}

@@ -11,7 +11,9 @@ import javax.swing.JTextPane;
 import com.google.common.base.Strings;
 
 import de.jreality.plugin.JRViewer;
+import de.jreality.plugin.icon.ImageHook;
 import de.jtem.jrworkspace.plugin.Controller;
+import de.jtem.jrworkspace.plugin.PluginInfo;
 import de.jtem.jrworkspace.plugin.sidecontainer.SideContainerPerspective;
 import de.jtem.jrworkspace.plugin.sidecontainer.template.ShrinkPanelPlugin;
 import unam.dcct.misc.Constants;
@@ -22,7 +24,6 @@ import unam.dcct.view.geometry.GeometricComplex;
 public class SCOutputConsole extends ShrinkPanelPlugin implements View{
 	private JTextPane textPane = JRViewer.scriptingTextPane;
 	private JScrollPane contentPanel = new JScrollPane();
-	private String consoleContent = "";
 	private StringBuilder complexInfo;
 	private final String newLine = "\n";
 	private final String complexInfoFormat = 
@@ -98,7 +99,16 @@ public class SCOutputConsole extends ShrinkPanelPlugin implements View{
 	}
 
 	@Override
-	public void displayComplex(GeometricComplex complex) {
+	public PluginInfo getPluginInfo() {
+		PluginInfo info = new PluginInfo();
+		info.name = Constants.SIMPLICIAL_COMPLEX_CONSOLE;
+		info.vendorName = "Fausto Salazar";
+		info.icon = ImageHook.getIcon("select01.png");
+		return info; 
+	}
+	
+	@Override
+	public void displayComplex(SimplicialComplex complex) {
 		resetConsole();
 		Model m = Model.getInstance();
 		// Check if the generated complex is initial

@@ -9,6 +9,6 @@ public class ComplexUpdateCommand extends Command{
 		super(receiver, complex);
 	}
 	public void execute(){
-		receiver.displayComplex(new GeometricComplex(complex));
+		receiver.displayComplex(complex);
 	}
 }

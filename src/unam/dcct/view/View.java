@@ -1,5 +1,6 @@
 package unam.dcct.view;
 
+import unam.dcct.topology.SimplicialComplex;
 import unam.dcct.view.geometry.GeometricComplex;
 
 /*** 
@@ -21,7 +22,7 @@ public interface View {
 	 * display the main screen of the application. 
 	 */
 	void start();
-	void displayComplex(GeometricComplex complex);
+	void displayComplex(SimplicialComplex complex);
 	void updateChromaticity(boolean chromatic);
 	void reset();
 }
