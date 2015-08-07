@@ -67,6 +67,7 @@ public final class Constants {
 	
 	public static final Map<String, List<String>> availableCommunicationModels;
 	public static final String MODEL_INFORMATION = "Model information";
+	public static final String GEOMETRIC_INFORMATION = "Geometric information";
 	static {
 		availableCommunicationModels = new LinkedHashMap<String, List<String>>();
 		availableCommunicationModels.put(SHARED_MEMORY, Arrays.asList(IMMEDIATE_SNAPSHOT));

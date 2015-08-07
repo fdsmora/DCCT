@@ -8,14 +8,14 @@ public class ChromaticityUpdateCommand extends Command{
 		
 	//private boolean chromatic;
 	
-	public ChromaticityUpdateCommand(View receiver, SimplicialComplex complex) {
-		super(receiver, complex);
+	public ChromaticityUpdateCommand(View receiver) {
+		super(receiver);
 		//this.chromatic = complex.isChromatic();
 	}
 
 	@Override
 	public void execute() {
-		receiver.updateChromaticity(complex.isChromatic());
+		receiver.updateChromaticity();
 	}
 	
 }

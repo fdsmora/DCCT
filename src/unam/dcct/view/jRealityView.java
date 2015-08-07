@@ -60,57 +60,6 @@ public class jRealityView implements View {
 		model.registerView(this);
 	}
 	
-//	public void update(Command action) {
-//		action.execute();
-////		if (action.equals("r")){
-////			resetView();
-////			resetGeometry();
-////			console.resetConsole();
-////			return;
-////		}
-////		
-////		if (action.equals("u")){
-////			console.resetProtocolComplexInfo();
-////			return;
-////		}
-////		
-////		if(action.equals("i")){
-////			complex = model.getInitialComplex() ;
-////			initialComplexGeometry = new Geometry (complex, 
-////					null, model.getSimplicialComplexColors());
-////		}
-////		else if (action.equals("p") || 
-////					action.equals("c")){
-////			complex = model.getProtocolComplex();
-////			protocolComplexGeometry = new Geometry(complex, 
-////					protocolComplexGeometry!=null? protocolComplexGeometry : initialComplexGeometry, 
-////					model.getSimplicialComplexColors());
-////			//Test
-////			//protocolComplexGeometry.test();
-////		}
-////		
-//////		g = new Geometry(complex, 
-//////				model.isChromatic()? model.getSimplicialComplexColors() : null);
-////
-////		if (action.equals("i")){
-////			console.setInitialComplexInfo(complex.toString());
-////		}
-////		else if (action.equals("p")) {
-////			CommunicationMechanism cm = model.getCommunicationMechanism();
-////			console.setCommunicationModel(cm.toString());
-////			
-////			console.addProtocolComplexInfo(complex.toString(),
-////					complex.getSimplices().size(),
-////					model.isChromatic()? 0 : protocolComplexGeometry.getFaces().size());
-////		}else if (action.equals("c")){
-////			console.addNonChromaticInfo(protocolComplexGeometry.getFaces().size());
-////		}
-////							
-////		console.print();
-////		
-////		updateView();
-//	}
-	
 	public void reset(){
 		psf = null; 
 		faceFactory = null;
@@ -128,9 +77,6 @@ public class jRealityView implements View {
 	}
 
 	public void start(){
-		//sgc.removeAllChildren();
-		//updateView();
-		//setAppearance();
 		configViewer();
 		viewer.startup();
 	}
@@ -236,10 +182,6 @@ public class jRealityView implements View {
 				getShrinkPanel().add(scPanel);
 			}
 			
-//			@Override
-//			public PluginInfo getPluginInfo() {
-//				return new PluginInfo(Constants.SIMPLICIAL_COMPLEX_CONSOLE);
-//			}
 			
 			@Override
 			public PluginInfo getPluginInfo() {
@@ -283,8 +225,6 @@ public class jRealityView implements View {
 
 	}
 	
-
-
 	private void setAppearance(){
 		sgc.setAppearance(new Appearance());
 		DefaultGeometryShader dgs = ShaderUtility.createDefaultGeometryShader(sgc.getAppearance(), false);
@@ -316,16 +256,24 @@ public class jRealityView implements View {
 	    pts.setFont(f);
 	}
 
-	public void displayComplex(SimplicialComplex complex) {
-		this.gComplex = new GeometricComplex(complex);
+	public void displayComplex() {
+		Model m = Model.getInstance();
+		// Check if the generated complex is initial
+		SimplicialComplex protocolComplex = m.getProtocolComplex();
+		if (protocolComplex==null){
+			gComplex = new GeometricComplex(m.getInitialComplex());
+		}else
+		{
+			gComplex = new GeometricComplex(protocolComplex);
+		}
 		updateView();
-		System.out.println(complex.toString());
+		SCOutputConsole.getInstance().addGeometricInformation(gComplex);
 	}
 
-	public void updateChromaticity(boolean chromatic) {
-		gComplex.setChromatic(chromatic);
+	@Override
+	public void updateChromaticity() {
+		gComplex.setChromatic(model.isChromatic());
 		updateView();
-	}
-	
+	}	
 
 }

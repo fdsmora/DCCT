@@ -7,22 +7,20 @@ import unam.dcct.view.View;
 public abstract class Command {
 	
 	protected View receiver;
-	protected SimplicialComplex complex;
 	
-	public Command(View receiver, SimplicialComplex complex){
+	public Command(View receiver){
 		this.receiver = receiver;
-		this.complex = complex;
 	}
 	
 	public abstract void execute();
 
-	public static Command createCommand(String type, View receiver, SimplicialComplex complex){
+	public static Command createCommand(String type, View receiver){
 		if (type.equals(Constants.RESET_VIEW_COMMAND))
-			return new ResetViewCommand(receiver, complex);
+			return new ResetViewCommand(receiver);
 		if (type.equals(Constants.COMPLEX_UPDATE_COMMAND))
-			return new ComplexUpdateCommand(receiver, complex);
+			return new ComplexUpdateCommand(receiver);
 		if (type.equals(Constants.CHROMATICITY_UPDATE_COMMAND))
-			return new ChromaticityUpdateCommand(receiver, complex);
+			return new ChromaticityUpdateCommand(receiver);
 		return null;
 	}
 }

@@ -40,9 +40,7 @@ public class Model {
 		communicationMechanism = null;
 		selectedBrackets = ProcessViewBrackets.DEFAULT;
 		roundCount = 0;
-		updateViews(Constants.RESET_VIEW_COMMAND, null);
-//		if (view!=null)
-//			view.update(new ResetViewCommand(view,null)); // reset
+		updateViews(Constants.RESET_VIEW_COMMAND);
 	}
 	
 	public SimplicialComplex createInitialComplex(List<String> pNames){
@@ -58,7 +56,7 @@ public class Model {
 		initialComplex = new SimplicialComplex(new Simplex(processes));
 		initialComplex.setNonChromaticSimplices(new Simplex(false,processes));
 		protocolComplex = null;
-		updateViews(Constants.COMPLEX_UPDATE_COMMAND, initialComplex);
+		updateViews(Constants.COMPLEX_UPDATE_COMMAND);
 //		if (view!=null)
 //			view.update(new InitialComplexCommand(view, initialComplex));
 		
@@ -90,21 +88,17 @@ public class Model {
 
 	public void setChromatic(boolean chromatic) {
 		protocolComplex.setChromatic(chromatic);
-		updateViews(Constants.COMPLEX_UPDATE_COMMAND, protocolComplex);
-		// Chromatic changed
-//		if (view!=null)
-//			view.update(new ChromaticityChangedCommand(view, protocolComplex)); 
+		updateViews(Constants.COMPLEX_UPDATE_COMMAND);
 	}
 	
 	public void registerView(View v){
 		views.add(v);
 	}
 	
-	public void updateViews(String cmdType, SimplicialComplex complex){
+	public void updateViews(String cmdType){
 		for (View v: views){
-			Command cmd = Command.createCommand(cmdType, v, complex);
+			Command cmd = Command.createCommand(cmdType, v);
 			cmd.execute();
-			//v.update(cmd);
 		}
 	}
 	
@@ -122,10 +116,8 @@ public class Model {
 		protocolComplex.setChromatic(previousColoring);
 		++roundCount;
 		
-		updateViews(Constants.COMPLEX_UPDATE_COMMAND, protocolComplex);
+		updateViews(Constants.COMPLEX_UPDATE_COMMAND);
 
-		//TEST
-		//toString();
 	}
 
 	public CommunicationMechanism getCommunicationMechanism() {

@@ -36,6 +36,11 @@ public class SCOutputConsole extends ShrinkPanelPlugin implements View{
 			+ "Dimension of complex: %d\n" // field for complex dimension
 			+ Constants.SET_NOTATION_REPRESENTATION + ":" + newLine
 			+ "%s\n";
+	private final String geometricInfoFormat = 
+			newLine + Constants.GEOMETRIC_INFORMATION + newLine
+			+ Constants.OUTPUT_CONSOLE_DELIMITER
+			+ "Number of vertices: %d\n"
+			+ "Number of faces: %d\n";
 	
 	private static SCOutputConsole instance = null;
 
@@ -108,7 +113,7 @@ public class SCOutputConsole extends ShrinkPanelPlugin implements View{
 	}
 	
 	@Override
-	public void displayComplex(SimplicialComplex complex) {
+	public void displayComplex() {
 		resetConsole();
 		Model m = Model.getInstance();
 		// Check if the generated complex is initial
@@ -122,10 +127,18 @@ public class SCOutputConsole extends ShrinkPanelPlugin implements View{
 		}
 		textPane.setText(complexInfo.toString());
 	}
+	
+	public void addGeometricInformation(GeometricComplex geom){
+		if (geom!=null && complexInfo!=null){
+			complexInfo.append(String.format(
+					geometricInfoFormat, geom.getVertexCount(), geom.getFacesIndices().length
+					));
+			textPane.setText(complexInfo.toString());
+		}
+	}
 
 	@Override
-	public void updateChromaticity(boolean chromatic) {
-		
+	public void updateChromaticity() {
 	}
 
 	@Override
