@@ -2,7 +2,7 @@ package unam.dcct.misc;
 
 public class LinearAlgebraHelper {
 	public static double[] scalarVectorMultiply(double scalar, double[] vector){
-		double[] res = vector.clone();
+		double[] res =vector.clone();
 		for (int i = 0; i<vector.length; i++){
 			res[i]*=scalar;
 		}

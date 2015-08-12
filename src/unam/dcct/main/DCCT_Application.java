@@ -13,7 +13,7 @@ import unam.dcct.view.jRealityView;
  */
 public class DCCT_Application {
 	public static void main(String[] args){
-		View view = jRealityView.getInstance();
+		jRealityView view = jRealityView.getInstance();
 		view.start();
 		Model model = Model.getInstance();
 		model.registerView(SCOutputConsole.getInstance());

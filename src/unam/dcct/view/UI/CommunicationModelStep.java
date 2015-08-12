@@ -15,30 +15,26 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import unam.dcct.misc.Constants;
+import unam.dcct.misc.Constants.CommunicationMechanism;
 import unam.dcct.misc.Constants.ProcessViewBrackets;
 import unam.dcct.model.Model;
 
 class CommunicationModelStep extends Step {
-	protected JComboBox<String> communicationModelOptions = new JComboBox<String>();
-	protected JComboBox<String> communicationModelSubOptions = new JComboBox<String>();
+	private JComboBox<CommunicationMechanism> communicationModelOptions;// = new JComboBox<String>();
+	private JComboBox<String> communicationModelSubOptions;// = new JComboBox<String>();
 	
 	public CommunicationModelStep(SimplicialComplexPanel p){
 		super(p);
 		
 		pContent.setBorder(BorderFactory.createTitledBorder(Constants.PROTOCOL_COMPLEX));
 		
-		communicationModelOptions.addActionListener(this);
-		communicationModelOptions.setActionCommand("mo");
-		communicationModelSubOptions.addActionListener(this);
-		communicationModelSubOptions.setActionCommand("smo");
-		
 		JPanel pCustomizations = createCustomizationsPanel();
+		displayModelOptions();
 		
 		pContent.add(communicationModelOptions);
 		pContent.add(communicationModelSubOptions);
 		pContent.add(pCustomizations);
 
-		displayModelOptions();
 	}
 	
 	@Override
@@ -49,17 +45,26 @@ class CommunicationModelStep extends Step {
 	}
 	
 	private void displayModelOptions() {			
-		List<String> options = new ArrayList<String>(Constants.availableCommunicationModels.keySet());
-		String[] optionsArr = new String[options.size()];
-		options.toArray(optionsArr);
-		communicationModelOptions.setModel(new DefaultComboBoxModel<String>(optionsArr));
+		//List<String> options = new ArrayList<String>(Constants.availableCommunicationModels.keySet());
+		//String[] optionsArr = new String[options.size()];
+		//options.toArray(optionsArr);
+		//communicationModelOptions.setModel(new DefaultComboBoxModel<String>(optionsArr));
 		
-		displayModelSubOptions(options.get(0));
+		communicationModelOptions = new JComboBox<CommunicationMechanism>(CommunicationMechanism.values());
+		communicationModelOptions.addActionListener(this);
+		communicationModelOptions.setActionCommand("mo");
+		
+		//displayModelSubOptions(options.get(0));
+		displayModelSubOptions(CommunicationMechanism.values()[0]);
 	}
 
-	private void displayModelSubOptions(String selectedModel) {			
-		List<String> subOptions = Constants.availableCommunicationModels.get(Constants.SHARED_MEMORY);
+	private void displayModelSubOptions(CommunicationMechanism selectedModel) {	
+		communicationModelSubOptions = new JComboBox<String>();
+		communicationModelSubOptions.addActionListener(this);
+		communicationModelSubOptions.setActionCommand("smo");
 		
+		//List<String> subOptions = Constants.availableCommunicationModels.get(Constants.SHARED_MEMORY);
+		List<String> subOptions = selectedModel.subModels();
 		String[] subOptionsArr = new String[subOptions.size()];
 		subOptions.toArray(subOptionsArr);
 		
@@ -116,7 +121,7 @@ class CommunicationModelStep extends Step {
 	public void actionPerformed(ActionEvent e) {
 		String command = e.getActionCommand();
 		if (command == "mo"){
-			displayModelSubOptions((String)communicationModelOptions.getSelectedItem());
+			displayModelSubOptions((CommunicationMechanism)communicationModelOptions.getSelectedItem());
 		}
 	}
 }

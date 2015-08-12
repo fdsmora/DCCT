@@ -6,14 +6,16 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-
+/***
+ * The purpose of this class is to provide a global access to the most commonly used constant values used throughout the application. 
+ * @author Fausto
+ */
 public final class Constants {
 	public static final Color[] DEFAULT_COLORS = {Color.BLUE, Color.WHITE, Color.GREEN, Color.YELLOW, Color.RED};
+	public static final Color DEFAULT_FACE_COLOR = Color.cyan;
 	public static final int MAX_COLORS = 5;
 	public static final float EPSILON_DEFAULT = 0.35f;
 	public static final Color DEFAULT_NON_CHROMATIC_COLOR = Color.GRAY;
-	public static final String SHARED_MEMORY = "Shared memory";
-	public static final String IMMEDIATE_SNAPSHOT = "Immediate snapshot";
 	public static final String NEXT = "Next";
 	public static final String BACK = "Back";
 	public static final String GENERATE = "Generate";
@@ -37,14 +39,15 @@ public final class Constants {
 	public static final String COMPLEX_UPDATE_COMMAND = "cxu";
 	public static final String CHROMATICITY_UPDATE_COMMAND = "chu";
 	public static final String SIMPLICIAL_COMPLEX = "Simplicial complex";
-
+	public static final String SHARED_MEMORY = "Shared memory";
+	public static final String IMMEDIATE_SNAPSHOT = "Immediate snapshot";
+	
 	public static final double[][] DEFAULT_0_SIMPLEX_VERTEX_COORDINATES = {{0,0,0}};
 	public static final double[][] DEFAULT_1_SIMPLEX_VERTEX_COORDINATES = {{-4.5,0,0},{4.5,0,0}};
 	public static final double[][] DEFAULT_2_SIMPLEX_VERTEX_COORDINATES = {{0,3.8,0}, {-4.5,-4,0},{4.5,-4,0}};
 	public static final double[][][] DEFAULT_SIMPLEX_VERTEX_COORDINATES = { DEFAULT_0_SIMPLEX_VERTEX_COORDINATES,
 																			DEFAULT_1_SIMPLEX_VERTEX_COORDINATES,
-																			DEFAULT_2_SIMPLEX_VERTEX_COORDINATES};
-											
+																			DEFAULT_2_SIMPLEX_VERTEX_COORDINATES};										
 	public enum ProcessViewBrackets{
 		CURLY("{%s}"),
 		ROUND("(%s)"),
@@ -64,13 +67,32 @@ public final class Constants {
 		}
 		public static final ProcessViewBrackets DEFAULT = CURLY;
 	}
-	
-	public static final Map<String, List<String>> availableCommunicationModels;
+		
+//	public static final Map<String, List<String>> availableCommunicationModels;
 	public static final String MODEL_INFORMATION = "Model information";
 	public static final String GEOMETRIC_INFORMATION = "Geometric information";
-	static {
-		availableCommunicationModels = new LinkedHashMap<String, List<String>>();
-		availableCommunicationModels.put(SHARED_MEMORY, Arrays.asList(IMMEDIATE_SNAPSHOT));
+//	static {
+//		availableCommunicationModels = new LinkedHashMap<String, List<String>>();
+//		availableCommunicationModels.put(SHARED_MEMORY, Arrays.asList(IMMEDIATE_SNAPSHOT));
+//	}
+	
+	public enum CommunicationMechanism{
+		// Add all new distributed computing model descriptions here. 
+		SHARED_MEMORY(Constants.SHARED_MEMORY, Constants.IMMEDIATE_SNAPSHOT);
+		
+		private String desc;
+		private List<String> subModels;
+		CommunicationMechanism(String desc, String... subModels){
+			this.desc = desc;
+			this.subModels = Arrays.asList(subModels);
+		}
+		@Override
+		public String toString(){
+			return desc;
+		}
+		public List<String> subModels(){
+			return subModels;
+		}
 	}
 	
 }

@@ -1,8 +1,5 @@
 package unam.dcct.view;
 
-import unam.dcct.topology.SimplicialComplex;
-import unam.dcct.view.geometry.GeometricComplex;
-
 /*** 
  * Represents the View component of the MVC architecture of the application. 
  * @author Fausto
@@ -11,16 +8,17 @@ import unam.dcct.view.geometry.GeometricComplex;
 public interface View {
 
 	/***
-	 * Classes that implement the View interface need to provide logic in this method to set up and 
-	 * display the main screen of the application. Usually one class will be responsible for starting up
-	 * the application, so only one class implements this method. 
-	 */
-	void start();
-	/***
-	 * 
-	 * @param complex
+	 * Classes that implement the View interface need to provide logic in order to display the simplicial complex
+	 * that the model generates. 
 	 */
 	void displayComplex();
+	/***
+	 * When a simplicial complex representation is currently displayed on screen and the chromaticity is changed, 
+	 * this method most provide logic in order to update the representation to reflect the chromaticity update. 
+	 */
 	void updateChromaticity();
+	/***
+	 * Implementing classes must provide logic in this method that cleans the display and resets all controls.
+	 */
 	void reset();
 }
