@@ -18,9 +18,9 @@ class NextRoundStep extends Step {
 	private int roundCount = 1;
 	private JRadioButton rbChromatic = new JRadioButton(Constants.CHROMATIC);
 	private JRadioButton rbNonChromatic = new JRadioButton(Constants.NON_CHROMATIC);
-
-	public NextRoundStep(SimplicialComplexPanel p){
-		super(p);	
+	
+	public NextRoundStep(){
+		super();	
 		
 		lbMaxReached.setForeground(Color.RED);
 		pContent.add(lbMaxReached);
@@ -61,8 +61,10 @@ class NextRoundStep extends Step {
 	@Override
 	public void goBack(){
 		scPanel.getpButtons().remove(2);
-		Step.resetAllSteps(scPanel);
-		Step back = Step.steps.get(NumberOfProcessesStep.class.getName());
+		//Step.resetAllSteps(scPanel);
+		//Step back = Step.steps.get(NumberOfProcessesStep.class.getName());
+		Steps.resetAllSteps();
+		Step back = Steps.NumberOfProcessesStep.getStep();
 		scPanel.setCurrentStep(back);
 		back.visit();
 	}
@@ -82,12 +84,13 @@ class NextRoundStep extends Step {
 		String cmd = e.getActionCommand();
 		if (cmd.equals("h")){
 			scPanel.getpButtons().remove(2);
-			Step next = Step.steps.get(CommunicationMechanismStep.class.getName());
+			//Step next = Step.steps.get(CommunicationMechanismStep.class.getName());
+			Step next = Steps.CommunicationMechanismStep.getStep();
 			scPanel.setCurrentStep(next);
 			next.visit();
 		}else{
 			model.setChromatic(cmd=="c");
 		}
 	}	
-		
+
 }

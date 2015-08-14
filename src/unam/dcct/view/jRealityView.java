@@ -196,6 +196,7 @@ public class jRealityView implements View {
 				SimplicialComplexPanel scPanel = SimplicialComplexPanel.getInstance();
 				// Embed this panel into jReality's Shrink Panel.
 				getShrinkPanel().add(scPanel);
+				scPanel.start();
 			}
 			
 			

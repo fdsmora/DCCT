@@ -3,9 +3,7 @@ package unam.dcct.view.UI;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 import java.util.List;
-
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -13,18 +11,24 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-
 import unam.dcct.misc.Constants;
 import unam.dcct.misc.Constants.CommunicationMechanism;
 import unam.dcct.misc.Constants.ProcessViewBrackets;
 import unam.dcct.model.Model;
 
+/**
+ * Represents the step in the {@link unam.dcct.view.UI.SimplicialComplexPanel} wizard
+ * that lets the user specify the distributed computing model on which the protocol 
+ * complex will be generated. 
+ * @author Fausto
+ *
+ */
 class CommunicationMechanismStep extends Step {
-	private JComboBox<CommunicationMechanism> communicationModelOptions;// = new JComboBox<String>();
-	private JComboBox<String> communicationModelSubOptions;// = new JComboBox<String>();
+	private JComboBox<CommunicationMechanism> communicationModelOptions;
+	private JComboBox<String> communicationModelSubOptions;
 	
-	public CommunicationMechanismStep(SimplicialComplexPanel p){
-		super(p);
+	public CommunicationMechanismStep(){
+		super();
 		
 		pContent.setBorder(BorderFactory.createTitledBorder(Constants.PROTOCOL_COMPLEX));
 		
@@ -65,6 +69,11 @@ class CommunicationMechanismStep extends Step {
 		communicationModelSubOptions.setModel(new DefaultComboBoxModel<String>(subOptionsArr));
 	}
 	
+	/**
+	 * Adds a subpanel where the user can customize some attributes of the 
+	 * visualization, such as the style of brackets that enclose the process view labels.
+	 * @return Returns the customizations subpanel. 
+	 */
 	private JPanel createCustomizationsPanel(){
 		new JPanel();
 		JPanel pCustomizations = new JPanel();
@@ -92,22 +101,32 @@ class CommunicationMechanismStep extends Step {
 		return pCustomizations;
 	}
 	
-	@Override
+	/**
+	 * Generates the protocol complex for the first communication round 
+	 * using the distributed computing model specified in this step.  
+	 */
 	public void validateAndExecute(){
 		String cModel = (String)communicationModelSubOptions.getSelectedItem();
 		model.setCommunicationMechanism(cModel);
 		model.setProtocolComplex(null);
 		model.executeRound();		
 		
-		Step nextStep = Step.steps.get(NextRoundStep.class.getName());
-		scPanel.setCurrentStep(nextStep);
-		nextStep.visit();	
+		//Step nextStep = Step.steps.get(NextRoundStep.class.getName());
+		Step next = Steps.NextRoundStep.getStep();
+		scPanel.setCurrentStep(next);
+		next.visit();	
 	}
 	
+	/**
+	 * Takes the user to the first step {@link unam.dcct.view.UI.NumberOfProcessesStep},
+	 * resetting the state of all wizard's controls.
+	 */
 	@Override
 	public void goBack(){
-		Step.resetAllSteps(scPanel);
-		Step back = Step.steps.get(NumberOfProcessesStep.class.getName());
+		//Step.resetAllSteps(scPanel);
+		Steps.resetAllSteps();
+		//Step back = Step.steps.get(NumberOfProcessesStep.class.getName());
+		Step back = Steps.NumberOfProcessesStep.getStep();
 		scPanel.setCurrentStep(back);
 		back.visit();
 	}
@@ -118,4 +137,5 @@ class CommunicationMechanismStep extends Step {
 			displayModelSubOptions((CommunicationMechanism)communicationModelOptions.getSelectedItem());
 		}
 	}
+
 }

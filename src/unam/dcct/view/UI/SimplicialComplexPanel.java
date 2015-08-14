@@ -11,7 +11,11 @@ import javax.swing.JPanel;
 import unam.dcct.misc.Constants;
 
 /***
- * 
+ * Represents the wizard that guides the user through the process of building an initial 
+ * simplicial complex and generating protocol complexes using different distributed computing models.
+ * This wizards consists of a main content panel that is populated with the current step's controls; and 
+ * a bottom panel that contains two buttons: Next and Back, that let user navigate across the wizard
+ * steps (optionally each step can add or remove buttons from this panel).
  * @author Fausto Salazar
  *
  */
@@ -31,7 +35,7 @@ public class SimplicialComplexPanel extends JPanel implements ActionListener {
 		return instance;
 	}
 	private SimplicialComplexPanel(){
-		// Configuring UI controls
+		// Configuring basic UI controls
 		btnNext.addActionListener(this);
 		btnNext.setActionCommand(Constants.NEXT);
 		btnBack.addActionListener(this);
@@ -45,11 +49,23 @@ public class SimplicialComplexPanel extends JPanel implements ActionListener {
 		add(pContent, BorderLayout.CENTER);
 		add(pButtons, BorderLayout.PAGE_END);
 		
-		Step.resetAllSteps(this);
-		currentStep = Step.steps.get(NumberOfProcessesStep.class.getName());
+		//Step.resetAllSteps(this);
+		//currentStep = Step.steps.get(NumberOfProcessesStep.class.getName());
+
+	}
+	
+	/**
+	 * Populates the wizard with the first step's controls
+	 */
+	public void start(){
+		Steps.resetAllSteps();
+		currentStep = Steps.NumberOfProcessesStep.getStep();
 		currentStep.visit();
 	}
 	
+	/**
+	 * Handles the navigation buttons (Next and Back) pressing events. 
+	 */
 	public void actionPerformed(ActionEvent e) {
 		String cmd = e.getActionCommand();
 		if (cmd.equals(Constants.NEXT))
@@ -57,14 +73,17 @@ public class SimplicialComplexPanel extends JPanel implements ActionListener {
 		else 
 			currentStep.goBack();
 	}
-	
 
-	public JPanel getpContent() {
+	/**
+	 * Returns the main content panel that is populated with the current step's controls.
+	 * @return The main content panel. 
+	 */
+	public JPanel getContentPanel() {
 		return pContent;
 	}
 
-	public void setpContent(JPanel pContent) {
-		this.pContent = pContent;
+	public void setContentPanel(JPanel contentPanel) {
+		this.pContent = contentPanel;
 	}
 
 	public JButton getBtnNext() {
@@ -95,8 +114,8 @@ public class SimplicialComplexPanel extends JPanel implements ActionListener {
 		return pButtons;
 	}
 
-	public void setpButtons(JPanel pButtons) {
-		this.pButtons = pButtons;
+	public void setButtonsPanel(JPanel buttonsPanel) {
+		this.pButtons = buttonsPanel;
 	}
 	
 }

@@ -28,26 +28,31 @@ import javax.swing.text.PlainDocument;
 import unam.dcct.misc.Constants;
 
 /***
- * 
- * @author Fausto
+ * Represents the step in the {@link unam.dcct.view.UI.SimplicialComplexPanel} wizard
+ * that lets the user introduce the text of the label and the color of the vertex that 
+ * represents each process. The number of controls displayed depends on the choice 
+ * of the previous step {@link unam.dcct.view.UI.NumberOfProcessesStep}. 
+ * @author Fausto Salazar
  *
  */
 class NameColorStep extends Step {
 	private JPanel pProcessNames = new JPanel();
 	private List<JTextField> l_processNames;
-	private List<ColorEditor> l_processColors;
+	private List<ColorChooser> l_processColors;
 	private int n = 0;
 	
-	public NameColorStep(SimplicialComplexPanel p) {
-		super(p);
+	public NameColorStep() {
+		super();
 	}
 	
 	@Override
 	public void visit(){
 		super.visit();
 		
-		int n = ((NumberOfProcessesStep)(Step.steps
-				.get(NumberOfProcessesStep.class.getName()))).getSelected_n();
+//		int n = ((NumberOfProcessesStep)(Step.steps
+//				.get(NumberOfProcessesStep.class.getName()))).getSelected_n();
+		
+		int n = ((NumberOfProcessesStep)(Steps.NumberOfProcessesStep.getStep())).getSelectedNumberOfProcesses();
 		
 		pContent.removeAll();
 		
@@ -59,11 +64,6 @@ class NameColorStep extends Step {
 		
 		String colorMsg = "";
 		
-//		pProcessColors.setLayout(new BoxLayout(pProcessColors,BoxLayout.Y_AXIS));
-//		createColors(n);
-//		pContent.add(pProcessColors);
-//		colorMsg = " and colors";
-		
 		lbTitle.setText("Enter processes names" + colorMsg);
 		
 		btnNext.setEnabled(true);
@@ -74,7 +74,7 @@ class NameColorStep extends Step {
 	
 	private void createFields(int n){
 		l_processNames = new ArrayList<JTextField>(n);
-		l_processColors = new ArrayList<ColorEditor>(n);
+		l_processColors = new ArrayList<ColorChooser>(n);
 		
 		pProcessNames.removeAll();
 		
@@ -92,21 +92,26 @@ class NameColorStep extends Step {
 			txtN.setMaximumSize(d);
 			l_processNames.add(txtN);
 			
-			ColorEditor cEditor = new ColorEditor(Constants.DEFAULT_COLORS[i]);
-			l_processColors.add(cEditor);
+			ColorChooser cChooser = new ColorChooser(Constants.DEFAULT_COLORS[i]);
+			l_processColors.add(cChooser);
 			
 			pBody.add(txtN);
 			pBody.add(Box.createRigidArea(new Dimension(10,0)));
-			pBody.add(cEditor.getButton());
+			pBody.add(cChooser.getButton());
 			
-			// Memo: Use method 'SetLabelFor'
 			JLabel lbN = new JLabel("Process " + i + "'s name and color");
 			lbN.setAlignmentX(Component.CENTER_ALIGNMENT);
+			lbN.setLabelFor(pBody);
 			pProcessNames.add(lbN);
 			pProcessNames.add(pBody);
 		}
 	}
 	
+	/**
+	 * Validates that the process names introduced are non-empty, alphanumeric, one-character and unique.
+	 * If any of these conditions is not fulfilled, an error message dialog is displayed. 
+	 * If validation succeeds, an initial complex is built using the data captured in this step and the previous. 
+	 */
 	@Override
 	public void validateAndExecute(){
 		Set<String> procNames = new LinkedHashSet<String>();
@@ -130,32 +135,39 @@ class NameColorStep extends Step {
 		lprocNames.addAll(procNames);
 		
 		List<Color> lprocColors = new ArrayList<Color>(n);
-		for (ColorEditor ce : l_processColors)
+		for (ColorChooser ce : l_processColors)
 			lprocColors.add(ce.getCurrentColor());
 		
 		model.setColors(lprocColors);
 		model.createInitialComplex(lprocNames);
 		
-		Step nextStep = Step.steps.get(CommunicationMechanismStep.class.getName());
-		scPanel.setCurrentStep(nextStep);
-		nextStep.visit();
+		//Step nextStep = Step.steps.get(CommunicationMechanismStep.class.getName());
+		Step next = Steps.CommunicationMechanismStep.getStep();
+		scPanel.setCurrentStep(next);
+		next.visit();
 	}
 	
 	@Override
 	public void goBack(){
-		Step back = Step.steps.get(NumberOfProcessesStep.class.getName());
+		//Step back = Step.steps.get(NumberOfProcessesStep.class.getName());
+		Step back = Steps.NumberOfProcessesStep.getStep();
 		scPanel.setCurrentStep(back);
 		back.visit();		
 	}
 		
-	private class ColorEditor implements ActionListener {
+	/**
+	 * Custom color chooser.
+	 * @author Fausto
+	 *
+	 */
+	private class ColorChooser implements ActionListener {
 		JButton button = new JButton(" ");
 		Color currentColor;
 		JDialog dialog;
 		JColorChooser colorChooser = new JColorChooser();
 		static final String EDIT = "edit";
 		
-		public ColorEditor(Color defaultColor){
+		public ColorChooser(Color defaultColor){
 			this.currentColor = defaultColor;
 			button.addActionListener(this);
 			button.setActionCommand(EDIT);
@@ -202,11 +214,6 @@ class NameColorStep extends Step {
 		  JTextFieldLimit(int limit) {
 		    super();
 		    this.limit = limit;		
-		  }
-
-		  JTextFieldLimit(int limit, boolean upper) {
-		    super();
-		    this.limit = limit;
 		  }
 
 		  public void insertString(int offset, String str, AttributeSet attr) throws BadLocationException {
