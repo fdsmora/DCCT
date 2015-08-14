@@ -53,7 +53,7 @@ abstract class Step implements ActionListener {
 		steps = new HashMap<String, Step>();
 		steps.put(NumberOfProcessesStep.class.getName(), new NumberOfProcessesStep(scPanel));
 		steps.put(NameColorStep.class.getName(), new NameColorStep(scPanel));
-		steps.put(CommunicationModelStep.class.getName(), new CommunicationModelStep(scPanel));
+		steps.put(CommunicationMechanismStep.class.getName(), new CommunicationMechanismStep(scPanel));
 		steps.put(NextRoundStep.class.getName(), new NextRoundStep(scPanel));
 
 	}

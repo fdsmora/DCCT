@@ -16,12 +16,10 @@ import unam.dcct.misc.Constants;
  *
  */
 public class SimplicialComplexPanel extends JPanel implements ActionListener {
-//	private Model model = null;
 	private JPanel pContent = new JPanel();
 	private JPanel pButtons = new JPanel();
 	private JButton btnNext = new JButton(Constants.NEXT);
 	private JButton btnBack = new JButton(Constants.BACK);
-	//private Step startStep = null;
 	private Step currentStep = null;
 	
 	// Implementing Singleton design pattern

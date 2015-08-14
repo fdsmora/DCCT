@@ -82,7 +82,7 @@ class NextRoundStep extends Step {
 		String cmd = e.getActionCommand();
 		if (cmd.equals("h")){
 			scPanel.getpButtons().remove(2);
-			Step next = Step.steps.get(CommunicationModelStep.class.getName());
+			Step next = Step.steps.get(CommunicationMechanismStep.class.getName());
 			scPanel.setCurrentStep(next);
 			next.visit();
 		}else{

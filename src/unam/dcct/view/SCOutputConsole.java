@@ -59,6 +59,8 @@ public class SCOutputConsole extends ShrinkPanelPlugin implements View{
 	}
 	
 	private SCOutputConsole() {
+		Model model = Model.getInstance();
+		model.registerView(this);
         setInitialPosition(ShrinkPanelPlugin.SHRINKER_BOTTOM);
 	}
 	

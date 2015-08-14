@@ -43,7 +43,7 @@ public class jRealityView implements View {
 
 	private Model model;
 	private GeometricComplex gComplex;
-	private JRViewer viewer = new JRViewer();
+	private JRViewer viewer;
 	private SceneGraphComponent sgc;
 	private SceneGraphComponent sgcV;
 	private IndexedFaceSetFactory faceFactory;
@@ -113,12 +113,12 @@ public class jRealityView implements View {
 			int[][] faces = gComplex.getFacesIndices();
 			faceFactory.setFaceCount(faces.length);
 			
-			Color[] faceColors = new Color[faces.length];
-			for (int i = 0; i<faces.length; i++){
-				faceColors[i]=Constants.DEFAULT_FACE_COLOR;
-			}
+//			Color[] faceColors = new Color[faces.length];
+//			for (int i = 0; i<faces.length; i++){
+//				faceColors[i]=Constants.DEFAULT_FACE_COLOR;
+//			}
 						
-			faceFactory.setFaceColors(toDoubleArray(faceColors));
+//			faceFactory.setFaceColors(toDoubleArray(faceColors));
 			
 			faceFactory.setFaceIndices(faces);
 			faceFactory.setGenerateFaceNormals(true);
@@ -160,6 +160,7 @@ public class jRealityView implements View {
 	}
 	
 	private void configViewer(){
+		viewer = new JRViewer();
 		sgc = new SceneGraphComponent();
 		sgcV = new SceneGraphComponent();
 		sgc.addChild(sgcV);

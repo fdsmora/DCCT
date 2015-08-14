@@ -15,7 +15,5 @@ public class DCCT_Application {
 	public static void main(String[] args){
 		jRealityView view = jRealityView.getInstance();
 		view.start();
-		Model model = Model.getInstance();
-		model.registerView(SCOutputConsole.getInstance());
 	}
 }

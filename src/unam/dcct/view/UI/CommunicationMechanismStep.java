@@ -19,11 +19,11 @@ import unam.dcct.misc.Constants.CommunicationMechanism;
 import unam.dcct.misc.Constants.ProcessViewBrackets;
 import unam.dcct.model.Model;
 
-class CommunicationModelStep extends Step {
+class CommunicationMechanismStep extends Step {
 	private JComboBox<CommunicationMechanism> communicationModelOptions;// = new JComboBox<String>();
 	private JComboBox<String> communicationModelSubOptions;// = new JComboBox<String>();
 	
-	public CommunicationModelStep(SimplicialComplexPanel p){
+	public CommunicationMechanismStep(SimplicialComplexPanel p){
 		super(p);
 		
 		pContent.setBorder(BorderFactory.createTitledBorder(Constants.PROTOCOL_COMPLEX));
@@ -45,16 +45,11 @@ class CommunicationModelStep extends Step {
 	}
 	
 	private void displayModelOptions() {			
-		//List<String> options = new ArrayList<String>(Constants.availableCommunicationModels.keySet());
-		//String[] optionsArr = new String[options.size()];
-		//options.toArray(optionsArr);
-		//communicationModelOptions.setModel(new DefaultComboBoxModel<String>(optionsArr));
-		
+
 		communicationModelOptions = new JComboBox<CommunicationMechanism>(CommunicationMechanism.values());
 		communicationModelOptions.addActionListener(this);
 		communicationModelOptions.setActionCommand("mo");
 		
-		//displayModelSubOptions(options.get(0));
 		displayModelSubOptions(CommunicationMechanism.values()[0]);
 	}
 
@@ -63,7 +58,6 @@ class CommunicationModelStep extends Step {
 		communicationModelSubOptions.addActionListener(this);
 		communicationModelSubOptions.setActionCommand("smo");
 		
-		//List<String> subOptions = Constants.availableCommunicationModels.get(Constants.SHARED_MEMORY);
 		List<String> subOptions = selectedModel.subModels();
 		String[] subOptionsArr = new String[subOptions.size()];
 		subOptions.toArray(subOptionsArr);

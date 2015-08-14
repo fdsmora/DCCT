@@ -136,7 +136,7 @@ class NameColorStep extends Step {
 		model.setColors(lprocColors);
 		model.createInitialComplex(lprocNames);
 		
-		Step nextStep = Step.steps.get(CommunicationModelStep.class.getName());
+		Step nextStep = Step.steps.get(CommunicationMechanismStep.class.getName());
 		scPanel.setCurrentStep(nextStep);
 		nextStep.visit();
 	}
