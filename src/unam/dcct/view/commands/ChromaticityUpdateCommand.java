@@ -1,8 +1,6 @@
 package unam.dcct.view.commands;
 
-import unam.dcct.topology.SimplicialComplex;
 import unam.dcct.view.View;
-
 
 public class ChromaticityUpdateCommand extends Command{
 		

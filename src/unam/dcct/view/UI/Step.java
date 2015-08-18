@@ -43,7 +43,7 @@ abstract class Step implements ActionListener {
 		this.scPanel = SimplicialComplexPanel.getInstance();
 		
 		pContent.add(lbTitle);
-		pContent.setLayout(new BoxLayout(pContent,BoxLayout.Y_AXIS));
+		pContent.setLayout(new BoxLayout(pContent,BoxLayout.PAGE_AXIS));
 		pContent.setBorder(BorderFactory.createTitledBorder(Constants.INITIAL_COMPLEX));
 		
 		btnNext = scPanel.getBtnNext();

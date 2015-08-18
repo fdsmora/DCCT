@@ -52,7 +52,7 @@ public class Model {
 	/**
 	 * Creates an initial simplicial complex. 
 	 * @param pNames A list of names that will be assigned to each process of the new initial complex. 
-	 * @return
+	 * @return The initial complex that has been created. 
 	 */
 	public SimplicialComplex createInitialComplex(List<String> pNames){
 		int n = pNames.size();

@@ -1,6 +1,5 @@
 package unam.dcct.view.commands;
 
-import unam.dcct.topology.SimplicialComplex;
 import unam.dcct.view.View;
 
 public class ResetViewCommand extends Command{

@@ -13,7 +13,6 @@ import unam.dcct.misc.Constants;
 
 class NextRoundStep extends Step {
 	private JButton btnChangeModel = new JButton(Constants.CHANGE_MODEL);
-	private static final int MAX_ALLOWED_ROUNDS = 3;
 	private JLabel lbMaxReached = new JLabel(Constants.MAX_ROUNDS_REACHED_MSG);
 	private int roundCount = 1;
 	private JRadioButton rbChromatic = new JRadioButton(Constants.CHROMATIC);
@@ -54,13 +53,13 @@ class NextRoundStep extends Step {
 		lbMaxReached.setVisible(false);		
 		btnBack.setText(Constants.START_OVER);
 		btnNext.setText(Constants.NEXT_ROUND);
-		scPanel.getpButtons().add(btnChangeModel,2);
+		scPanel.getButtonsPanel().add(btnChangeModel,2);
 		rbChromatic.setSelected(true);
 	}
 	
 	@Override
 	public void goBack(){
-		scPanel.getpButtons().remove(2);
+		scPanel.getButtonsPanel().remove(2);
 		//Step.resetAllSteps(scPanel);
 		//Step back = Step.steps.get(NumberOfProcessesStep.class.getName());
 		Steps.resetAllSteps();
@@ -73,7 +72,7 @@ class NextRoundStep extends Step {
 	public void validateAndExecute(){
 		model.executeRound();
 		++roundCount;
-		if (roundCount>=MAX_ALLOWED_ROUNDS){
+		if (roundCount>=Constants.MAX_ALLOWED_ROUNDS){
 			btnNext.setEnabled(false);
 			lbMaxReached.setVisible(true);
 		}
@@ -83,7 +82,7 @@ class NextRoundStep extends Step {
 	public void actionPerformed(ActionEvent e) {
 		String cmd = e.getActionCommand();
 		if (cmd.equals("h")){
-			scPanel.getpButtons().remove(2);
+			scPanel.getButtonsPanel().remove(2);
 			//Step next = Step.steps.get(CommunicationMechanismStep.class.getName());
 			Step next = Steps.CommunicationMechanismStep.getStep();
 			scPanel.setCurrentStep(next);

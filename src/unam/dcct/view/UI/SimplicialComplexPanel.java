@@ -110,7 +110,7 @@ public class SimplicialComplexPanel extends JPanel implements ActionListener {
 		this.currentStep = currentStep;
 	}
 
-	public JPanel getpButtons() {
+	public JPanel getButtonsPanel() {
 		return pButtons;
 	}
 

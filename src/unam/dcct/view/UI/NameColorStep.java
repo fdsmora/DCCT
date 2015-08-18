@@ -49,9 +49,6 @@ class NameColorStep extends Step {
 	public void visit(){
 		super.visit();
 		
-//		int n = ((NumberOfProcessesStep)(Step.steps
-//				.get(NumberOfProcessesStep.class.getName()))).getSelected_n();
-		
 		int n = ((NumberOfProcessesStep)(Steps.NumberOfProcessesStep.getStep())).getSelectedNumberOfProcesses();
 		
 		pContent.removeAll();
