@@ -1,8 +1,5 @@
 package unam.dcct.main;
 
-import unam.dcct.model.Model;
-import unam.dcct.view.SCOutputConsole;
-import unam.dcct.view.View;
 import unam.dcct.view.jRealityView;
 
 /***

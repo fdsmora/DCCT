@@ -1,11 +1,15 @@
 package unam.dcct.misc;
 
 import java.awt.Color;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+
+import org.reflections.Reflections;
 /***
  * The purpose of this class is to provide a global access to the most commonly used constant values used throughout the application. 
  * @author Fausto
@@ -69,31 +73,62 @@ public final class Constants {
 		public static final ProcessViewBrackets DEFAULT = CURLY;
 	}
 		
-//	public static final Map<String, List<String>> availableCommunicationModels;
 	public static final String MODEL_INFORMATION = "Model information";
 	public static final String GEOMETRIC_INFORMATION = "Geometric information";
-//	static {
-//		availableCommunicationModels = new LinkedHashMap<String, List<String>>();
-//		availableCommunicationModels.put(SHARED_MEMORY, Arrays.asList(IMMEDIATE_SNAPSHOT));
-//	}
 	
-	public enum CommunicationMechanism{
-		// Add all new distributed computing model descriptions here. 
-		SHARED_MEMORY(Constants.SHARED_MEMORY, Constants.IMMEDIATE_SNAPSHOT);
-		
-		private String desc;
-		private List<String> subModels;
-		CommunicationMechanism(String desc, String... subModels){
-			this.desc = desc;
-			this.subModels = Arrays.asList(subModels);
-		}
-		@Override
-		public String toString(){
-			return desc;
-		}
-		public List<String> subModels(){
-			return subModels;
+	public static final Map<String, List<String>> availableCommunicationMechanisms;
+	static {
+		availableCommunicationMechanisms = new LinkedHashMap<String, List<String>>();
+		List<String[]> commMechInfo = getCommunicationMechanismInfo();
+		for (String[] pair : commMechInfo){
+			
+			if (availableCommunicationMechanisms.containsKey(pair[0]))
+			{
+				availableCommunicationMechanisms.get(pair[0]).add(pair[1]);
+			}else{
+				List<String> names = new ArrayList<String>();
+				names.add(pair[1]);
+				availableCommunicationMechanisms.put(pair[0], names);
+			}	
 		}
 	}
+	private static List<String[]> getCommunicationMechanismInfo() {
+
+		List<String[]> info = new ArrayList<String[]>();
+
+		Reflections reflections = new Reflections("unam.dcct.model");
+		Set<Class<? extends unam.dcct.model.CommunicationMechanism>> allClasses = reflections
+				.getSubTypesOf(unam.dcct.model.CommunicationMechanism.class);
+
+		for (Class<? extends unam.dcct.model.CommunicationMechanism> c : allClasses) {
+			try {
+				String[] pair = new String[2];
+				pair[0] = (String) c.getMethod("basicMechanismName", null).invoke(null, null);
+				pair[1] = (String) c.getMethod("name", null).invoke(null, null);
+				info.add(pair);
+			} catch (Exception e) {
+			}
+		}
+		return info;
+	}
+	
+//	public enum CommunicationMechanism{
+//		// Add all new distributed computing model descriptions here. 
+//		SHARED_MEMORY(Constants.SHARED_MEMORY, Constants.IMMEDIATE_SNAPSHOT);
+//		
+//		private String desc;
+//		private List<String> subModels;
+//		CommunicationMechanism(String desc, String... subModels){
+//			this.desc = desc;
+//			this.subModels = Arrays.asList(subModels);
+//		}
+//		@Override
+//		public String toString(){
+//			return desc;
+//		}
+//		public List<String> subModels(){
+//			return subModels;
+//		}
+//	}
 	
 }

@@ -1,12 +1,10 @@
 package unam.dcct.view.UI;
 
-import java.awt.Color;
 import java.awt.Component;
-import java.awt.ComponentOrientation;
 import java.awt.Dimension;
-import java.awt.LayoutManager2;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -15,11 +13,7 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.SwingConstants;
-import javax.swing.border.Border;
-
 import unam.dcct.misc.Constants;
-import unam.dcct.misc.Constants.CommunicationMechanism;
 import unam.dcct.misc.Constants.ProcessViewBrackets;
 import unam.dcct.model.Model;
 
@@ -31,7 +25,7 @@ import unam.dcct.model.Model;
  *
  */
 class CommunicationMechanismStep extends Step {
-	private JComboBox<CommunicationMechanism> communicationModelOptions;
+	private JComboBox<String> communicationModelOptions;
 	private JComboBox<String> communicationModelSubOptions;
 		
 	public CommunicationMechanismStep(){
@@ -53,7 +47,7 @@ class CommunicationMechanismStep extends Step {
 	}
 	
 	private void displayModelOptions() {
-		JLabel lblCommunicationModel = new JLabel("Select communication mechanism dsfsa:");
+		JLabel lblCommunicationModel = new JLabel("Select communication mechanism:");
 		lblCommunicationModel.setLabelFor(communicationModelOptions);
 		// In order to properly align all controls to the left, this label, the combo boxes, and ALL top level controls contained 
 		// inside pContent must have this property set to this value. If any of these doesn't have its property set to this value, 
@@ -62,21 +56,24 @@ class CommunicationMechanismStep extends Step {
 		// and in general, the most you can about Swing Layout managers. 
 		lblCommunicationModel.setAlignmentX(Component.LEFT_ALIGNMENT);
 		
-		communicationModelOptions = new JComboBox<CommunicationMechanism>(CommunicationMechanism.values());
+		List<String> commMechanisms = new ArrayList<String>(Constants.availableCommunicationMechanisms.keySet());
+		String[] commMechanismArray = new String[commMechanisms.size()];
+		commMechanisms.toArray(commMechanismArray);
+		communicationModelOptions = new JComboBox<String>(new DefaultComboBoxModel<String>(commMechanismArray));
 		communicationModelOptions.addActionListener(this);
 		communicationModelOptions.setActionCommand("mo");
+		// Set visual properties
 		communicationModelOptions.setAlignmentX(Component.LEFT_ALIGNMENT);
-	
 		communicationModelOptions.setMaximumSize(new Dimension(150,15));
 
 		pContent.add(lblCommunicationModel);
 		pContent.add(communicationModelOptions);
-		pContent.add(Box.createRigidArea(new Dimension(0,10)));
+		pContent.add(Box.createRigidArea(new Dimension(0,5)));
 
-		displayModelSubOptions(CommunicationMechanism.values()[0]);
+		displayModelSubOptions(commMechanismArray[0]);
 	}
 
-	private void displayModelSubOptions(CommunicationMechanism selectedModel) {	
+	private void displayModelSubOptions(String selectedMechanism) {	
 		JLabel lblCommunicationSubModel = new JLabel("Select communication mechanism's suboptions:");
 		lblCommunicationSubModel.setLabelFor(communicationModelSubOptions);
 		lblCommunicationSubModel.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -87,20 +84,23 @@ class CommunicationMechanismStep extends Step {
 		communicationModelSubOptions.setMaximumSize(new Dimension(150,15));
 		communicationModelSubOptions.setAlignmentX(Component.LEFT_ALIGNMENT);
 		
-		List<String> subOptions = selectedModel.subModels();
-		String[] subOptionsArr = new String[subOptions.size()];
-		subOptions.toArray(subOptionsArr);
-		
-		communicationModelSubOptions.setModel(new DefaultComboBoxModel<String>(subOptionsArr));
+		populateSubOptions(selectedMechanism);
 		
 		pContent.add(lblCommunicationSubModel);
 		pContent.add(communicationModelSubOptions);
 	}
 	
+	private void populateSubOptions(String selectedMechanism){		
+		List<String> subOptions = Constants.availableCommunicationMechanisms.get(selectedMechanism);
+		String[] subOptionsArr = new String[subOptions.size()];
+		subOptions.toArray(subOptionsArr);
+		
+		communicationModelSubOptions.setModel(new DefaultComboBoxModel<String>(subOptionsArr));
+	}
+	
 	/**
 	 * Adds a subpanel where the user can customize some attributes of the 
 	 * visualization, such as the style of brackets that enclose the process view labels.
-	 * @return Returns the customizations subpanel. 
 	 */
 	private void createCustomizationsPanel(){
 		JPanel pCustomizations = new JPanel();
@@ -109,7 +109,6 @@ class CommunicationMechanismStep extends Step {
 		pCustomizations.setAlignmentX(Component.LEFT_ALIGNMENT);
 		
 		JLabel lbSelectBrackets = new JLabel("Select brackets for process views");
-		//lbSelectBrackets.setAlignmentX(Component.LEFT_ALIGNMENT);
 		JComboBox<ProcessViewBrackets> cbBrackets = new JComboBox<ProcessViewBrackets>(ProcessViewBrackets.values());
 		
 		cbBrackets.addActionListener(new ActionListener(){
@@ -127,6 +126,7 @@ class CommunicationMechanismStep extends Step {
 		pCustomizations.add(Box.createRigidArea(new Dimension(10,0)));
 		pCustomizations.add(cbBrackets);
 		
+		pContent.add(Box.createRigidArea(new Dimension(0,10)));
 		pContent.add(pCustomizations);
 	}
 	
@@ -140,7 +140,6 @@ class CommunicationMechanismStep extends Step {
 		model.setProtocolComplex(null);
 		model.executeRound();		
 		
-		//Step nextStep = Step.steps.get(NextRoundStep.class.getName());
 		Step next = Steps.NextRoundStep.getStep();
 		scPanel.setCurrentStep(next);
 		next.visit();	
@@ -152,9 +151,7 @@ class CommunicationMechanismStep extends Step {
 	 */
 	@Override
 	public void goBack(){
-		//Step.resetAllSteps(scPanel);
 		Steps.resetAllSteps();
-		//Step back = Step.steps.get(NumberOfProcessesStep.class.getName());
 		Step back = Steps.NumberOfProcessesStep.getStep();
 		scPanel.setCurrentStep(back);
 		back.visit();
@@ -163,7 +160,7 @@ class CommunicationMechanismStep extends Step {
 	public void actionPerformed(ActionEvent e) {
 		String command = e.getActionCommand();
 		if (command == "mo"){
-			displayModelSubOptions((CommunicationMechanism)communicationModelOptions.getSelectedItem());
+			populateSubOptions((String)communicationModelOptions.getSelectedItem());
 		}
 	}
 

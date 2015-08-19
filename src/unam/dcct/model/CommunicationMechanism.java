@@ -73,6 +73,14 @@ public abstract class CommunicationMechanism{
 
 	protected abstract ScenarioGenerator createScenarioGenerator(Simplex s);
     
+	public static String name(){
+		return "Please implement this in subclass with appropiate name";
+	}
+	
+	public static String basicMechanismName(){
+		return "Please implement this in subclass with appropiate name";
+	}
+	
 	public static CommunicationMechanism createCommunicationMechanism(String name){
 		if (name.equals(Constants.IMMEDIATE_SNAPSHOT))
 			return new ImmediateSnapshot();

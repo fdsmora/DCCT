@@ -34,45 +34,6 @@ public class ImmediateSnapshot extends CommunicationMechanism {
 	}
 	
 	/**
-	 * Simulates all possible execution scenarios of processes communicating through shared memory.
-	 * @param simplices The set containing the simplices which in turn contain the processes of the simplicial complex from which the simplices of this
-	 * protocol complex will be obtained.  
-	 */
-//	public SimplicialComplex communicationRound(SimplicialComplex sc) {
-//		// The communication round must be performed on chromatic simplices.
-//		//sc.setChromatic(true);
-//		
-////		Set<Simplex> simplices = sc.getSimplices();
-////		Set<Simplex> newSimplices = new LinkedHashSet<Simplex>();
-//		List<Simplex> simplices = sc.getSimplices();
-//		List<Simplex> newSimplices = new ArrayList<Simplex>();
-//		
-//		for(Simplex s: simplices){
-//			String strAllScenarios = PartitionGenerator.generate(s.dimension());
-//			//Test
-//			//System.out.println("\n" + strAllScenarios);
-//			String[] scenarios = strAllScenarios.split("\n");
-//			for (String scn : scenarios) {
-//				String[] groups = scn.split("\\" + String.valueOf(PartitionGenerator.getDelimiter()));
-//				List<Process> processes = new ArrayList<Process>(s.getProcesses());
-//				String[] sharedMemory = new String[processes.size()];
-////				Set<Process> newProcesses = new LinkedHashSet<Process>(processes.size());
-//				List<Process> newProcesses = new ArrayList<Process>(processes.size());
-//				for (String g : groups) {
-//					int[] order = toIndices(g);
-//					newProcesses.addAll(simulateCommunication(processes, sharedMemory, order));
-//				}
-//				Simplex newSimplex = new Simplex(newProcesses);
-//				newSimplex.setParent(s);
-//				//newSimplex.setParentId(s.getid);
-//				newSimplices.add(newSimplex);
-//			}
-//		}
-//		rounds++;
-//		return new SimplicialComplex(newSimplices);
-//	}
-	
-	/**
 	 * Makes copies of processes write and take snapshots of shared memory in the given order, thus producing a list of these 
 	 * processes with new views. 
 	 * @param processes The processes whose copies will write and take snapshots of shared memory. 
@@ -118,6 +79,14 @@ public class ImmediateSnapshot extends CommunicationMechanism {
 	@Override 
 	public String toString(){
 		return Constants.IMMEDIATE_SNAPSHOT + " " + Constants.SHARED_MEMORY ;
+	}
+	
+	public static String name(){
+		return Constants.IMMEDIATE_SNAPSHOT;
+	}
+	
+	public static String basicMechanismName(){
+		return Constants.SHARED_MEMORY;
 	}
 	
 	private String getAllScenarios(int dimension){

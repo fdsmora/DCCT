@@ -60,8 +60,6 @@ class NextRoundStep extends Step {
 	@Override
 	public void goBack(){
 		scPanel.getButtonsPanel().remove(2);
-		//Step.resetAllSteps(scPanel);
-		//Step back = Step.steps.get(NumberOfProcessesStep.class.getName());
 		Steps.resetAllSteps();
 		Step back = Steps.NumberOfProcessesStep.getStep();
 		scPanel.setCurrentStep(back);
@@ -83,7 +81,6 @@ class NextRoundStep extends Step {
 		String cmd = e.getActionCommand();
 		if (cmd.equals("h")){
 			scPanel.getButtonsPanel().remove(2);
-			//Step next = Step.steps.get(CommunicationMechanismStep.class.getName());
 			Step next = Steps.CommunicationMechanismStep.getStep();
 			scPanel.setCurrentStep(next);
 			next.visit();
