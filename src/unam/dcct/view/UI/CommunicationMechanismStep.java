@@ -137,6 +137,7 @@ class CommunicationMechanismStep extends Step {
 	public void validateAndExecute(){
 		String cModel = (String)communicationModelSubOptions.getSelectedItem();
 		model.setCommunicationMechanism(cModel);
+		// As this is the complex of the first round, we dismiss any previous generated protocol complexes. 
 		model.setProtocolComplex(null);
 		model.executeRound();		
 		

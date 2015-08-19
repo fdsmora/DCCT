@@ -29,7 +29,7 @@ public final class Constants {
 	public static final String CHANGE_MODEL = "Change model";
 	public static final String NEXT_ROUND = "Next round";
 	public static final String MAX_ROUNDS_REACHED_MSG = "Maximum number of rounds allowed reached.";
-	public static final int MAX_ALLOWED_ROUNDS = 2;
+	public static final int MAX_ALLOWED_ROUNDS = 3;
 	public static final String CHROMATIC = "Chromatic";
 	public static final String NON_CHROMATIC = "Non-chromatic";
 	public static final String PROTOCOL_COMPLEX = "Protocol Complex";
@@ -103,11 +103,10 @@ public final class Constants {
 		for (Class<? extends unam.dcct.model.CommunicationMechanism> c : allClasses) {
 			try {
 				String[] pair = new String[2];
-				pair[0] = (String) c.getMethod("basicMechanismName", null).invoke(null, null);
-				pair[1] = (String) c.getMethod("name", null).invoke(null, null);
+				pair[0] = (String) c.getMethod("getBasicMechanismName", null).invoke(null, null);
+				pair[1] = (String) c.getMethod("getName", null).invoke(null, null);
 				info.add(pair);
-			} catch (Exception e) {
-			}
+			} catch (Exception e) {}
 		}
 		return info;
 	}

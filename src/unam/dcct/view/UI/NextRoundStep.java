@@ -7,6 +7,7 @@ import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JRadioButton;
 
 import unam.dcct.misc.Constants;
@@ -68,8 +69,13 @@ class NextRoundStep extends Step {
 	
 	@Override
 	public void validateAndExecute(){
-		model.executeRound();
-		++roundCount;
+		int capture = 0;
+		if (roundCount==2) 
+			capture = JOptionPane.showConfirmDialog(null,"Performance of the application may decrease after executing this round. Do you want to proceed?");
+		if (capture==0) {
+			model.executeRound();
+			++roundCount;
+		}
 		if (roundCount>=Constants.MAX_ALLOWED_ROUNDS){
 			btnNext.setEnabled(false);
 			lbMaxReached.setVisible(true);

@@ -81,11 +81,11 @@ public class ImmediateSnapshot extends CommunicationMechanism {
 		return Constants.IMMEDIATE_SNAPSHOT + " " + Constants.SHARED_MEMORY ;
 	}
 	
-	public static String name(){
+	public static String getName(){
 		return Constants.IMMEDIATE_SNAPSHOT;
 	}
 	
-	public static String basicMechanismName(){
+	public static String getBasicMechanismName(){
 		return Constants.SHARED_MEMORY;
 	}
 	
