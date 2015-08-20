@@ -108,7 +108,7 @@ public class Model {
 	 */
 	public void setChromatic(boolean chromatic) {
 		protocolComplex.setChromatic(chromatic);
-		updateViews(Constants.COMPLEX_UPDATE_COMMAND);
+		updateViews(Constants.CHROMATICITY_UPDATE_COMMAND);
 	}
 	
 	/**
@@ -142,9 +142,9 @@ public class Model {
 		if (protocolComplex!=null)
 			previousColoring = protocolComplex.isChromatic();
 		
+		SimplicialComplex baseComplex = (protocolComplex!=null? protocolComplex : initialComplex);
 		protocolComplex = communicationMechanism
-					.communicationRound(protocolComplex!=null? 
-							protocolComplex : initialComplex);
+					.executeRound(baseComplex);
 		protocolComplex.setChromatic(previousColoring);
 		++roundCount;
 		

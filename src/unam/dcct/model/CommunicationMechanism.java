@@ -16,7 +16,7 @@ public abstract class CommunicationMechanism{
 	protected ScenarioGenerator scenarioGenerator;
 	private SimplicialComplex newComplex;
 
-	public SimplicialComplex communicationRound(SimplicialComplex sc){
+	public SimplicialComplex executeRound(SimplicialComplex sc){
 		sc.setChromatic(true);
 		newComplex = null;
 		generateOrCompleteNewComplex(sc);

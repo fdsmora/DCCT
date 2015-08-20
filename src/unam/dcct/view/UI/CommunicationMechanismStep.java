@@ -135,8 +135,8 @@ class CommunicationMechanismStep extends Step {
 	 * using the distributed computing model specified in this step.  
 	 */
 	public void validateAndExecute(){
-		String cModel = (String)communicationModelSubOptions.getSelectedItem();
-		model.setCommunicationMechanism(cModel);
+		String selectedMech = (String)communicationModelSubOptions.getSelectedItem();
+		model.setCommunicationMechanism(selectedMech);
 		// As this is the complex of the first round, we dismiss any previous generated protocol complexes. 
 		model.setProtocolComplex(null);
 		model.executeRound();		
