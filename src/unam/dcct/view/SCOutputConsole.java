@@ -170,6 +170,7 @@ public class SCOutputConsole extends ShrinkPanelPlugin implements View{
 	}
 
 	public void updateChromaticity() {
+		displayComplex();
 	}
 
 	/**

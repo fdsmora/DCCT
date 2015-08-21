@@ -25,15 +25,15 @@ import unam.dcct.model.Model;
  *
  */
 class CommunicationMechanismStep extends Step {
-	private JComboBox<String> communicationModelOptions;
-	private JComboBox<String> communicationModelSubOptions;
+	private JComboBox<String> cbMechanisms;
+	private JComboBox<String> cbSubMechanisms;
 		
 	public CommunicationMechanismStep(){
 		super();
 		
 		pContent.setBorder(BorderFactory.createTitledBorder(Constants.PROTOCOL_COMPLEX));
 		
-		displayModelOptions();
+		populateAndSetMechanisms();
 		
 		createCustomizationsPanel();
 
@@ -46,56 +46,56 @@ class CommunicationMechanismStep extends Step {
 		btnBack.setText(Constants.START_OVER);
 	}
 	
-	private void displayModelOptions() {
-		JLabel lblCommunicationModel = new JLabel("Select communication mechanism:");
-		lblCommunicationModel.setLabelFor(communicationModelOptions);
+	private void populateAndSetMechanisms() {
+		JLabel lblMechanism = new JLabel("Select communication mechanism:");
+		lblMechanism.setLabelFor(cbMechanisms);
 		// In order to properly align all controls to the left, this label, the combo boxes, and ALL top level controls contained 
 		// inside pContent must have this property set to this value. If any of these doesn't have its property set to this value, 
 		// layout will be ugly. For more information read https://docs.oracle.com/javase/tutorial/uiswing/layout/box.html#alignment 
 		// I recommend to read the complete article about BoxLayout (https://docs.oracle.com/javase/tutorial/uiswing/layout/box.html)
 		// and in general, the most you can about Swing Layout managers. 
-		lblCommunicationModel.setAlignmentX(Component.LEFT_ALIGNMENT);
+		lblMechanism.setAlignmentX(Component.LEFT_ALIGNMENT);
 		
-		List<String> commMechanisms = new ArrayList<String>(Constants.availableCommunicationMechanisms.keySet());
-		String[] commMechanismArray = new String[commMechanisms.size()];
-		commMechanisms.toArray(commMechanismArray);
-		communicationModelOptions = new JComboBox<String>(new DefaultComboBoxModel<String>(commMechanismArray));
-		communicationModelOptions.addActionListener(this);
-		communicationModelOptions.setActionCommand("mo");
+		List<String> l_mechanisms = new ArrayList<String>(Constants.availableCommunicationMechanisms.keySet());
+		String[] a_mechanisms = new String[l_mechanisms.size()];
+		l_mechanisms.toArray(a_mechanisms);
+		cbMechanisms = new JComboBox<String>(new DefaultComboBoxModel<String>(a_mechanisms));
+		cbMechanisms.addActionListener(this);
+		cbMechanisms.setActionCommand("mo");
 		// Set visual properties
-		communicationModelOptions.setAlignmentX(Component.LEFT_ALIGNMENT);
-		communicationModelOptions.setMaximumSize(new Dimension(150,15));
+		cbMechanisms.setAlignmentX(Component.LEFT_ALIGNMENT);
+		cbMechanisms.setMaximumSize(new Dimension(150,15));
 
-		pContent.add(lblCommunicationModel);
-		pContent.add(communicationModelOptions);
+		pContent.add(lblMechanism);
+		pContent.add(cbMechanisms);
 		pContent.add(Box.createRigidArea(new Dimension(0,5)));
 
-		displayModelSubOptions(commMechanismArray[0]);
+		populateAndSetSubMechanisms(a_mechanisms[0]);
 	}
 
-	private void displayModelSubOptions(String selectedMechanism) {	
-		JLabel lblCommunicationSubModel = new JLabel("Select communication mechanism's suboptions:");
-		lblCommunicationSubModel.setLabelFor(communicationModelSubOptions);
-		lblCommunicationSubModel.setAlignmentX(Component.LEFT_ALIGNMENT);
+	private void populateAndSetSubMechanisms(String selectedMechanism) {	
+		JLabel lbSubMechanisms = new JLabel("Select communication mechanism's suboptions:");
+		lbSubMechanisms.setLabelFor(cbSubMechanisms);
+		lbSubMechanisms.setAlignmentX(Component.LEFT_ALIGNMENT);
 		
-		communicationModelSubOptions = new JComboBox<String>();
-		communicationModelSubOptions.addActionListener(this);
-		communicationModelSubOptions.setActionCommand("smo");
-		communicationModelSubOptions.setMaximumSize(new Dimension(150,15));
-		communicationModelSubOptions.setAlignmentX(Component.LEFT_ALIGNMENT);
+		cbSubMechanisms = new JComboBox<String>();
+		cbSubMechanisms.addActionListener(this);
+		cbSubMechanisms.setActionCommand("smo");
+		cbSubMechanisms.setMaximumSize(new Dimension(150,15));
+		cbSubMechanisms.setAlignmentX(Component.LEFT_ALIGNMENT);
 		
-		populateSubOptions(selectedMechanism);
+		populateSubMechanisms(selectedMechanism);
 		
-		pContent.add(lblCommunicationSubModel);
-		pContent.add(communicationModelSubOptions);
+		pContent.add(lbSubMechanisms);
+		pContent.add(cbSubMechanisms);
 	}
 	
-	private void populateSubOptions(String selectedMechanism){		
-		List<String> subOptions = Constants.availableCommunicationMechanisms.get(selectedMechanism);
-		String[] subOptionsArr = new String[subOptions.size()];
-		subOptions.toArray(subOptionsArr);
+	private void populateSubMechanisms(String selectedMechanism){		
+		List<String> l_subMechanisms = Constants.availableCommunicationMechanisms.get(selectedMechanism);
+		String[] a_subMechanisms = new String[l_subMechanisms.size()];
+		l_subMechanisms.toArray(a_subMechanisms);
 		
-		communicationModelSubOptions.setModel(new DefaultComboBoxModel<String>(subOptionsArr));
+		cbSubMechanisms.setModel(new DefaultComboBoxModel<String>(a_subMechanisms));
 	}
 	
 	/**
@@ -135,7 +135,7 @@ class CommunicationMechanismStep extends Step {
 	 * using the distributed computing model specified in this step.  
 	 */
 	public void validateAndExecute(){
-		String selectedMech = (String)communicationModelSubOptions.getSelectedItem();
+		String selectedMech = (String)cbSubMechanisms.getSelectedItem();
 		model.setCommunicationMechanism(selectedMech);
 		// As this is the complex of the first round, we dismiss any previous generated protocol complexes. 
 		model.setProtocolComplex(null);
@@ -161,7 +161,7 @@ class CommunicationMechanismStep extends Step {
 	public void actionPerformed(ActionEvent e) {
 		String command = e.getActionCommand();
 		if (command == "mo"){
-			populateSubOptions((String)communicationModelOptions.getSelectedItem());
+			populateSubMechanisms((String)cbMechanisms.getSelectedItem());
 		}
 	}
 
