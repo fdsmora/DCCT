@@ -43,7 +43,8 @@ public class SCOutputConsole extends ShrinkPanelPlugin implements View{
 			newLine + Constants.GEOMETRIC_INFORMATION + newLine
 			+ Constants.OUTPUT_CONSOLE_DELIMITER
 			+ "Number of vertices: %d\n"
-			+ "Number of triangles: %d\n";
+			+ "Number of %d-faces: %d\n";
+	private String geometricInformation = "";
 	
 	private static SCOutputConsole instance = null;
 
@@ -146,26 +147,25 @@ public class SCOutputConsole extends ShrinkPanelPlugin implements View{
 			String modelInfo = m.getCommunicationMechanism().toString() + newLine + "Round : " + m.getRoundCount() + newLine ;
 			setComplexInfo(m.getProtocolComplex(), Constants.PROTOCOL_COMPLEX, modelInfo);
 		}
-		textPane.setText(complexInfo.toString());
+
+		textPane.setText(complexInfo.toString() + geometricInformation.toString());
 	}
 	
 	/**
 	 * It lets display geometric information (number of vertices, faces, etc) in the console.
 	 * @param geom The geometric complex object whose information will be extracted to be displayed. 
 	 */
-	public void addGeometricInformation(GeometricComplex geom){
-		if (geom!=null && complexInfo!=null){
-			// Only count number of 2 dimension faces. 
-			int totalFaces = 0;
-			for (int[] face : geom.getFacesIndices()){
-				if (face.length == 3)
-					++totalFaces;
-			}
+	public void setGeometricInformation(GeometricComplex geom){
+		if (geom!=null){
+
+			geometricInformation = String.format(
+					geometricInfoFormat, geom.getVertexCount(), geom.getFacesIndices()[0].length-1,geom.getFacesIndices().length);
 			
-			complexInfo.append(String.format(
-					geometricInfoFormat, geom.getVertexCount(),totalFaces 
-					));
-			textPane.setText(complexInfo.toString());
+			// If displayComplex() has already been called, the text to display in the console has already been built,
+			// so we just append the geometric information to it. 
+			if (complexInfo!=null){
+				textPane.setText(complexInfo.toString() + geometricInformation.toString());
+			}
 		}
 	}
 

@@ -44,7 +44,7 @@ class NextRoundStep extends Step {
 		rbChromatic.addActionListener(this);
 		rbNonChromatic.addActionListener(this);
 		
-		lbTitle.setText("Select simplicial complex's color");
+		lbTitle.setText("Select simplicial complex chromaticity");
 	}
 	
 	@Override
