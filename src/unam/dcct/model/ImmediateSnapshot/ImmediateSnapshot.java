@@ -1,4 +1,4 @@
-package unam.dcct.model.ImmediateSnapshotModel;
+package unam.dcct.model.ImmediateSnapshot;
 
 import java.util.ArrayList;
 import java.util.Arrays;

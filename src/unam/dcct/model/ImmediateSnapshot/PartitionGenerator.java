@@ -1,6 +1,7 @@
-package unam.dcct.model.ImmediateSnapshotModel;
+package unam.dcct.model.ImmediateSnapshot;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class PartitionGenerator {
@@ -8,7 +9,7 @@ public class PartitionGenerator {
 	private static String delimiter = "|";
 	
 	public static void main(String[] args){
-		String all = generate(2);
+		String all = generate(3);
 		System.out.println(all);
 	}
 	
@@ -16,9 +17,9 @@ public class PartitionGenerator {
 		n = dimension + 1; // to get correct number of processes
 		List<int[]> allRGF = generateAllRGF();
 		
-		String all = generateOrderedPartitions(allRGF);
+		String allPartitions = generateOrderedPartitions(allRGF);
 		//System.out.print( all);
-		return all;
+		return allPartitions;
 	}
 	
 	private static int getMax(int[] array){
@@ -64,10 +65,10 @@ public class PartitionGenerator {
 	}
 	
 	private static String generateOrderedPartitions(List<int[]> allRGF){
-		StringBuilder sb = new StringBuilder();
+		StringBuilder allPartitions = new StringBuilder();
 		
 		for (int[] rgf : allRGF){
-			//System.out.println(Arrays.toString(rgf));
+			System.out.println(Arrays.toString(rgf));
 			int k = getMax(rgf);
 			List<StringBuilder> partition = new ArrayList<StringBuilder>(k);
 			initPartition(k, partition);
@@ -75,25 +76,25 @@ public class PartitionGenerator {
 				partition.get(rgf[i]-1).append(Integer.toString(i));
 			}
 
-			generatePartitionPermutations(partition, sb, k);
+			generatePartitionPermutations(partition, allPartitions, k);
 		}
 		
-		return sb.toString();
+		return allPartitions.toString();
 	}
 	
-	private static void generatePartitionPermutations(List<StringBuilder> partition, StringBuilder sb, int k){
+	private static void generatePartitionPermutations(List<StringBuilder> partition, StringBuilder block, int k){
 		PermutationGenerator perm = new PermutationGenerator(k);
 		
 		for (List<Integer> p : perm){
-			List<StringBuilder> pPartition=new ArrayList<StringBuilder>(k);
+			List<StringBuilder> orderedPartition=new ArrayList<StringBuilder>(k);
 			for (int i : p){
-				pPartition.add(partition.get(i-1));
+				orderedPartition.add(partition.get(i-1));
 			}
-			print(pPartition, sb);
+			add(orderedPartition, block);
 		}
 	}
 	
-	private static void print(List<StringBuilder> lista, StringBuilder sb){
+	private static void add(List<StringBuilder> lista, StringBuilder sb){
 		if (sb==null)
 			throw new IllegalArgumentException("No string builder initialized");
 		String delim = "";

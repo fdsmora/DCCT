@@ -5,7 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import unam.dcct.misc.Constants;
-import unam.dcct.model.ImmediateSnapshotModel.ImmediateSnapshot;
+import unam.dcct.model.ImmediateSnapshot.ImmediateSnapshot;
 import unam.dcct.topology.Process;
 import unam.dcct.topology.Simplex;
 import unam.dcct.topology.SimplicialComplex;
@@ -20,7 +20,7 @@ public abstract class CommunicationMechanism{
 		sc.setChromatic(true);
 		newComplex = null;
 		generateOrCompleteNewComplex(sc);
-//		// Now lets generate all non-chromatic simplices
+		// Now lets generate all non-chromatic simplices
 		sc.setChromatic(false);
 		generateOrCompleteNewComplex(sc);
 		
@@ -61,10 +61,8 @@ public abstract class CommunicationMechanism{
 				List<Process> newProcesses = scenario.execute(originalProcesses);
 				Simplex newSimplex = chromatic ? new Simplex(newProcesses) : new Simplex(false, newProcesses);
 				newSimplex.setParent(s);
-				//generateNonChromaticSimplex(s, scenario, newSimplex, newProcesses);
 				newSimplices.add(newSimplex);
 			}
-			//generateNonChromaticSimplices(newSimplices, s);
 			allNewSimplices.addAll(newSimplices);
 		}
 		
@@ -73,11 +71,11 @@ public abstract class CommunicationMechanism{
 
 	protected abstract ScenarioGenerator createScenarioGenerator(Simplex s);
     
-	public static String name(){
+	public static String getName(){
 		return "Please implement this in subclass with appropiate name";
 	}
 	
-	public static String basicMechanismName(){
+	public static String getBasicMechanismName(){
 		return "Please implement this in subclass with appropiate name";
 	}
 	
