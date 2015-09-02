@@ -23,7 +23,7 @@ public final class Constants {
 	public static final String NEXT = "Next";
 	public static final String BACK = "Back";
 	public static final String GENERATE = "Generate";
-	public static final String COMMUNICATION_MODEL = "Communication model";
+	public static final String COMMUNICATION_PROTOCOL = "Communication protocol";
 	public static final String EXECUTE_ROUND = "Execute round";
 	public static final String START_OVER = "Start over";
 	public static final String CHANGE_MODEL = "Change model";
@@ -73,37 +73,37 @@ public final class Constants {
 		public static final ProcessViewBrackets DEFAULT = CURLY;
 	}
 		
-	public static final String MODEL_INFORMATION = "Model information";
+	public static final String PROTOCOL_INFORMATION = "Protocol information";
 	public static final String GEOMETRIC_INFORMATION = "Geometric information";
 	
-	public static final Map<String, List<String>> availableCommunicationMechanisms;
+	public static final Map<String, List<String>> availableCommunicationProtocols;
 	static {
-		availableCommunicationMechanisms = new LinkedHashMap<String, List<String>>();
-		List<String[]> commMechInfo = getCommunicationMechanismInfo();
+		availableCommunicationProtocols = new LinkedHashMap<String, List<String>>();
+		List<String[]> commMechInfo = getCommunicationProtocols();
 		for (String[] pair : commMechInfo){
 			
-			if (availableCommunicationMechanisms.containsKey(pair[0]))
+			if (availableCommunicationProtocols.containsKey(pair[0]))
 			{
-				availableCommunicationMechanisms.get(pair[0]).add(pair[1]);
+				availableCommunicationProtocols.get(pair[0]).add(pair[1]);
 			}else{
 				List<String> names = new ArrayList<String>();
 				names.add(pair[1]);
-				availableCommunicationMechanisms.put(pair[0], names);
+				availableCommunicationProtocols.put(pair[0], names);
 			}	
 		}
 	}
-	private static List<String[]> getCommunicationMechanismInfo() {
+	private static List<String[]> getCommunicationProtocols() {
 
 		List<String[]> info = new ArrayList<String[]>();
 
 		Reflections reflections = new Reflections("unam.dcct.model");
-		Set<Class<? extends unam.dcct.model.CommunicationMechanism>> allClasses = reflections
-				.getSubTypesOf(unam.dcct.model.CommunicationMechanism.class);
+		Set<Class<? extends unam.dcct.model.CommunicationProtocol>> allClasses = reflections
+				.getSubTypesOf(unam.dcct.model.CommunicationProtocol.class);
 
-		for (Class<? extends unam.dcct.model.CommunicationMechanism> c : allClasses) {
+		for (Class<? extends unam.dcct.model.CommunicationProtocol> c : allClasses) {
 			try {
 				String[] pair = new String[2];
-				pair[0] = (String) c.getMethod("getBasicMechanismName", null).invoke(null, null);
+				pair[0] = (String) c.getMethod("getBasicProtocolName", null).invoke(null, null);
 				pair[1] = (String) c.getMethod("getName", null).invoke(null, null);
 				info.add(pair);
 			} catch (Exception e) {}
@@ -111,23 +111,5 @@ public final class Constants {
 		return info;
 	}
 	
-//	public enum CommunicationMechanism{
-//		// Add all new distributed computing model descriptions here. 
-//		SHARED_MEMORY(Constants.SHARED_MEMORY, Constants.IMMEDIATE_SNAPSHOT);
-//		
-//		private String desc;
-//		private List<String> subModels;
-//		CommunicationMechanism(String desc, String... subModels){
-//			this.desc = desc;
-//			this.subModels = Arrays.asList(subModels);
-//		}
-//		@Override
-//		public String toString(){
-//			return desc;
-//		}
-//		public List<String> subModels(){
-//			return subModels;
-//		}
-//	}
 	
 }

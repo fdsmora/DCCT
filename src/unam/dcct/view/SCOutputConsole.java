@@ -93,7 +93,7 @@ public class SCOutputConsole extends ShrinkPanelPlugin implements View{
 		complexInfo = new StringBuilder(
 				String.format(complexInfoFormat, type, 
 						(!Strings.isNullOrEmpty(modelInformation)? 
-								Constants.MODEL_INFORMATION + ":" + modelInformation : ""),
+								Constants.PROTOCOL_INFORMATION + ":" + modelInformation : ""),
 						(String.format("%s complex ", 
 								(complex.isChromatic()? Constants.CHROMATIC : Constants.NON_CHROMATIC))),
 						complex.getSimplices().size(),
@@ -144,7 +144,7 @@ public class SCOutputConsole extends ShrinkPanelPlugin implements View{
 			setComplexInfo(m.getInitialComplex(), Constants.INITIAL_COMPLEX, null);
 		}else
 		{
-			String modelInfo = m.getCommunicationMechanism().toString() + newLine + "Round : " + m.getRoundCount() + newLine ;
+			String modelInfo = m.getCommunicationProtocol().toString() + newLine + "Round : " + m.getRoundCount() + newLine ;
 			setComplexInfo(m.getProtocolComplex(), Constants.PROTOCOL_COMPLEX, modelInfo);
 		}
 

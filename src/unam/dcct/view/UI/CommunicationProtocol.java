@@ -19,21 +19,21 @@ import unam.dcct.model.Model;
 
 /**
  * Represents the step in the {@link unam.dcct.view.UI.SimplicialComplexPanel} wizard
- * that lets the user specify the distributed computing model on which the protocol 
+ * that lets the user specify the protocol on which the protocol 
  * complex will be generated. 
  * @author Fausto
  *
  */
-class CommunicationMechanismStep extends Step {
-	private JComboBox<String> cbMechanisms;
+class CommunicationProtocol extends Step {
+	private JComboBox<String> cbProtocols;
 	private JComboBox<String> cbSubMechanisms;
 		
-	public CommunicationMechanismStep(){
+	public CommunicationProtocol(){
 		super();
 		
 		pContent.setBorder(BorderFactory.createTitledBorder(Constants.PROTOCOL_COMPLEX));
 		
-		populateAndSetMechanisms();
+		populateAndSetProtocols();
 		
 		createCustomizationsPanel();
 
@@ -46,35 +46,35 @@ class CommunicationMechanismStep extends Step {
 		btnBack.setText(Constants.START_OVER);
 	}
 	
-	private void populateAndSetMechanisms() {
-		JLabel lblMechanism = new JLabel("Select communication mechanism:");
-		lblMechanism.setLabelFor(cbMechanisms);
+	private void populateAndSetProtocols() {
+		JLabel lbProtocol = new JLabel("Select communication protocol:");
+		lbProtocol.setLabelFor(cbProtocols);
 		// In order to properly align all controls to the left, this label, the combo boxes, and ALL top level controls contained 
 		// inside pContent must have this property set to this value. If any of these doesn't have its property set to this value, 
 		// layout will be ugly. For more information read https://docs.oracle.com/javase/tutorial/uiswing/layout/box.html#alignment 
 		// I recommend to read the complete article about BoxLayout (https://docs.oracle.com/javase/tutorial/uiswing/layout/box.html)
 		// and in general, the most you can about Swing Layout managers. 
-		lblMechanism.setAlignmentX(Component.LEFT_ALIGNMENT);
+		lbProtocol.setAlignmentX(Component.LEFT_ALIGNMENT);
 		
-		List<String> l_mechanisms = new ArrayList<String>(Constants.availableCommunicationMechanisms.keySet());
-		String[] a_mechanisms = new String[l_mechanisms.size()];
-		l_mechanisms.toArray(a_mechanisms);
-		cbMechanisms = new JComboBox<String>(new DefaultComboBoxModel<String>(a_mechanisms));
-		cbMechanisms.addActionListener(this);
-		cbMechanisms.setActionCommand("mo");
+		List<String> l_protocols = new ArrayList<String>(Constants.availableCommunicationProtocols.keySet());
+		String[] a_protocols = new String[l_protocols.size()];
+		l_protocols.toArray(a_protocols);
+		cbProtocols = new JComboBox<String>(new DefaultComboBoxModel<String>(a_protocols));
+		cbProtocols.addActionListener(this);
+		cbProtocols.setActionCommand("mo");
 		// Set visual properties
-		cbMechanisms.setAlignmentX(Component.LEFT_ALIGNMENT);
-		cbMechanisms.setMaximumSize(new Dimension(150,15));
+		cbProtocols.setAlignmentX(Component.LEFT_ALIGNMENT);
+		cbProtocols.setMaximumSize(new Dimension(150,15));
 
-		pContent.add(lblMechanism);
-		pContent.add(cbMechanisms);
+		pContent.add(lbProtocol);
+		pContent.add(cbProtocols);
 		pContent.add(Box.createRigidArea(new Dimension(0,5)));
 
-		populateAndSetSubMechanisms(a_mechanisms[0]);
+		populateAndSetSubMechanisms(a_protocols[0]);
 	}
 
-	private void populateAndSetSubMechanisms(String selectedMechanism) {	
-		JLabel lbSubMechanisms = new JLabel("Select communication mechanism's suboptions:");
+	private void populateAndSetSubMechanisms(String selectedProtocol) {	
+		JLabel lbSubMechanisms = new JLabel("Select communication protocol suboptions:");
 		lbSubMechanisms.setLabelFor(cbSubMechanisms);
 		lbSubMechanisms.setAlignmentX(Component.LEFT_ALIGNMENT);
 		
@@ -84,14 +84,14 @@ class CommunicationMechanismStep extends Step {
 		cbSubMechanisms.setMaximumSize(new Dimension(150,15));
 		cbSubMechanisms.setAlignmentX(Component.LEFT_ALIGNMENT);
 		
-		populateSubMechanisms(selectedMechanism);
+		populateSubMechanisms(selectedProtocol);
 		
 		pContent.add(lbSubMechanisms);
 		pContent.add(cbSubMechanisms);
 	}
 	
-	private void populateSubMechanisms(String selectedMechanism){		
-		List<String> l_subMechanisms = Constants.availableCommunicationMechanisms.get(selectedMechanism);
+	private void populateSubMechanisms(String selectedProtocol){		
+		List<String> l_subMechanisms = Constants.availableCommunicationProtocols.get(selectedProtocol);
 		String[] a_subMechanisms = new String[l_subMechanisms.size()];
 		l_subMechanisms.toArray(a_subMechanisms);
 		
@@ -135,8 +135,8 @@ class CommunicationMechanismStep extends Step {
 	 * using the distributed computing model specified in this step.  
 	 */
 	public void validateAndExecute(){
-		String selectedMech = (String)cbSubMechanisms.getSelectedItem();
-		model.setCommunicationMechanism(selectedMech);
+		String selectedProtocol = (String)cbSubMechanisms.getSelectedItem();
+		model.setCommunicationProtocol(selectedProtocol);
 		// As this is the complex of the first round, we dismiss any previous generated protocol complexes. 
 		model.setProtocolComplex(null);
 		model.executeRound();		
@@ -161,7 +161,7 @@ class CommunicationMechanismStep extends Step {
 	public void actionPerformed(ActionEvent e) {
 		String command = e.getActionCommand();
 		if (command == "mo"){
-			populateSubMechanisms((String)cbMechanisms.getSelectedItem());
+			populateSubMechanisms((String)cbProtocols.getSelectedItem());
 		}
 	}
 

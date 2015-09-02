@@ -83,9 +83,9 @@ public class PartitionGenerator {
 	}
 	
 	private static void generatePartitionPermutations(List<StringBuilder> partition, StringBuilder block, int k){
-		PermutationGenerator perm = new PermutationGenerator(k);
+		PermutationGenerator permutations = new PermutationGenerator(k);
 		
-		for (List<Integer> p : perm){
+		for (List<Integer> p : permutations){
 			List<StringBuilder> orderedPartition=new ArrayList<StringBuilder>(k);
 			for (int i : p){
 				orderedPartition.add(partition.get(i-1));

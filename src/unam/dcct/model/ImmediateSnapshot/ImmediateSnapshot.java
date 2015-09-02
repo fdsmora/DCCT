@@ -8,12 +8,12 @@ import java.util.List;
 import java.util.Set;
 
 import unam.dcct.misc.Constants;
-import unam.dcct.model.CommunicationMechanism;
+import unam.dcct.model.CommunicationProtocol;
 import unam.dcct.topology.Process;
 import unam.dcct.topology.Simplex;
 import unam.dcct.topology.SimplicialComplex;
 
-public class ImmediateSnapshot extends CommunicationMechanism {
+public class ImmediateSnapshot extends CommunicationProtocol {
 	
 	private String[] allScenariosPerDimension = new String[3];
 	
@@ -85,7 +85,7 @@ public class ImmediateSnapshot extends CommunicationMechanism {
 		return Constants.IMMEDIATE_SNAPSHOT;
 	}
 	
-	public static String getBasicMechanismName(){
+	public static String getBasicProtocolName(){
 		return Constants.SHARED_MEMORY;
 	}
 	

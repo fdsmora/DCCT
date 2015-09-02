@@ -10,7 +10,7 @@ import unam.dcct.topology.Process;
 import unam.dcct.topology.Simplex;
 import unam.dcct.topology.SimplicialComplex;
 
-public abstract class CommunicationMechanism{
+public abstract class CommunicationProtocol{
 	protected int t=0;
 	protected int rounds=0;
 	protected ScenarioGenerator scenarioGenerator;
@@ -79,7 +79,7 @@ public abstract class CommunicationMechanism{
 		return "Please implement this in subclass with appropiate name";
 	}
 	
-	public static CommunicationMechanism createCommunicationMechanism(String name){
+	public static CommunicationProtocol createCommunicationProtocol(String name){
 		if (name.equals(Constants.IMMEDIATE_SNAPSHOT))
 			return new ImmediateSnapshot();
 		return null;
