@@ -33,7 +33,6 @@ public class Simplex {
 		
 		sortProcesses(this.processes);
 
-		//this.chromaticProcesses = processes;
 		this.n = this.processes.size();
 	}
 	
@@ -115,15 +114,10 @@ public class Simplex {
 		return chromatic;
 	}
 
-	public void setChromatic(boolean chromatic) {
-//		if (!chromatic && nonChromaticProcesses == null)
-//			try {
-//				throw new Exception("The method 'setNonChromaticSimplex(List<Process> nonChromaticProcesses)' must be called before calling this method with a 'false' argument. ");
-//			} catch (Exception e) {
-//				e.printStackTrace();
-//			}
-		this.chromatic = chromatic;
-	}
+//	public void setChromatic(boolean chromatic) {
+//
+//		this.chromatic = chromatic;
+//	}
 
 	public Simplex getParent() {
 		return parent;

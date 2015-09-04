@@ -138,7 +138,7 @@ class CommunicationProtocol extends Step {
 		String selectedProtocol = (String)cbSubMechanisms.getSelectedItem();
 		model.setCommunicationProtocol(selectedProtocol);
 		// As this is the complex of the first round, we dismiss any previous generated protocol complexes. 
-		model.setProtocolComplex(null);
+		model.clearProtocolComplex();
 		model.executeRound();		
 		
 		Step next = Steps.NextRoundStep.getStep();

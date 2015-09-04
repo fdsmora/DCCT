@@ -14,6 +14,16 @@ import unam.dcct.topology.SimplicialComplex;
 import unam.dcct.view.View;
 import unam.dcct.view.commands.*;
 
+/**
+ * It is the model component of the application's MVC architecture.
+ * Contains methods for manipulating the application's state.
+ * In particular generating and manipulating the simplicial complexes
+ * that are displayed and other information related to them.
+ * It implements the Singleton design pattern as there can be only one
+ * instance of this class during the application execution.  
+ * @author Fausto Salazar
+ *
+ */
 public class Model {
 	private SimplicialComplex initialComplex;
 	private SimplicialComplex protocolComplex;
@@ -38,7 +48,8 @@ public class Model {
 	}
 	
 	/**
-	 * Resets all generated complexes and all input data. Also causes all views to reset. 
+	 * Resets all generated complexes and input data. Also causes all views to reset, that is,
+	 * clear all displayed information. 
 	 */
 	public void reset(){
 		initialComplex =protocolComplex= null;
@@ -83,15 +94,18 @@ public class Model {
 		return initialComplex;
 	}
 	/**
-	 * Returns the protocol complex that has been generated in the last communication round.
+	 * Returns the protocol complex that was generated in the last communication round.
 	 * @return The protocol complex
 	 */
 	public SimplicialComplex getProtocolComplex() {
 		return protocolComplex;
 	}
 
-	public void setProtocolComplex(SimplicialComplex pc) {
-		this.protocolComplex = pc;
+	/**
+	 * Clears the last generated protocol complex. 
+	 */
+	public void clearProtocolComplex() {
+		this.protocolComplex = null;
 	}
 
 	/**
@@ -112,7 +126,7 @@ public class Model {
 	}
 	
 	/**
-	 * Registers a View so that it is notified when some changes in the model occur. 
+	 * Registers a {@link View} so that it is notified when some changes in the model occur. 
 	 * @param v The object whose class implements the View interface.
 	 */
 	public void registerView(View v){
@@ -121,7 +135,8 @@ public class Model {
 	/**
 	 * Updates all registered Views. This method should be called when a change in the Model occurs.
 	 * Each specific change is represented by a commandType. 
-	 * @param cmdType
+	 * @param commandType
+	 * @see unam.dcct.view.commands.Command
 	 */
 	private void updateViews(String commandType){
 		for (View v: views){

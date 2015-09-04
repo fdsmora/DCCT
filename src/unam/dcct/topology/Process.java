@@ -1,6 +1,5 @@
 package unam.dcct.topology;
 
-import unam.dcct.misc.Constants;
 import unam.dcct.model.Model;
 
 public class Process implements Cloneable {
