@@ -18,7 +18,7 @@ import unam.dcct.topology.SimplicialComplex;
 public abstract class CommunicationProtocol{
 	protected int t=0;
 	protected int rounds=0;
-	protected ScenarioGenerator scenarioGenerator;
+	//protected ScenarioGenerator scenarioGenerator;
 	private SimplicialComplex newComplex;
 
 	/**
@@ -98,7 +98,7 @@ public abstract class CommunicationProtocol{
 
 		for (Simplex s : baseSimplices){
 			List<Simplex> newSimplices= new ArrayList<Simplex>();
-			scenarioGenerator = createScenarioGenerator(s.dimension());
+			Iterable<Scenario> scenarioGenerator = createScenarioGenerator(s.dimension());
 			for (Scenario scenario : scenarioGenerator){
 				List<Process> originalProcesses = s.getProcesses();
 				List<Process> newProcesses = scenario.execute(originalProcesses);
@@ -119,11 +119,11 @@ public abstract class CommunicationProtocol{
 	 * scenarios of execution in which dimension+1 processes (which is the total number of 
 	 * processes in the simplex) communicate during the round.
 	 * <p>
-	 * This is a "Factory method" because subclasess "manufacture" 
+	 * This is a "Factory method" because subclasses "manufacture" 
 	 * the specific implementation of the {@link ScenarioGenerator}.
 	 * @return An {@link ScenarioGenerator} instance which lets clients iterate over all generated scenarios of execution of this protocol.
 	 */
-	protected abstract ScenarioGenerator createScenarioGenerator(int dimension);
+	protected abstract Iterable<Scenario> createScenarioGenerator(int dimension);
     
 	/**
 	 * This is intended for specific communication protocols to provide their names in order to
@@ -175,16 +175,16 @@ public abstract class CommunicationProtocol{
 	 * @author Fausto Salazar
 	 *
 	 */
-	protected interface ScenarioGenerator extends Iterable<Scenario>{
-		//Iterator<Scenario> iterator();
-	}
+//	protected interface ScenarioGenerator extends Iterable<Scenario>{
+//		//Iterator<Scenario> iterator();
+//	}
 	
 	/**
 	 * Represents an scenario of execution of a communication round for a particular protocol.
 	 * @author Fausto
 	 *
 	 */
-	protected interface Scenario{
+	public interface Scenario{
 		/**
 		 * Simulates how the process communicate executing a round of the protocol but
 		 * in the order and circumstances specified in this scenario.

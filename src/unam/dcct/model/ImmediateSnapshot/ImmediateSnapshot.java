@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 import unam.dcct.misc.Constants;
 import unam.dcct.model.CommunicationProtocol;
+import unam.dcct.model.CommunicationProtocol.Scenario;
 import unam.dcct.topology.Process;
 
 /**
@@ -41,15 +42,21 @@ public class ImmediateSnapshot extends CommunicationProtocol {
 	 * It creates all possible scenarios of execution of a communication round of this protocol. 
 	 */
 	@Override
-	protected ScenarioGenerator createScenarioGenerator(int dimension) {
+	protected Iterable<Scenario> createScenarioGenerator(int dimension) {
 		String allScenarios = getAllScenarios(dimension);
-		return new ScenarioGenerator(){
-
+//		return new ScenarioGenerator(){
+//
+//			@Override
+//			public Iterator<Scenario> iterator() {
+//				return new ImmediateSnapshotIterator(allScenarios);
+//			}
+//			
+//		};
+		return new Iterable<Scenario>(){
 			@Override
 			public Iterator<Scenario> iterator() {
 				return new ImmediateSnapshotIterator(allScenarios);
 			}
-			
 		};
 	}
 	
