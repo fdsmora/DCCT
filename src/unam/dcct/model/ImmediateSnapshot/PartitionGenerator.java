@@ -4,11 +4,19 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Generates all possible partitions of an \(n\) cardinality set \({0,1,...,n-1}\). 
+ * The partitions are produced in a string format where each block in the partition
+ * is delimited by the "|" character. 
+ * @author Fausto Salazar
+ *
+ */
 public class PartitionGenerator {
 	private static int n=0;
 	private static String delimiter = "|";
 	
 	public static void main(String[] args){
+		// Test
 		String all = generate(3);
 		System.out.println(all);
 	}
@@ -37,6 +45,13 @@ public class PartitionGenerator {
 		}
 	}
 	
+	/**
+	 * 	 This algorithm generates all partitions of the set {0,1,..,n-1} 
+	 *	 coded in restricted growth functions. This method is an implementation
+	 *	 of the algorithm described in D. Stanton and D. White's Constructive Combinatorics, 1986. 
+	 * @return
+	 */
+
 	private static List<int[]> generateAllRGF(){
 		List<int[]> allRGF = new ArrayList<int[]>();
 		int[] M = new int[n];
@@ -64,6 +79,11 @@ public class PartitionGenerator {
 		}
 	}
 	
+	/**
+	 * This algorithm is an implementation of the algorithm described in  D. Stanton and D. White's Constructive Combinatorics, 1986. 
+	 * @param allRGF
+	 * @return
+	 */
 	private static String generateOrderedPartitions(List<int[]> allRGF){
 		StringBuilder allPartitions = new StringBuilder();
 		

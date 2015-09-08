@@ -3,26 +3,46 @@ package unam.dcct.model.ImmediateSnapshot;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Set;
-
 import unam.dcct.misc.Constants;
 import unam.dcct.model.CommunicationProtocol;
 import unam.dcct.topology.Process;
-import unam.dcct.topology.Simplex;
-import unam.dcct.topology.SimplicialComplex;
 
+/**
+ * Represents the shared memory communication protocol known as 'atomic immediate snapshot'. 
+ * <p>
+ * In this protocol n processes communicate by first writing to a shared memory, which is 
+ * an array with n entries, each ith-entry, 0&lt;=i&lt;=n, is assigned to each process with id equals to i.
+ * Each process writes the contents of it's view to its entry in the array and 
+ * when the writing is complete it immediately reads the whole array atomically, that is,
+ * it gets a snapshot of the whole content of the array, so it is an operation that takes time O(1).
+ * <p> 
+ * This class provides functionality to first generate all possible scenarios of execution that could have taken place
+ * place during a round of execution of this protocol and second, to simulate the communication of processes
+ * using this protocol for each of the generated scenarios, thus creating new processes with new states (views)
+ * that represent what the processes ended up knowing about the other processes after communicating in the order
+ * specified by each particular scenario. 
+ * <p> 
+ * @author Fausto Salazar
+ * @see CommunicationProtocol
+ */
 public class ImmediateSnapshot extends CommunicationProtocol {
 	
+	/**
+	 * It stores all scenarios codification for each dimension of simplex, that is,
+	 * for each number of processes in each simplex minus one.  
+	 */
 	private String[] allScenariosPerDimension = new String[3];
-	
 	
 	public ImmediateSnapshot(){}
 
+	/**
+	 * It is the implementation of the abstract method {@link CommunicationProtocol#createScenarioGenerator(int)}.
+	 * It creates all possible scenarios of execution of a communication round of this protocol. 
+	 */
 	@Override
-	protected ScenarioGenerator createScenarioGenerator(Simplex s) {
-		String allScenarios = getAllScenarios(s.dimension());
+	protected ScenarioGenerator createScenarioGenerator(int dimension) {
+		String allScenarios = getAllScenarios(dimension);
 		return new ScenarioGenerator(){
 
 			@Override
@@ -115,9 +135,18 @@ public class ImmediateSnapshot extends CommunicationProtocol {
 		}
 	}
 
+	/**
+	 * Represents an scenario of execution of a round of this protocol. 
+	 * @author Fausto
+	 *
+	 */
 	private class ImmediateSnapshotScenario implements Scenario{
 		private String[] groups;
 		
+		/**
+		 * Creates an scenario of execution. 
+		 * @param strScenario A codification of an execution scenario. 
+		 */
 		ImmediateSnapshotScenario(String strScenario){
 			groups = strScenario.split("\\" + String.valueOf(PartitionGenerator.getDelimiter()));
 		}

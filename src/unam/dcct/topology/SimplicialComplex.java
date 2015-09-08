@@ -5,14 +5,19 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import unam.dcct.model.CommunicationProtocol;
+
 /**
- * Represents a simplicial complex. 
- * A simplicial complex is made up of simplices. 
+ * * Represents a distributed computing simplicial complex. 
+ * A simplicial complex is made up of a set of simplices.  
  * In distributed computing through combinatorial topology a simplicial complex can be represented
  * in two ways: chromatic or non-chromatic. This class supports both representations. 
  * This is determined by the state of the {@link chromatic} attribute. 
  * @author Fausto Salazar
- *
+ * @see Simplex
+ * @see Process
+ * @see unam.dcct.model.CommunicationProtocol
+ * @see GeometricComplex
  */
 public class SimplicialComplex {
 	private List<Simplex> chromaticSimplices;
@@ -175,6 +180,7 @@ public class SimplicialComplex {
 	 * The simplices supplied as parameters of this method will be the ones returned 
 	 * by the {@link #getSimplices()} method when this complex is chromatic.
 	 * @param chromaticSimplices
+	 * @see CommunicationProtocol#executeRound(SimplicialComplex)
 	 */
 	public void setChromaticSimplices(Simplex... chromaticSimplices) {
 		setChromaticSimplices(Arrays.asList(chromaticSimplices));
@@ -184,6 +190,7 @@ public class SimplicialComplex {
 	 * The simplices supplied as parameters of this method will be the ones returned 
 	 * by the {@link #getSimplices()} method when this complex is non-chromatic.
 	 * @param nonChromaticSimplices
+	 * @see CommunicationProtocol#executeRound(SimplicialComplex)
 	 */
 	public void setNonChromaticSimplices(Simplex... nonChromaticSimplices) {
 		setNonChromaticSimplices(Arrays.asList(nonChromaticSimplices));
@@ -193,6 +200,7 @@ public class SimplicialComplex {
 	 * The simplices supplied as parameters of this method will be the ones returned 
 	 * by the {@link #getSimplices()} method when this complex is chromatic.
 	 * @param chromaticSimplices
+	 * @see CommunicationProtocol#executeRound(SimplicialComplex)
 	 */
 	public void setChromaticSimplices(List<Simplex> chromaticSimplices) {
 		this.chromaticSimplices = chromaticSimplices;
@@ -203,6 +211,7 @@ public class SimplicialComplex {
 	 * The simplices supplied as parameters of this method will be the ones returned 
 	 * by the {@link #getSimplices()} method when this complex is non-chromatic.
 	 * @param nonChromaticSimplices
+	 * @see CommunicationProtocol#executeRound(SimplicialComplex)
 	 */
 	public void setNonChromaticSimplices(List<Simplex> nonChromaticSimplices) {
 		this.nonChromaticSimplices = nonChromaticSimplices;
