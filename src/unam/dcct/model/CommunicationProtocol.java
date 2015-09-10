@@ -166,18 +166,6 @@ public abstract class CommunicationProtocol{
 	public void set_t(int t){
 		this.t=t;
 	}
-		
-	/**
-	 * This interface provides a way to iterate over all generated scenarios of execution 
-	 * of a communication round for a particular protocol. 
-	 * <p>
-	 * It is an implementation of the iterator pattern. 
-	 * @author Fausto Salazar
-	 *
-	 */
-//	protected interface ScenarioGenerator extends Iterable<Scenario>{
-//		//Iterator<Scenario> iterator();
-//	}
 	
 	/**
 	 * Represents an scenario of execution of a communication round for a particular protocol.

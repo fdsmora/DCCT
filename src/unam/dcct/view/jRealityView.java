@@ -292,6 +292,7 @@ public class jRealityView implements View {
 			gComplex = new GeometricComplex(protocolComplex);
 		}
 		updateView();
+		// Append geometric information to console.
 		SCOutputConsole.getInstance().setGeometricInformation(gComplex);
 	}
 
@@ -303,6 +304,7 @@ public class jRealityView implements View {
 	public void updateChromaticity() {
 		gComplex.setChromatic(model.isChromatic());
 		updateView();
+		// Append geometric information to console.
 		SCOutputConsole.getInstance().setGeometricInformation(gComplex);
 
 	}	

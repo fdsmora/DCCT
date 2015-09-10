@@ -69,17 +69,17 @@ public class ImmediateSnapshot extends CommunicationProtocol {
 	 * @return A list containing a copy of the processes with new views. 
 	 */
 	private static List<Process> simulateCommunication(List<Process> processes, String[] memory, int[] order) {
-		List<Process> tempProcesses = new ArrayList<Process>(order.length);
+		List<Process> newProcesses = new ArrayList<Process>(order.length);
 		int i;
 		for(i=0;i<order.length;i++){
 			Process p = (Process)processes.get(order[i]).clone();
 			write(p, memory);
-			tempProcesses.add(p);
+			newProcesses.add(p);
 		}
-		for (Process p: tempProcesses){
+		for (Process p: newProcesses){
 			snapshot(p, memory);
 		}
-		return tempProcesses;
+		return newProcesses;
 	}
 	
 	private static void write(Process p, String[] memory){
@@ -148,22 +148,22 @@ public class ImmediateSnapshot extends CommunicationProtocol {
 	 *
 	 */
 	private class ImmediateSnapshotScenario implements Scenario{
-		private String[] groups;
+		private String[] blocks;
 		
 		/**
 		 * Creates an scenario of execution. 
 		 * @param strScenario A codification of an execution scenario. 
 		 */
 		ImmediateSnapshotScenario(String strScenario){
-			groups = strScenario.split("\\" + String.valueOf(PartitionGenerator.getDelimiter()));
+			blocks = strScenario.split("\\" + String.valueOf(PartitionGenerator.getDelimiter()));
 		}
 		
 		@Override
 		public List<Process> execute(List<Process> originalProcesses) {
 			String[] sharedMemory = new String[originalProcesses.size()];
 			List<Process> newProcesses = new ArrayList<Process>(originalProcesses.size());
-			for (String g : groups) {
-				int[] order = ImmediateSnapshot.toIndices(g);
+			for (String b : blocks) {
+				int[] order = ImmediateSnapshot.toIndices(b);
 				newProcesses.addAll(ImmediateSnapshot.simulateCommunication(originalProcesses, sharedMemory, order));
 			}
 			return newProcesses;
