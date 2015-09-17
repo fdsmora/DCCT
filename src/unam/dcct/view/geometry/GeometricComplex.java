@@ -48,12 +48,12 @@ public class GeometricComplex {
 			faces = new ArrayList<Face>(complex.getSimplexCount());
 			boolean chromatic = complex.isChromatic();
 			for (Simplex s : simplices){
-				Face f;
 				Simplex parent = s.getParent();
-				if (chromatic)
-					f = new ChromaticFace(s, parent);
-				else
-					f = new NonChromaticFace(s, parent);
+				Face f = new Face(s, parent, chromatic);
+//				if (chromatic)
+//					f = new ChromaticFace(s, parent);
+//				else
+//					f = new NonChromaticFace(s, parent);
 						
 				faces.add(f);
 				s.setFace(f);

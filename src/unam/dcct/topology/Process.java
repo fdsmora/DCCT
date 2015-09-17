@@ -205,7 +205,7 @@ public class Process implements Cloneable {
 		 * A View can belong only to a process. 
 		 * @param p The process that owns this view. 
 		 */
-		public View(Process p){
+		View(Process p){
 			this.process = p;
 		}
 		
