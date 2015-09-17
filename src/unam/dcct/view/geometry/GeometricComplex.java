@@ -6,11 +6,10 @@ import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-
 import unam.dcct.topology.Simplex;
 import unam.dcct.topology.SimplicialComplex;
 
-public class GeometricComplex {
+public class GeometricComplex implements Geometry{
 	private boolean chromatic = true;
 	private List<Face> chromaticFaces;
 	private List<Face> nonChromaticFaces;
@@ -112,28 +111,28 @@ public class GeometricComplex {
 			coordinates[j++] = v.getCoordinates(); 
 		}		
 	}
-
+	@Override
 	public int getVertexCount() {
 		return vertices.size();
 	}
-	
+	@Override
 	public double[][] getCoordinates(){
 		return coordinates;
 	}
-	
+	@Override
 	public String[] getVertexLabels(){
 		return labels;
 	}
-	
+	@Override
 	public Color[] getVertexColors(){
 		return colors;
 	}
-	
+	@Override
 	public int[][] getFacesIndices(){		
 		return faceIndices;
 	}
 	
-	private List<Face> getFaces(){
+	public List<Face> getFaces(){
 		if (chromatic)
 			return chromaticFaces;
 		return nonChromaticFaces;
@@ -163,14 +162,20 @@ public class GeometricComplex {
 		sb.append("All faces:"+Arrays.deepToString(faceIndices)+"\n");
 		return sb.toString();
 	}
-
+	@Override
 	public boolean isChromatic() {
 		return chromatic;
 	}
 
+	@Override
 	public void setChromatic(boolean chromatic) {
 		this.chromatic = chromatic;
 		update();
 	}
+
+	public List<Vertex> getVertices() {
+		return new ArrayList<Vertex>(vertices.values());
+	}
 		
+
 }

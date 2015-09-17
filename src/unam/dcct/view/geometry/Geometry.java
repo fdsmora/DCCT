@@ -8,4 +8,6 @@ public interface Geometry {
 	String[] getVertexLabels();
 	Color[] getVertexColors();
 	int[][] getFacesIndices();
+	void setChromatic(boolean chromatic);
+	boolean isChromatic();
 }

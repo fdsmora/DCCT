@@ -13,7 +13,7 @@ import unam.dcct.model.Model;
 import unam.dcct.topology.Process;
 import unam.dcct.topology.Simplex;
 
-public class Face {
+public class Face implements Geometry {
 	private Simplex simplex;
 	private double[][] coordinates;
 	private Color[] colors;
@@ -21,6 +21,7 @@ public class Face {
 	private Face parent;
 	private List<Vertex> vertices;
 	private int[][] faceIndices;
+	private boolean chromatic;
 	private ChromaticityBehaviour chromaticityBehaviour;
 		
 	public Face(Simplex simplex, Simplex pSimplex, boolean chromatic){
@@ -28,6 +29,7 @@ public class Face {
 		if (pSimplex !=null) 
 			this.parent = pSimplex.getFace();
 		setVertices();
+		this.chromatic = chromatic;
 		this.chromaticityBehaviour = chromatic? new ChromaticBehaviour(this) :
 									new NonChromaticBehaviour(this); 
 		setVerticesAttributes();
@@ -80,21 +82,37 @@ public class Face {
 	private Color getColor(){
 		return chromaticityBehaviour.getColor();
 	}
-
+	@Override
 	public String[] getVertexLabels(){
 		return labels;
 	}
 	
-	public int[][] getFaceIndices(){
+	@Override
+	public int[][] getFacesIndices() {
 		return faceIndices;
 	}
-	
+
+	@Override
 	public Color[] getVertexColors(){
 		return colors;
 	}
-	
+	@Override
 	public int getVertexCount(){
 		return vertices.size();
+	}
+	@Override
+	public double[][] getCoordinates(){
+		return coordinates;
+	}
+	
+	@Override
+	public void setChromatic(boolean chromatic) {
+		this.chromatic = chromatic;		
+	}
+
+	@Override
+	public boolean isChromatic() {
+		return chromatic;
 	}
 
 	public Simplex getSimplex() {
@@ -104,15 +122,11 @@ public class Face {
 	public List<Vertex> getVertices() {
 		return vertices;
 	}
-	
-	public double[][] getCoordinates(){
-		return coordinates;
-	}
 
 	public Face getParent() {
 		return parent;
 	}
-	
+
 	private interface ChromaticityBehaviour {
 		double[] calculateCoordinatesPerProcess(Process p);
 		Color getColor();
@@ -204,7 +218,7 @@ public class Face {
 			for (int i = 0; i<processView.length; i++){
 				if (processView[i]!=null){
 					pCoords = parentNcBehaviour.coordinatesMap.get(processView[i]).getCoordinates();
-//			
+			
 					res = LinearAlgebraHelper.vectorSum(
 							LinearAlgebraHelper.scalarVectorMultiply(factor, pCoords),res);
 				}
@@ -218,5 +232,4 @@ public class Face {
 		}
 
 	}
-
 }

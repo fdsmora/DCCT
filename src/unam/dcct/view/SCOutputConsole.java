@@ -155,7 +155,7 @@ public class SCOutputConsole extends ShrinkPanelPlugin implements View{
 	 * It lets display geometric information (number of vertices, faces, etc) in the console.
 	 * @param geom The geometric complex object whose information will be extracted to be displayed. 
 	 */
-	public void setGeometricInformation(GeometricComplex geom){
+	public void setGeometricComplexInformation(GeometricComplex geom){
 		if (geom!=null){
 
 			geometricInformation = String.format(

@@ -8,6 +8,7 @@ import unam.dcct.model.Model;
 import unam.dcct.topology.SimplicialComplex;
 import unam.dcct.view.UI.SimplicialComplexPanel;
 import unam.dcct.view.geometry.GeometricComplex;
+import unam.dcct.view.geometry.Geometry;
 import de.jreality.geometry.IndexedFaceSetFactory;
 import de.jreality.geometry.PointSetFactory;
 import de.jreality.plugin.JRViewer;
@@ -42,7 +43,7 @@ import de.jtem.jrworkspace.plugin.PluginInfo;
 public class jRealityView implements View {
 
 	private Model model;
-	private GeometricComplex gComplex;
+	private Geometry geometricObject;
 	private JRViewer viewer;
 	private SceneGraphComponent sgc;
 	private SceneGraphComponent sgcV;
@@ -93,24 +94,24 @@ public class jRealityView implements View {
 	}
 	
 	private void setVertices() {
-		if (gComplex!=null){
+		if (geometricObject!=null){
 			psf = new PointSetFactory();
-			psf.setVertexCount(gComplex.getVertexCount());
-			psf.setVertexCoordinates(gComplex.getCoordinates());
+			psf.setVertexCount(geometricObject.getVertexCount());
+			psf.setVertexCoordinates(geometricObject.getCoordinates());
 			// Need to convert colors to a double array, otherwise doesn't work. 
-			psf.setVertexColors(toDoubleArray(gComplex.getVertexColors()));
-			psf.setVertexAttribute(Attribute.LABELS, StorageModel.STRING_ARRAY.createReadOnly(gComplex.getVertexLabels()));
+			psf.setVertexColors(toDoubleArray(geometricObject.getVertexColors()));
+			psf.setVertexAttribute(Attribute.LABELS, StorageModel.STRING_ARRAY.createReadOnly(geometricObject.getVertexLabels()));
 			psf.update();
 			sgcV.setGeometry(psf.getPointSet());
 		}
 	}
 	
 	private void setFaces() {
-		if (gComplex!=null){
+		if (geometricObject!=null){
 			faceFactory = new IndexedFaceSetFactory();
-			faceFactory.setVertexCount(gComplex.getVertexCount());
-			faceFactory.setVertexCoordinates(gComplex.getCoordinates());
-			int[][] faces = gComplex.getFacesIndices();
+			faceFactory.setVertexCount(geometricObject.getVertexCount());
+			faceFactory.setVertexCoordinates(geometricObject.getCoordinates());
+			int[][] faces = geometricObject.getFacesIndices();
 			faceFactory.setFaceCount(faces.length);
 			
 //			Color[] faceColors = new Color[faces.length];
@@ -134,7 +135,7 @@ public class jRealityView implements View {
 	 * @param e
 	 */
 	public void pointDragged(PointDragEvent e) {
-		double[][] coordinates = gComplex.getCoordinates(); 
+		double[][] coordinates = geometricObject.getCoordinates(); 
 		coordinates[e.getIndex()][0]=e.getX();
 		coordinates[e.getIndex()][1]=e.getY();
 		coordinates[e.getIndex()][2]=e.getZ();
@@ -286,14 +287,20 @@ public class jRealityView implements View {
 		// Check if the generated complex is initial
 		SimplicialComplex protocolComplex = m.getProtocolComplex();
 		if (protocolComplex==null){
-			gComplex = new GeometricComplex(m.getInitialComplex());
+			geometricObject = new GeometricComplex(m.getInitialComplex());
 		}else
 		{
-			gComplex = new GeometricComplex(protocolComplex);
+			geometricObject = new GeometricComplex(protocolComplex);
 		}
+		
+		/* Uncomment this line in order to see that also single faces can also be
+		   drawn. */
+		//geometricObject = ((GeometricComplex)geometricObject).getFaces().get(0);
 		updateView();
-		// Append geometric information to console.
-		SCOutputConsole.getInstance().setGeometricInformation(gComplex);
+		
+		// Append geometric complex information to console.
+		if (geometricObject instanceof GeometricComplex)
+			SCOutputConsole.getInstance().setGeometricComplexInformation((GeometricComplex)geometricObject);
 	}
 
 	/**
@@ -302,11 +309,11 @@ public class jRealityView implements View {
 	 */
 	@Override
 	public void updateChromaticity() {
-		gComplex.setChromatic(model.isChromatic());
+		geometricObject.setChromatic(model.isChromatic());
 		updateView();
-		// Append geometric information to console.
-		SCOutputConsole.getInstance().setGeometricInformation(gComplex);
-
+		// Append geometric complex information to console.
+		if (geometricObject instanceof GeometricComplex)
+			SCOutputConsole.getInstance().setGeometricComplexInformation((GeometricComplex)geometricObject);
 	}	
 
 }
