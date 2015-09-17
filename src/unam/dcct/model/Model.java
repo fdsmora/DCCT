@@ -30,6 +30,7 @@ public class Model {
 	private CommunicationProtocol communicationProtocol;
 	private Set<View> views = new HashSet<View>(5);
 	private List<Color> pColors;
+	private Color nonChromaticColor= null;
 	private ProcessViewBrackets selectedBrackets = ProcessViewBrackets.DEFAULT;
 	private int roundCount = 0;
 	
@@ -208,6 +209,16 @@ public class Model {
 		if (pColors == null)
 			return Arrays.asList(Constants.DEFAULT_COLORS);
 		return pColors;
+	}
+	
+	public Color getNonChromaticColor(){
+		if (nonChromaticColor == null)
+			nonChromaticColor = Constants.DEFAULT_NON_CHROMATIC_COLOR;
+		return nonChromaticColor;
+	}
+	
+	public void setNonChromaticColor(Color color){
+		nonChromaticColor = color;
 	}
 
 	public void setColors(List<Color> pColors) {

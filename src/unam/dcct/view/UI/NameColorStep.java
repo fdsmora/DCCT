@@ -12,6 +12,7 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -36,13 +37,27 @@ import unam.dcct.misc.Constants;
  *
  */
 class NameColorStep extends Step {
-	private JPanel pProcessNames = new JPanel();
+	private JPanel pProcessNameColor = new JPanel();
 	private List<JTextField> l_processNames;
 	private List<ColorChooser> l_processColors;
+	private ColorChooser ncChooser;
 	private int n = 0;
 	
 	public NameColorStep() {
 		super();
+	}
+	
+	private JPanel createNonChromaticColorChooser(){
+		JPanel pNonChromaticColor = new JPanel();
+		pNonChromaticColor.setLayout(new BoxLayout(pNonChromaticColor,BoxLayout.PAGE_AXIS));
+		pNonChromaticColor.setBorder(BorderFactory.createTitledBorder("Color for non-chromatic vertices"));
+		pNonChromaticColor.setAlignmentX(Component.CENTER_ALIGNMENT);
+		ncChooser = new ColorChooser(Constants.DEFAULT_NON_CHROMATIC_COLOR);
+		JButton btnColor = ncChooser.getButton();
+		btnColor.setAlignmentX(Component.CENTER_ALIGNMENT);
+		pNonChromaticColor.add(Box.createRigidArea(new Dimension(180,0)));
+		pNonChromaticColor.add(ncChooser.getButton());
+		return pNonChromaticColor;
 	}
 	
 	@Override
@@ -55,9 +70,10 @@ class NameColorStep extends Step {
 		
 		createFields(n);	
 		
-		pProcessNames.setLayout(new BoxLayout(pProcessNames,BoxLayout.PAGE_AXIS));
-		pContent.setLayout(new BoxLayout(pContent,BoxLayout.LINE_AXIS));
-		pContent.add(pProcessNames);
+		pProcessNameColor.setLayout(new BoxLayout(pProcessNameColor,BoxLayout.PAGE_AXIS));
+		pContent.setLayout(new BoxLayout(pContent,BoxLayout.PAGE_AXIS));
+		pContent.add(pProcessNameColor);
+		pContent.add(createNonChromaticColorChooser());
 		
 		String colorMsg = "";
 		
@@ -73,9 +89,10 @@ class NameColorStep extends Step {
 		l_processNames = new ArrayList<JTextField>(n);
 		l_processColors = new ArrayList<ColorChooser>(n);
 		
-		pProcessNames.removeAll();
+		pProcessNameColor.removeAll();
 		
-		for (int i = 0; i<n ; i++){			
+		for (int i = 0; i<n ; i++){
+			
 			JPanel pBody = new JPanel();
 			pBody.setLayout(new BoxLayout(pBody,BoxLayout.LINE_AXIS));
 			
@@ -99,8 +116,8 @@ class NameColorStep extends Step {
 			JLabel lbN = new JLabel("Process " + i + "'s name and color");
 			lbN.setAlignmentX(Component.CENTER_ALIGNMENT);
 			lbN.setLabelFor(pBody);
-			pProcessNames.add(lbN);
-			pProcessNames.add(pBody);
+			pProcessNameColor.add(lbN);
+			pProcessNameColor.add(pBody);
 		}
 	}
 	
@@ -136,6 +153,7 @@ class NameColorStep extends Step {
 			lprocColors.add(ce.getCurrentColor());
 		
 		model.setColors(lprocColors);
+		model.setNonChromaticColor(ncChooser.getCurrentColor());
 		model.createInitialComplex(lprocNames);
 		
 		//Step nextStep = Step.steps.get(CommunicationMechanismStep.class.getName());

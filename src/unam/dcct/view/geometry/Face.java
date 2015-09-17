@@ -228,7 +228,7 @@ public class Face implements Geometry {
 
 		@Override
 		public Color getColor(){
-			return Constants.DEFAULT_NON_CHROMATIC_COLOR;
+			return Model.getInstance().getNonChromaticColor();
 		}
 
 	}
