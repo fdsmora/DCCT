@@ -18,6 +18,7 @@ import de.jreality.plugin.content.ContentLoader;
 import de.jreality.plugin.content.ContentTools;
 import de.jreality.plugin.icon.ImageHook;
 import de.jreality.plugin.menu.CameraMenu;
+import de.jreality.scene.Appearance;
 //import de.jreality.scene.Appearance;
 import de.jreality.scene.SceneGraphComponent;
 import de.jreality.scene.data.Attribute;
@@ -34,11 +35,15 @@ import de.jreality.tools.DraggingTool;
 import de.jreality.tools.PointDragEvent;
 import de.jreality.tools.PointDragListener;
 import de.jtem.jrworkspace.plugin.PluginInfo;
+//import static de.jreality.shader.CommonAttributes.*;
 /***
- * This class contains all the methods and logic that renders simplicial complexes 
- * into the screen using the jReality API. 
- * @author Fausto
- *
+ * This class contains methods and logic that produces geometric visualizations of
+ * simplicial complexes and simplices using jReality library. 
+ * @author Fausto Salazar
+ * @see SimplicialComplexPanel
+ * @see Geometry
+ * @See Face
+ * @See GeometricComplex
  */
 public class jRealityView implements View {
 
@@ -80,7 +85,7 @@ public class jRealityView implements View {
 		sgc.addChild(sgcV);
 	}
 
-	public void updateView() {
+	private void updateView() {
 		setVertices();
 		setFaces();
 	}
@@ -132,7 +137,7 @@ public class jRealityView implements View {
 	
 	/**
 	 * Handles the event of dragging a vertex with the mouse, updating the vertex coordinates and redrawing the vertex with the new updated coordinates. 
-	 * @param e
+	 * @param e The Event object that contains all the information about the draggin event such as the new vertex coordinates after the drag. 
 	 */
 	public void pointDragged(PointDragEvent e) {
 		double[][] coordinates = geometricObject.getCoordinates(); 
@@ -147,6 +152,11 @@ public class jRealityView implements View {
 		faceFactory.update();
 	}
 
+	/**
+	 * Converts the color to a double array representation. 
+	 * @param color
+	 * @return
+	 */
 	private static double [] toDoubleArray( Color [] color ) {
 		float [] c = new float[5];
 		double [] array = new double[color.length * 4 ];
@@ -283,17 +293,16 @@ public class jRealityView implements View {
 	 * to draw the new complex into the screen. 
 	 */
 	public void displayComplex() {
-		Model m = Model.getInstance();
 		// Check if the generated complex is initial
-		SimplicialComplex protocolComplex = m.getProtocolComplex();
+		SimplicialComplex protocolComplex = model.getProtocolComplex();
 		if (protocolComplex==null){
-			geometricObject = new GeometricComplex(m.getInitialComplex());
+			geometricObject = new GeometricComplex(model.getInitialComplex());
 		}else
 		{
 			geometricObject = new GeometricComplex(protocolComplex);
 		}
 		
-		/* Uncomment this line in order to see that also single faces can also be
+		/* For testing purposes uncomment this line in order to see that also single faces can also be
 		   drawn. */
 		//geometricObject = ((GeometricComplex)geometricObject).getFaces().get(0);
 		updateView();
@@ -305,15 +314,19 @@ public class jRealityView implements View {
 
 	/**
 	 * This redraws the simplicial complex currently displayed into the screen so that
-	 * it reflects the chromaticity update. 
+	 * it reflects the chromaticity update. Currently it is only supported for {@link GeometricComplex}
 	 */
 	@Override
 	public void updateChromaticity() {
-		geometricObject.setChromatic(model.isChromatic());
-		updateView();
-		// Append geometric complex information to console.
-		if (geometricObject instanceof GeometricComplex)
-			SCOutputConsole.getInstance().setGeometricComplexInformation((GeometricComplex)geometricObject);
-	}	
+		// Currently it is only supported for GeometricComplex
+		if (geometricObject instanceof GeometricComplex){
+			GeometricComplex gc = (GeometricComplex)geometricObject;
+			gc.setChromatic(model.isChromatic());
+			updateView(); 	
+			
+			// Append geometric complex information to console.
+			SCOutputConsole.getInstance().setGeometricComplexInformation(gc);
+		}
+	}
 
 }

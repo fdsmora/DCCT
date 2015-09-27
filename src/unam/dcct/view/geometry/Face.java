@@ -12,7 +12,19 @@ import unam.dcct.misc.LinearAlgebraHelper;
 import unam.dcct.model.Model;
 import unam.dcct.topology.Process;
 import unam.dcct.topology.Simplex;
-
+/**
+ * Represents a face that is part of a geometric complex.
+ * <p>
+ * A Face can have a chromatic representation or a non-chromatic
+ * representation. This determines how the coordinates of its
+ * containing vertices are computed and how their colors are set.
+ * <p>
+ * 
+ * @author Fausto Salazar
+ * @see Geometry
+ * @see GeometricComplex
+ * @see Vertex
+ */
 public class Face implements Geometry {
 	private Simplex simplex;
 	private double[][] coordinates;
@@ -22,20 +34,27 @@ public class Face implements Geometry {
 	private List<Vertex> vertices;
 	private int[][] faceIndices;
 	private boolean chromatic;
+	/** 
+	 * This property represents an object that is responsible for
+	 * calculating the coordinates of the vertices contained in the
+	 * face and setting their colors. This is based on the 'Strategy'
+	 * design pattern. 
+	 */
 	private ChromaticityBehaviour chromaticityBehaviour;
 		
-	public Face(Simplex simplex, Simplex pSimplex, boolean chromatic){
+	public Face(Simplex simplex, Simplex parent, boolean chromatic){
 		this.simplex = simplex;
-		if (pSimplex !=null) 
-			this.parent = pSimplex.getFace();
+		if (parent !=null) 
+			this.parent = parent.getFace();
 		setVertices();
 		this.chromatic = chromatic;
+
 		this.chromaticityBehaviour = chromatic? new ChromaticBehaviour(this) :
 									new NonChromaticBehaviour(this); 
-		setVerticesAttributes();
+		setAttributes();
 	}
 	
-	public void setVertices(){
+	private void setVertices(){
 		vertices = new ArrayList<Vertex>(simplex.getProcessCount());
 		for (Process p : simplex.getProcesses()){
 			Vertex v = new Vertex(p);
@@ -43,7 +62,7 @@ public class Face implements Geometry {
 		}
 	}
 	
-	private void setVerticesAttributes() {
+	private void setAttributes() {
 
 		colors = new Color[simplex.getProcessCount()];
 		faceIndices = new int[1][simplex.getProcessCount()];
@@ -104,13 +123,7 @@ public class Face implements Geometry {
 	public double[][] getCoordinates(){
 		return coordinates;
 	}
-	
-	@Override
-	public void setChromatic(boolean chromatic) {
-		this.chromatic = chromatic;		
-	}
 
-	@Override
 	public boolean isChromatic() {
 		return chromatic;
 	}
@@ -127,11 +140,25 @@ public class Face implements Geometry {
 		return parent;
 	}
 
+	/**
+	 * Interface to an object that is responsible for 
+	 * calculating the face's vertices coordinates and
+	 * setting their colors. 
+	 * @author Fausto Salazar
+	 *
+	 */
 	private interface ChromaticityBehaviour {
 		double[] calculateCoordinatesPerProcess(Process p);
 		Color getColor();
 	}
 
+	/**
+	 * Represents an object that is responsible for calculating
+	 * the coordinates of a chromatic face's vertices and also
+	 * setting their colors. 
+	 * @author Fausto Salazar
+	 *
+	 */
 	private class ChromaticBehaviour implements ChromaticityBehaviour {
 
 		private Queue<Color> qColors;
@@ -147,15 +174,16 @@ public class Face implements Geometry {
 			int count = p.getViewElementsCount();
 			int pid = p.getId();
 			
-			// If process only saw himself during communication round.
+			// If process only saw himself during communication round 
+			// use the coordinates of the vertex that represented it 
+			// in the complex of the previous round. 
 			if (count == 1)
 				return parent.getCoordinates()[pid];
 			
 			final float EPSILON = Constants.EPSILON_DEFAULT  ;
 			double smallFactor = (1-EPSILON)/count;
-			double bigFactor = (1+(EPSILON/(count==3?2:1)))/count;
+			double bigFactor = (1+(EPSILON/(count-1)))/count;
 			double[] res = {0.0,0.0,0.0};
-			Face parent = face.getParent();
 			
 			for (int i = 0; i<processView.length; i++){
 				if (i==pid)
@@ -180,7 +208,13 @@ public class Face implements Geometry {
 		}
 
 	}
-	
+	/**
+	 * Represents an object that is responsible for calculating
+	 * the coordinates of a non-chromatic face's vertices and also
+	 * setting their colors. 
+	 * @author Fausto Salazar
+	 *
+	 */
 	private class NonChromaticBehaviour implements ChromaticityBehaviour {
 
 		private Map<String, Vertex> coordinatesMap; 
@@ -191,12 +225,22 @@ public class Face implements Geometry {
 			setCoordinatesMap();
 		}
 		
+		/**
+		 * In the non-chromatic representation of a face
+		 * vertices are referenced by process's views, not by process's id's
+		 * like in the chromatic representation, so we need to build
+		 * a map to support this kind of referencing schema. 
+		 */
 		private void setCoordinatesMap() {
 			List<Vertex> vertices = face.vertices;
 			coordinatesMap = new HashMap<String, Vertex>(vertices.size());
 			for (Vertex v : vertices){
 				coordinatesMap.put(v.getLabel(), v);
 			}
+		}
+		
+		private double[] getCoordinates(String processView){
+			return coordinatesMap.get(processView).getCoordinates();
 		}
 		
 		@Override
@@ -217,7 +261,7 @@ public class Face implements Geometry {
 
 			for (int i = 0; i<processView.length; i++){
 				if (processView[i]!=null){
-					pCoords = parentNcBehaviour.coordinatesMap.get(processView[i]).getCoordinates();
+					pCoords = parentNcBehaviour.getCoordinates(processView[i]);
 			
 					res = LinearAlgebraHelper.vectorSum(
 							LinearAlgebraHelper.scalarVectorMultiply(factor, pCoords),res);

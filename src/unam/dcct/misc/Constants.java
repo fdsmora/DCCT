@@ -10,17 +10,13 @@ import java.util.Map;
 import java.util.Set;
 
 import org.reflections.Reflections;
+
+import unam.dcct.misc.Constants.ProcessViewBrackets;
 /***
  * The purpose of this class is to provide a global access to the most commonly used constant values used throughout the application. 
  * @author Fausto
  */
 public final class Constants {
-	public static final Color[] DEFAULT_COLORS = {Color.BLUE, Color.WHITE, Color.GREEN, Color.YELLOW, Color.RED};
-	public static final Color DEFAULT_FACE_COLOR = Color.cyan;
-	public static final int MAX_COLORS = 5;
-	public static final float EPSILON_DEFAULT = 0.35f;
-	public static final Color DEFAULT_NON_CHROMATIC_COLOR = Color.GRAY;
-	public static final String NEXT = "Next";
 	public static final String BACK = "Back";
 	public static final String GENERATE = "Generate";
 	public static final String COMMUNICATION_PROTOCOL = "Communication protocol";
@@ -29,7 +25,6 @@ public final class Constants {
 	public static final String CHANGE_MODEL = "Change model";
 	public static final String NEXT_ROUND = "Next round";
 	public static final String MAX_ROUNDS_REACHED_MSG = "Maximum number of rounds allowed reached.";
-	public static final int MAX_ALLOWED_ROUNDS = 3;
 	public static final String CHROMATIC = "Chromatic";
 	public static final String NON_CHROMATIC = "Non-chromatic";
 	public static final String PROTOCOL_COMPLEX = "Protocol Complex";
@@ -47,12 +42,7 @@ public final class Constants {
 	public static final String SHARED_MEMORY = "Shared memory";
 	public static final String IMMEDIATE_SNAPSHOT = "Immediate snapshot";
 	
-	public static final double[][] DEFAULT_0_SIMPLEX_VERTEX_COORDINATES = {{0,0,0}};
-	public static final double[][] DEFAULT_1_SIMPLEX_VERTEX_COORDINATES = {{-4.5,0,0},{4.5,0,0}};
-	public static final double[][] DEFAULT_2_SIMPLEX_VERTEX_COORDINATES = {{0,3.8,0}, {-4.5,-4,0},{4.5,-4,0}};
-	public static final double[][][] DEFAULT_SIMPLEX_VERTEX_COORDINATES = { DEFAULT_0_SIMPLEX_VERTEX_COORDINATES,
-																			DEFAULT_1_SIMPLEX_VERTEX_COORDINATES,
-																			DEFAULT_2_SIMPLEX_VERTEX_COORDINATES};										
+									
 	public enum ProcessViewBrackets{
 		CURLY("{%s}"),
 		ROUND("(%s)"),
@@ -111,5 +101,24 @@ public final class Constants {
 		return info;
 	}
 	
+	
+	// temporal> remove
+	
+	public static final Color[] DEFAULT_COLORS = {Color.BLUE, Color.WHITE, Color.GREEN, Color.YELLOW, Color.RED};
+	public static final int MAX_COLORS = 5;
+	public static final float EPSILON_DEFAULT = 0.35f;
+	public static final Color DEFAULT_NON_CHROMATIC_COLOR = Color.GRAY;
+	public static final String NEXT = "Next";
+	public static final int MAX_ALLOWED_ROUNDS = 3;
+	public static ProcessViewBrackets DEFAULT_BRACKET = ProcessViewBrackets.CURLY;
+
+	public static final double[][] DEFAULT_0_SIMPLEX_VERTEX_COORDINATES = {{0,0,0}};
+	public static final double[][] DEFAULT_1_SIMPLEX_VERTEX_COORDINATES = {{-4.5,0,0},{4.5,0,0}};
+	public static final double[][] DEFAULT_2_SIMPLEX_VERTEX_COORDINATES = {{0,3.8,0}, {-4.5,-4,0},{4.5,-4,0}};
+	public static final double[][][] DEFAULT_SIMPLEX_VERTEX_COORDINATES = { DEFAULT_0_SIMPLEX_VERTEX_COORDINATES,
+																			DEFAULT_1_SIMPLEX_VERTEX_COORDINATES,
+																			DEFAULT_2_SIMPLEX_VERTEX_COORDINATES};
+	
+	public static final Object SELECTED_DEFAULT_COLORS = "SELECTED_DEFAULT_COLORS";
 	
 }

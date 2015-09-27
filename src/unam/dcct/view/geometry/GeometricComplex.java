@@ -9,6 +9,14 @@ import java.util.Map;
 import unam.dcct.topology.Simplex;
 import unam.dcct.topology.SimplicialComplex;
 
+/**
+ * Wrapper class that transforms a {@link SimplicialComplex}
+ * into its geometric representation. To build the geometric
+ * representation of a simplicial complex, it properly builds vertices
+ * from the complex's processes and faces from the complex's simplices. 
+ * @author Fausto Salazar
+ *
+ */
 public class GeometricComplex implements Geometry{
 	private boolean chromatic = true;
 	private List<Face> chromaticFaces;
@@ -34,7 +42,7 @@ public class GeometricComplex implements Geometry{
 		// Leave it as it was
 		complex.setChromatic(originalChromaticState);
 		
-		update();
+		setAttributes();
 		
 	}
 	
@@ -48,12 +56,7 @@ public class GeometricComplex implements Geometry{
 			boolean chromatic = complex.isChromatic();
 			for (Simplex s : simplices){
 				Simplex parent = s.getParent();
-				Face f = new Face(s, parent, chromatic);
-//				if (chromatic)
-//					f = new ChromaticFace(s, parent);
-//				else
-//					f = new NonChromaticFace(s, parent);
-						
+				Face f = new Face(s, parent, chromatic);			
 				faces.add(f);
 				s.setFace(f);
 			}
@@ -61,14 +64,22 @@ public class GeometricComplex implements Geometry{
 		return faces;
 	}
 	
-	private void update(){
+	/**
+	 *  Sets all its fundamental properties: vertices, coordinates,
+	 *  labels, colors and face indices. 
+	 */
+	private void setAttributes(){
 		setVertices();
 		setCoordinates();
 		setLabels();
 		setColors();
 		setFaceIndices();
 	}
-
+	
+	/**
+	 * It builds the set of vertices by 'gluing' the 
+	 * geometric complex's faces. 
+	 */
 	private void setVertices() {
 		int indexCount = 0;
 		vertices = new LinkedHashMap<String, Vertex>();
@@ -162,15 +173,13 @@ public class GeometricComplex implements Geometry{
 		sb.append("All faces:"+Arrays.deepToString(faceIndices)+"\n");
 		return sb.toString();
 	}
-	@Override
 	public boolean isChromatic() {
 		return chromatic;
 	}
 
-	@Override
 	public void setChromatic(boolean chromatic) {
 		this.chromatic = chromatic;
-		update();
+		setAttributes();
 	}
 
 	public List<Vertex> getVertices() {

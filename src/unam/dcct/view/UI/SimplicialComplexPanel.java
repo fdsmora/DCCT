@@ -48,9 +48,7 @@ public class SimplicialComplexPanel extends JPanel implements ActionListener {
 		pButtons.add(btnNext);
 		add(pContent, BorderLayout.CENTER);
 		add(pButtons, BorderLayout.PAGE_END);
-		
-		//Step.resetAllSteps(this);
-		//currentStep = Step.steps.get(NumberOfProcessesStep.class.getName());
+
 
 	}
 	

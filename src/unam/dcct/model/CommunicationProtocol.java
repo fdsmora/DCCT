@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import unam.dcct.misc.Constants;
-import unam.dcct.model.ImmediateSnapshot.ImmediateSnapshot;
+import unam.dcct.model.immediatesnapshot.ImmediateSnapshot;
 import unam.dcct.topology.Process;
 import unam.dcct.topology.Simplex;
 import unam.dcct.topology.SimplicialComplex;

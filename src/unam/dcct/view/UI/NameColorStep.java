@@ -34,7 +34,6 @@ import unam.dcct.misc.Constants;
  * represents each process. The number of controls displayed depends on the choice 
  * of the previous step {@link unam.dcct.view.UI.NumberOfProcessesStep}. 
  * @author Fausto Salazar
- *
  */
 class NameColorStep extends Step {
 	private JPanel pProcessNameColor = new JPanel();
