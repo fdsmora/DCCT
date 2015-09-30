@@ -20,6 +20,7 @@ public final class Constants {
 	public static final String BACK = "Back";
 	public static final String GENERATE = "Generate";
 	public static final String COMMUNICATION_PROTOCOL = "Communication protocol";
+	public static final String NEXT = "Next";
 	public static final String EXECUTE_ROUND = "Execute round";
 	public static final String START_OVER = "Start over";
 	public static final String CHANGE_MODEL = "Change model";
@@ -41,6 +42,16 @@ public final class Constants {
 	public static final String SIMPLICIAL_COMPLEX = "Simplicial complex";
 	public static final String SHARED_MEMORY = "Shared memory";
 	public static final String IMMEDIATE_SNAPSHOT = "Immediate snapshot";
+	public static final String SELECTED_DEFAULT_COLORS = "SELECTED_DEFAULT_COLORS";
+	public static final String DEFAULT_COORDINATES_REGEX = "DEFAULT_\\d_SIMPLEX_VERTEX_COORDINATES";
+	public static final String SELECTED_DEFAULT_NON_CHROMATIC_COLOR = "SELECTED_DEFAULT_NON_CHROMATIC_COLOR";
+	public static final String SELECTED_DEFAULT_BRACKETS = "SELECTED_DEFAULT_BRACKETS";
+	public static final String EPSILON_VALUE = "EPSILON_VALUE";
+	public static final String DEFAULT_BRACKETS = "DEFAULT_BRACKETS";
+	public static final String DEFAULT_NON_CHROMATIC_COLOR = "DEFAULT_NON_CHROMATIC_COLOR";
+	public static final String MAX_ALLOWED_ROUNDS = "MAX_ALLOWED_ROUNDS";
+	public static final String DEFAULT_COLORS = "DEFAULT_COLORS";
+	public static final String CONFIG_FILE_NAME = "dcct.config";
 	
 									
 	public enum ProcessViewBrackets{
@@ -58,7 +69,7 @@ public final class Constants {
 		}
 		@Override
 		public String toString(){
-			return String.format(formatString, " ");
+			return String.format(formatString, "");
 		}
 		public static final ProcessViewBrackets DEFAULT = CURLY;
 	}
@@ -101,24 +112,5 @@ public final class Constants {
 		return info;
 	}
 	
-	
-	// temporal> remove
-	
-	public static final Color[] DEFAULT_COLORS = {Color.BLUE, Color.WHITE, Color.GREEN, Color.YELLOW, Color.RED};
-	public static final int MAX_COLORS = 5;
-	public static final float EPSILON_DEFAULT = 0.35f;
-	public static final Color DEFAULT_NON_CHROMATIC_COLOR = Color.GRAY;
-	public static final String NEXT = "Next";
-	public static final int MAX_ALLOWED_ROUNDS = 3;
-	public static ProcessViewBrackets DEFAULT_BRACKET = ProcessViewBrackets.CURLY;
 
-	public static final double[][] DEFAULT_0_SIMPLEX_VERTEX_COORDINATES = {{0,0,0}};
-	public static final double[][] DEFAULT_1_SIMPLEX_VERTEX_COORDINATES = {{-4.5,0,0},{4.5,0,0}};
-	public static final double[][] DEFAULT_2_SIMPLEX_VERTEX_COORDINATES = {{0,3.8,0}, {-4.5,-4,0},{4.5,-4,0}};
-	public static final double[][][] DEFAULT_SIMPLEX_VERTEX_COORDINATES = { DEFAULT_0_SIMPLEX_VERTEX_COORDINATES,
-																			DEFAULT_1_SIMPLEX_VERTEX_COORDINATES,
-																			DEFAULT_2_SIMPLEX_VERTEX_COORDINATES};
-	
-	public static final Object SELECTED_DEFAULT_COLORS = "SELECTED_DEFAULT_COLORS";
-	
 }

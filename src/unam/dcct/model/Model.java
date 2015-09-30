@@ -6,7 +6,10 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+//import javax.security.auth.login.Configuration;
 import unam.dcct.misc.Constants;
+import unam.dcct.misc.Configuration;
 import unam.dcct.misc.Constants.ProcessViewBrackets;
 import unam.dcct.topology.Process;
 import unam.dcct.topology.Simplex;
@@ -33,6 +36,7 @@ public class Model {
 	private Color nonChromaticColor= null;
 	private ProcessViewBrackets selectedBrackets = ProcessViewBrackets.DEFAULT;
 	private int roundCount = 0;
+	private Configuration config = Configuration.getInstance();
 	
 	// Singleton design pattern
 	private static Model instance = null;
@@ -207,13 +211,13 @@ public class Model {
 
 	public List<Color> getColors() {
 		if (pColors == null)
-			return Arrays.asList(Constants.DEFAULT_COLORS);
+			return config.DEFAULT_COLORS;
 		return pColors;
 	}
 	
 	public Color getNonChromaticColor(){
 		if (nonChromaticColor == null)
-			nonChromaticColor = Constants.DEFAULT_NON_CHROMATIC_COLOR;
+			nonChromaticColor = config.NON_CHROMATIC_COLOR;
 		return nonChromaticColor;
 	}
 	
@@ -222,13 +226,14 @@ public class Model {
 	}
 
 	public void setColors(List<Color> pColors) {
-		// Add additional colors to prevent cases when there are less colors than processes.
-		if (pColors.size()<Constants.MAX_COLORS){
-			for (int i=Constants.MAX_COLORS-pColors.size(); i>0; i--){
-				pColors.add(Constants.DEFAULT_COLORS[i]);
-			}
-		}
-		this.pColors = pColors;
+		
+//		// Add additional colors to prevent cases when there are less colors than processes.
+//		if (pColors.size()<Constants.MAX_COLORS){
+//			for (int i=Constants.MAX_COLORS-pColors.size(); i>0; i--){
+//				pColors.add(Constants.DEFAULT_COLORS[i]);
+//			}
+//		}
+		this.pColors = config.DEFAULT_COLORS;
 	}
 	public String getSelectedBrackets() {
 		return selectedBrackets.getBracketsWithFormat();

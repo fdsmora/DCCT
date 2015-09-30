@@ -7,6 +7,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
+
+import unam.dcct.misc.Configuration;
 import unam.dcct.misc.Constants;
 import unam.dcct.misc.LinearAlgebraHelper;
 import unam.dcct.model.Model;
@@ -34,6 +36,7 @@ public class Face implements Geometry {
 	private List<Vertex> vertices;
 	private int[][] faceIndices;
 	private boolean chromatic;
+	private Configuration config = Configuration.getInstance();
 	/** 
 	 * This property represents an object that is responsible for
 	 * calculating the coordinates of the vertices contained in the
@@ -92,7 +95,7 @@ public class Face implements Geometry {
 	private void calculateCoordinatesPerVertex(Vertex v){
 		Process p = v.getProcess();
 		if (parent == null){
-			v.setCoordinates(Constants.DEFAULT_SIMPLEX_VERTEX_COORDINATES[simplex.dimension()][p.getId()]);
+			v.setCoordinates(config.DEFAULT_SIMPLEX_VERTEX_COORDINATES[simplex.dimension()][p.getId()]);
 		}else {
 			v.setCoordinates(chromaticityBehaviour.calculateCoordinatesPerProcess(p));
 		}
@@ -180,7 +183,7 @@ public class Face implements Geometry {
 			if (count == 1)
 				return parent.getCoordinates()[pid];
 			
-			final float EPSILON = Constants.EPSILON_DEFAULT  ;
+			final float EPSILON = Configuration.getInstance().EPSILON_VALUE  ;
 			double smallFactor = (1-EPSILON)/count;
 			double bigFactor = (1+(EPSILON/(count-1)))/count;
 			double[] res = {0.0,0.0,0.0};

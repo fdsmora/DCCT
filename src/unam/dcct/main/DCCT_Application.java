@@ -3,6 +3,7 @@ package unam.dcct.main;
 import java.io.IOException;
 
 import unam.dcct.misc.Configuration;
+import unam.dcct.misc.Configuration.InvalidConfigFormatException;
 import unam.dcct.view.jRealityView;
 
 /***
@@ -12,9 +13,11 @@ import unam.dcct.view.jRealityView;
  *
  */
 public class DCCT_Application {
-	public static void main(String[] args) throws IOException{
-		Configuration.loadConfiguration();
+	public static void main(String[] args) {
+		// Calling the Configuration constructor reads and loads configuration file. 
+//		Configuration conf = Configuration.getInstance();
 		jRealityView view = jRealityView.getInstance();
 		view.start();
 	}
+	
 }

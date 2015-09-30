@@ -10,6 +10,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JRadioButton;
 
+import unam.dcct.misc.Configuration;
 import unam.dcct.misc.Constants;
 
 class NextRoundStep extends Step {
@@ -76,7 +77,7 @@ class NextRoundStep extends Step {
 			model.executeRound();
 			++roundCount;
 		}
-		if (roundCount>=Constants.MAX_ALLOWED_ROUNDS){
+		if (roundCount>=Configuration.getInstance().MAX_ALLOWED_ROUNDS){
 			btnNext.setEnabled(false);
 			lbMaxReached.setVisible(true);
 		}

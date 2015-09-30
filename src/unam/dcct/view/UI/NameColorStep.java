@@ -26,6 +26,7 @@ import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.PlainDocument;
 
+import unam.dcct.misc.Configuration;
 import unam.dcct.misc.Constants;
 
 /***
@@ -40,6 +41,7 @@ class NameColorStep extends Step {
 	private List<JTextField> l_processNames;
 	private List<ColorChooser> l_processColors;
 	private ColorChooser ncChooser;
+	private Configuration config = Configuration.getInstance();
 	private int n = 0;
 	
 	public NameColorStep() {
@@ -51,7 +53,7 @@ class NameColorStep extends Step {
 		pNonChromaticColor.setLayout(new BoxLayout(pNonChromaticColor,BoxLayout.PAGE_AXIS));
 		pNonChromaticColor.setBorder(BorderFactory.createTitledBorder("Color for non-chromatic vertices"));
 		pNonChromaticColor.setAlignmentX(Component.CENTER_ALIGNMENT);
-		ncChooser = new ColorChooser(Constants.DEFAULT_NON_CHROMATIC_COLOR);
+		ncChooser = new ColorChooser(config.NON_CHROMATIC_COLOR);
 		JButton btnColor = ncChooser.getButton();
 		btnColor.setAlignmentX(Component.CENTER_ALIGNMENT);
 		pNonChromaticColor.add(Box.createRigidArea(new Dimension(180,0)));
@@ -105,7 +107,7 @@ class NameColorStep extends Step {
 			txtN.setMaximumSize(d);
 			l_processNames.add(txtN);
 			
-			ColorChooser cChooser = new ColorChooser(Constants.DEFAULT_COLORS[i]);
+			ColorChooser cChooser = new ColorChooser(config.DEFAULT_COLORS.get(i));
 			l_processColors.add(cChooser);
 			
 			pBody.add(txtN);
