@@ -109,7 +109,7 @@ class CommunicationProtocol extends Step {
 		pCustomizations.setAlignmentX(Component.LEFT_ALIGNMENT);
 		
 		JLabel lbSelectBrackets = new JLabel("Select brackets for process views");
-		JComboBox<ProcessViewBrackets> cbBrackets = new JComboBox<ProcessViewBrackets>(ProcessViewBrackets.values());
+		final JComboBox<ProcessViewBrackets> cbBrackets = new JComboBox<ProcessViewBrackets>(ProcessViewBrackets.values());
 		
 		cbBrackets.addActionListener(new ActionListener(){
 

@@ -12,6 +12,7 @@ import java.util.Set;
 import org.reflections.Reflections;
 
 import unam.dcct.misc.Constants.ProcessViewBrackets;
+import unam.dcct.model.immediatesnapshot.ImmediateSnapshot;
 /***
  * The purpose of this class is to provide a global access to the most commonly used constant values used throughout the application. 
  * @author Fausto
@@ -96,7 +97,12 @@ public final class Constants {
 	private static List<String[]> getCommunicationProtocols() {
 
 		List<String[]> info = new ArrayList<String[]>();
-
+		
+		//Temporary code to test bug in linux
+//		String[] pair = new String[2];
+//		pair[0] = ImmediateSnapshot.getBasicProtocolName();
+//		pair[1] = ImmediateSnapshot.getName();
+//		info.add(pair);
 		Reflections reflections = new Reflections("unam.dcct.model");
 		Set<Class<? extends unam.dcct.model.CommunicationProtocol>> allClasses = reflections
 				.getSubTypesOf(unam.dcct.model.CommunicationProtocol.class);

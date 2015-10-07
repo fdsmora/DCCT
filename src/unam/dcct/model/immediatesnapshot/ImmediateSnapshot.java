@@ -43,7 +43,7 @@ public class ImmediateSnapshot extends CommunicationProtocol {
 	 */
 	@Override
 	protected Iterable<Scenario> createScenarioGenerator(int dimension) {
-		String allScenarios = getAllScenarios(dimension);
+		final String allScenarios = getAllScenarios(dimension);
 //		return new ScenarioGenerator(){
 //
 //			@Override

@@ -57,59 +57,71 @@ public class Configuration {
 	}
 	
 	private Configuration() {
-		BufferedReader br = null;
-		boolean error = false;
-		try{
-			br = new BufferedReader(new FileReader(Constants.CONFIG_FILE_NAME));
-		}
-        catch (IOException ex)
-        {
-        	System.err.println(CONFIG_NOT_FOUND);
-        } 	
-		try{
-			String line;
-			while((line = br.readLine())!=null){
-				if (line.trim().isEmpty() || line.startsWith("#")) // Ignore comments and blank lines
-					continue;
-				//System.out.println(line);
-				setProperties(line);
-			}
-		}
-		catch(Exception e){
-			error = true;
-		}
-		finally{
-			try {
-				if (br!=null)
-					br.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			if (error){
-				// Set default values
-				System.err.println("Some errors happened while reading configuration file, setting default properties values");
-				MAX_ALLOWED_ROUNDS = 3;
-				EPSILON_VALUE = 0.35f;
-				DEFAULT_BRACKETS = Constants.ProcessViewBrackets.DEFAULT;
-				NON_CHROMATIC_COLOR = Color.GRAY;
-				Color[] aColors = {Color.BLUE,Color.WHITE,Color.GREEN,Color.YELLOW,Color.RED};
-				DEFAULT_COLORS = Arrays.asList(aColors);
-				double[][] coords0 = {{0,3.8,0}};
-				double[][] coords1 = {{-4.5,0,0},{4.5,0,0}};
-				double[][] coords2 = {{0,3.8,0},{-4.5,-4,0},{4.5,-4,0}};
-				DEFAULT_SIMPLEX_VERTEX_COORDINATES[0] = coords0;
-				DEFAULT_SIMPLEX_VERTEX_COORDINATES[1] = coords1;
-				DEFAULT_SIMPLEX_VERTEX_COORDINATES[2] = coords2;
-
-			}else {
-				MAX_ALLOWED_ROUNDS = _MAX_ALLOWED_ROUNDS;
-				EPSILON_VALUE = _EPSILON_VALUE;
-				DEFAULT_BRACKETS = _DEFAULT_BRACKETS;
-				NON_CHROMATIC_COLOR = _NON_CHROMATIC_COLOR;
-				DEFAULT_COLORS = _DEFAULT_COLORS;
-				
-			}
-		}
+		MAX_ALLOWED_ROUNDS = 3;
+		EPSILON_VALUE = 0.35f;
+		DEFAULT_BRACKETS = Constants.ProcessViewBrackets.DEFAULT;
+		NON_CHROMATIC_COLOR = Color.GRAY;
+		Color[] aColors = {Color.BLUE,Color.WHITE,Color.GREEN,Color.YELLOW,Color.RED};
+		DEFAULT_COLORS = Arrays.asList(aColors);
+		double[][] coords0 = {{0,3.8,0}};
+		double[][] coords1 = {{-4.5,0,0},{4.5,0,0}};
+		double[][] coords2 = {{0,3.8,0},{-4.5,-4,0},{4.5,-4,0}};
+		DEFAULT_SIMPLEX_VERTEX_COORDINATES[0] = coords0;
+		DEFAULT_SIMPLEX_VERTEX_COORDINATES[1] = coords1;
+		DEFAULT_SIMPLEX_VERTEX_COORDINATES[2] = coords2;
+//		BufferedReader br = null;
+//		boolean error = false;
+//		try{
+//			br = new BufferedReader(new FileReader(Constants.CONFIG_FILE_NAME));
+//		}
+//        catch (IOException ex)
+//        {
+//        	System.err.println(CONFIG_NOT_FOUND);
+//        } 	
+//		try{
+//			String line;
+//			while((line = br.readLine())!=null){
+//				if (line.trim().isEmpty() || line.startsWith("#")) // Ignore comments and blank lines
+//					continue;
+//				//System.out.println(line);
+//				setProperties(line);
+//			}
+//		}
+//		catch(Exception e){
+//			error = true;
+//		}
+//		finally{
+//			try {
+//				if (br!=null)
+//					br.close();
+//			} catch (IOException e) {
+//				e.printStackTrace();
+//			}
+//			if (error){
+//				// Set default values
+//				System.err.println("Some errors happened while reading configuration file, setting default properties values");
+//				MAX_ALLOWED_ROUNDS = 3;
+//				EPSILON_VALUE = 0.35f;
+//				DEFAULT_BRACKETS = Constants.ProcessViewBrackets.DEFAULT;
+//				NON_CHROMATIC_COLOR = Color.GRAY;
+//				Color[] aColors = {Color.BLUE,Color.WHITE,Color.GREEN,Color.YELLOW,Color.RED};
+//				DEFAULT_COLORS = Arrays.asList(aColors);
+//				double[][] coords0 = {{0,3.8,0}};
+//				double[][] coords1 = {{-4.5,0,0},{4.5,0,0}};
+//				double[][] coords2 = {{0,3.8,0},{-4.5,-4,0},{4.5,-4,0}};
+//				DEFAULT_SIMPLEX_VERTEX_COORDINATES[0] = coords0;
+//				DEFAULT_SIMPLEX_VERTEX_COORDINATES[1] = coords1;
+//				DEFAULT_SIMPLEX_VERTEX_COORDINATES[2] = coords2;
+//
+//			}else {
+//				MAX_ALLOWED_ROUNDS = _MAX_ALLOWED_ROUNDS;
+//				EPSILON_VALUE = _EPSILON_VALUE;
+//				DEFAULT_BRACKETS = _DEFAULT_BRACKETS;
+//				NON_CHROMATIC_COLOR = _NON_CHROMATIC_COLOR;
+//				DEFAULT_COLORS = _DEFAULT_COLORS;
+//				
+//			}
+//		}
 
 	}
 	
