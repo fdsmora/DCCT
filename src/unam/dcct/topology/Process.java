@@ -4,21 +4,21 @@ import unam.dcct.model.Model;
 
 /**
  * Represents a Process. 
- * <p>
+ * <br> 
  * In distributed computing through combinatorial topology a process is part of a simplex. 
  * In a geometric representation of a simplex, a process is represented as a vertex of the simplex. 
- * <p>
+ * <br> 
  * Basically a process \(p_i\) is a pair \((id, view\)), where the \(id\) is an integer that uniquely identifies
  * the process within the simplex and the \(view\) is what the process knows about the other processes 
  * that are also part of the distributed system; or, from a topology perspective, the other processes 
  * of the simplex. 
- * <p>
+ * <br> 
  * This class provides fields that map to this theoretical definition of a process, and
  * methods that facilitate its manipulation within a simplex. 
  * @author Fausto Salazar
  * @see Simplex
  * @see unam.dcct.model.CommunicationProtocol
- * @see Vertex
+ * @see unam.dcct.view.geometry.Vertex
  */
 public class Process implements Cloneable {
 
@@ -31,12 +31,12 @@ public class Process implements Cloneable {
 	 * Returns a string representation of the 'view' of this process. 
 	 * Depending on the chromaticity of this process (see {@link #isChromatic()} and {@link #setChromatic(boolean)}),
 	 * the representation will vary. 
-	 * <p> 
-	 * <h6> Chromatic process </h6>
+	 * <br> 
+	 * <h3> Chromatic process </h3>
 	 * If this process, let's call it \(p_i\), is chromatic, this method will return the view in this format:
-	 * <p>
+	 * <br> 
 	 * <i>openingBracket</i> \(v_0,...,v_{n-1}\) <i>closingBracket</i>
-	 * <p>
+	 * <br> 
 	 * where: 
 	 * <ul>
 	 * <li><i>openingBracket</i> and <i>closingBracket</i> are the style of brackets selected by the user. 
@@ -51,7 +51,7 @@ public class Process implements Cloneable {
 	 * <li><code>{{0,1,2},{0,1,2},-}</code> (for a two round execution of the protocol)
 	 * <li><code>(0,-,2)</code> (if using () brackets)
 	 * </ul>
-	 * <h6>Non-chromatic process</h6>
+	 * <h3>Non-chromatic process</h3>
 	 * When the process is non-chromatic, the returned view is almost the same as in the chromatic process, but with
 	 * the difference that no special character is displayed when the view of other processes is unknown. 
 	 * In these case, the non-chromatic versions of the example views are these:
@@ -146,15 +146,14 @@ public class Process implements Cloneable {
 	/**
 	 * Returns the name of the process. The name of the process is used to label the vertex that represents the 
 	 * process in the visualization of the simplicial complex. 
-	 * <p>
+	 * <br> 
 	 * A process is uniquely identified within a simplex by it's id,
 	 * but I decided to add a 'name' attribute which works as an alias for the process. 
 	 * This is because users would sometimes refer to processes with names other than their integer ids, such
 	 * as 'p','q','r','a','b','x','y', etc. Process names must also be unique within the simplex, but this is 
 	 * enforced at the moment of data entry in user interface. 
 	 * @return The name of the process. 
-	 * @see Vertex
-	 * @see NameColorStep
+	 * @see unam.dcct.view.geometry.Vertex
 	 */
 	public String getName() {
 		return name;
@@ -174,8 +173,7 @@ public class Process implements Cloneable {
 	 * that represents this process's view. 
 	 * @return
 	 * @see #getViewArray()
-	 * @see ChromaticFace#calculateCoordinates(Process)
-	 * @see NonChromaticFace#calculateCoordinates(Process)
+
 	 */
 	public int getViewElementsCount(){
 		return view.getViewElementsCount();
@@ -191,7 +189,7 @@ public class Process implements Cloneable {
 	
 	/**
 	 * Represents a view for a process. 
-	 * <p>
+	 * <br> 
 	 * During first development versions of the program a view was just simply an string array. 
 	 * But as the program development progressed, more operations on process's views were needed,
 	 * so I decided to have a dedicated class to represent and manage views. 

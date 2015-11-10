@@ -246,12 +246,7 @@ public class Face implements Geometry {
 			return coordinatesMap.get(processView).getCoordinates();
 		}
 		
-		/**
-		 * The coordinates for each vertex that represents a process are calculated using this 
-		 * formula:
-		 * <p>
-		 * 
-		 */
+
 		@Override
 		public double[] calculateCoordinatesPerProcess(Process p) throws ClassCastException{
 			String[] processView = p.getViewArray();

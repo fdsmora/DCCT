@@ -32,7 +32,7 @@ public enum Steps {
 	public static void resetAllSteps(){
 		Step[] default_steps = new Step[]{new NumberOfProcessesStep(), 
 				new NameColorStep(), 
-				new CommunicationProtocol(), 
+				new CommunicationProtocolStep(), 
 				new NextRoundStep()};
 		int i = 0;
 		for (Steps s : Steps.values()){

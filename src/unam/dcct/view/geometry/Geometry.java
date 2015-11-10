@@ -3,7 +3,7 @@ package unam.dcct.view.geometry;
 import java.awt.Color;
 /**
  * Represents an geometric object that can be drawn, 
- * such as a {@link GeometricComplex} or a {@link Simplex}.
+ * such as a {@link unam.dcct.view.geometry.GeometricComplex} or a {@link unam.dcct.topology.Simplex}.
  * @author Fausto Salazar
  */
 public interface Geometry {

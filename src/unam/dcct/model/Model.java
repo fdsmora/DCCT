@@ -181,7 +181,7 @@ public class Model {
 
 	/**
 	 * Sets the communication protocol that the Model will use for simulating communication rounds and generating protocol complexes. 
-	 * @param c A string that has the name of the communicationProtocol
+	 * @param cm A string that has the name of the communicationProtocol
 	 */
 	public void setCommunicationProtocol(String cm) {
 		this.communicationProtocol = CommunicationProtocol.createCommunicationProtocol(cm);

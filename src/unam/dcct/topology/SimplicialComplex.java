@@ -8,7 +8,7 @@ import java.util.List;
 import unam.dcct.model.CommunicationProtocol;
 
 /**
- * * Represents a distributed computing simplicial complex. 
+ * Represents a distributed computing simplicial complex. 
  * A simplicial complex is made up of a set of simplices.  
  * In distributed computing through combinatorial topology a simplicial complex can be represented
  * in two ways: chromatic or non-chromatic. This class supports both representations. 
@@ -17,7 +17,7 @@ import unam.dcct.model.CommunicationProtocol;
  * @see Simplex
  * @see Process
  * @see unam.dcct.model.CommunicationProtocol
- * @see GeometricComplex
+ * @see unam.dcct.view.geometry.GeometricComplex
  */
 public class SimplicialComplex {
 	private List<Simplex> chromaticSimplices;

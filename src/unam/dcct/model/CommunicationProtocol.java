@@ -18,7 +18,6 @@ import unam.dcct.topology.SimplicialComplex;
 public abstract class CommunicationProtocol{
 	protected int t=0;
 	protected int rounds=0;
-	//protected ScenarioGenerator scenarioGenerator;
 	private SimplicialComplex newComplex;
 
 	/**
@@ -118,10 +117,7 @@ public abstract class CommunicationProtocol{
 	 * @param dimension The dimension of the simplex. This is used to generate all possible
 	 * scenarios of execution in which dimension+1 processes (which is the total number of 
 	 * processes in the simplex) communicate during the round.
-	 * <p>
-	 * This is a "Factory method" because subclasses "manufacture" 
-	 * the specific implementation of the {@link ScenarioGenerator}.
-	 * @return An {@link ScenarioGenerator} instance which lets clients iterate over all generated scenarios of execution of this protocol.
+	 * @return An Iterable instance which lets clients iterate over all generated scenarios of execution of this protocol.
 	 */
 	protected abstract Iterable<Scenario> createScenarioGenerator(int dimension);
     

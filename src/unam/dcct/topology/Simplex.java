@@ -22,9 +22,7 @@ import unam.dcct.view.geometry.Face;
  * @see SimplicialComplex
  * @see Process
  * @see unam.dcct.model.CommunicationProtocol
- * @see Face
- * @see NonChromaticFace
- * @see ChromaticFace
+ * @see unam.dcct.view.geometry.Face
  */
 public class Simplex {
 	/**

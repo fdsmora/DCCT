@@ -24,11 +24,11 @@ import unam.dcct.model.Model;
  * @author Fausto
  *
  */
-class CommunicationProtocol extends Step {
+class CommunicationProtocolStep extends Step {
 	private JComboBox<String> cbProtocols;
 	private JComboBox<String> cbSubMechanisms;
 		
-	public CommunicationProtocol(){
+	public CommunicationProtocolStep(){
 		super();
 		
 		pContent.setBorder(BorderFactory.createTitledBorder(Constants.PROTOCOL_COMPLEX));

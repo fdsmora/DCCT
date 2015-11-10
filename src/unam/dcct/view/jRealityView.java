@@ -35,15 +35,14 @@ import de.jreality.tools.DraggingTool;
 import de.jreality.tools.PointDragEvent;
 import de.jreality.tools.PointDragListener;
 import de.jtem.jrworkspace.plugin.PluginInfo;
-//import static de.jreality.shader.CommonAttributes.*;
 /***
  * This class contains methods and logic that produces geometric visualizations of
  * simplicial complexes and simplices using jReality library. 
  * @author Fausto Salazar
  * @see SimplicialComplexPanel
- * @see Geometry
- * @See Face
- * @See GeometricComplex
+ * @see unam.dcct.view.geometry.Geometry
+ * @see unam.dcct.view.geometry.Face
+ * @see unam.dcct.view.geometry.GeometricComplex
  */
 public class jRealityView implements View {
 
