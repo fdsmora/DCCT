@@ -233,7 +233,8 @@ public class Model {
 //				pColors.add(Constants.DEFAULT_COLORS[i]);
 //			}
 //		}
-		this.pColors = config.DEFAULT_COLORS;
+//		this.pColors = config.DEFAULT_COLORS;
+		this.pColors = pColors;
 	}
 	public String getSelectedBrackets() {
 		return selectedBrackets.getBracketsWithFormat();
