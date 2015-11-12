@@ -1,6 +1,10 @@
 package unam.dcct.view;
 
 import java.awt.Color;
+import java.util.ArrayList;
+import java.util.List;
+
+import unam.dcct.misc.Configuration;
 //import java.awt.Font;
 //import javax.swing.SwingConstants;
 import unam.dcct.misc.Constants;
@@ -18,7 +22,6 @@ import de.jreality.plugin.content.ContentLoader;
 import de.jreality.plugin.content.ContentTools;
 import de.jreality.plugin.icon.ImageHook;
 import de.jreality.plugin.menu.CameraMenu;
-import de.jreality.scene.Appearance;
 //import de.jreality.scene.Appearance;
 import de.jreality.scene.SceneGraphComponent;
 import de.jreality.scene.data.Attribute;
@@ -34,6 +37,7 @@ import de.jreality.tools.DragEventTool;
 import de.jreality.tools.DraggingTool;
 import de.jreality.tools.PointDragEvent;
 import de.jreality.tools.PointDragListener;
+import de.jtem.jrworkspace.plugin.Controller;
 import de.jtem.jrworkspace.plugin.PluginInfo;
 /***
  * This class contains methods and logic that produces geometric visualizations of
@@ -199,14 +203,20 @@ public class jRealityView implements View {
 				
 		ViewShrinkPanelPlugin simplicialComplexPanelPlugin =  new ViewShrinkPanelPlugin(){
 			
+			private SimplicialComplexPanel scPanel;
+			private final String  COLOR = "color";
+			private final String BRACKETS = "brackets";
+			private final int NUMBER_OF_PROCESSES = 5;
+			private final String NC_COLOR = "nc_color"; 
+			private final String P_NAME = "p_name"; 
+			
 			// Instance initializer
 			{
 				// Define the position of the controls within jReality UI
 				setInitialPosition(SHRINKER_LEFT);
-				SimplicialComplexPanel scPanel = SimplicialComplexPanel.getInstance();
+				scPanel = SimplicialComplexPanel.getInstance();
 				// Embed this panel into jReality's Shrink Panel.
 				getShrinkPanel().add(scPanel);
-				scPanel.start();
 			}
 			
 			
@@ -214,7 +224,7 @@ public class jRealityView implements View {
 			public PluginInfo getPluginInfo() {
 				PluginInfo info = new PluginInfo();
 				info.name = Constants.SIMPLICIAL_COMPLEX_PANEL;
-				info.vendorName = "Fausto Salazar";
+				info.vendorName = "UNAM";
 				info.icon = ImageHook.getIcon("select01.png");
 				return info; 
 			}
@@ -234,8 +244,75 @@ public class jRealityView implements View {
 			public Class<?> getHelpHandle() {
 				return getClass();
 			}
+			@Override
+			public void restoreStates(Controller c) throws Exception {
+				super.restoreStates(c);
+				Model m = Model.getInstance();
+				// Restore brackets (third parameter is default in case property value is not found in preferences file)
+				m.setSelectedBrackets(
+						c.getProperty(getClass(), "brackets", Constants.ProcessViewBrackets.DEFAULT.getBracketsWithFormat()));
+
+				// Restore process colors
+				List<Color> processColorsChosen = new ArrayList<Color>();
+				int n = NUMBER_OF_PROCESSES;
+				int i =0;
+				for (; i<n; i++){
+					String propName = COLOR + i;
+					Color restoredColor = c.getProperty(getClass(), propName, Configuration.getInstance().DEFAULT_COLORS.get(i));
+					processColorsChosen.add(restoredColor);
+				}
+				m.setColors(processColorsChosen);
+				
+				// restore non chromatic color
+				Color ncColor = c.getProperty(getClass(), NC_COLOR, Color.GRAY);
+				m.setNonChromaticColor(ncColor);
+				
+				// restore process names
+				List<String> pNames = new ArrayList<String>();
+				for (i=0; i<n; i++){
+					String propName = P_NAME + i;
+					String pName = c.getProperty(getClass(), propName, Integer.toString(i));
+					pNames.add(pName);
+				}
+				m.setpNames(pNames);
+				
+				// After restoring state the panel has to be started so that it can load UI controls
+				// with correct restored data.
+				scPanel.start();
+			}
+			@Override
+			public void storeStates(Controller c) throws Exception {
+				super.storeStates(c);
+				Model m = Model.getInstance();
+
+				// Save process view brackets chosen by user so that next time the app starts 
+				// it loads this choice. 
+				c.storeProperty(getClass(), BRACKETS, m.getSelectedBrackets());
+				
+				// Save processes colors chosen by user
+				List<Color> processColorsChosen = m.getColors();
+//				c.storeProperty(getClass(), NUMBER_OF_PROCESSES, n);
+				int i =0;
+				for (; i<processColorsChosen.size(); i++){
+					String propName = COLOR + i;
+					c.storeProperty(getClass(), propName, processColorsChosen.get(i));
+				}
+				
+				// Save non-chromatic color chosen by user
+				Color ncColor = m.getNonChromaticColor();
+				c.storeProperty(getClass(), NC_COLOR, ncColor);
+				
+				int n = NUMBER_OF_PROCESSES;
+				// Save processes names chosen by user
+				List<String> pNames = m.getpNames();
+				for (i=0; i<n; i++){
+					String propName = P_NAME + i;
+					c.storeProperty(getClass(), propName, pNames.get(i));
+				}
+			}
 			
 		};
+		
 		
 		viewer.addBasicUI();
 		

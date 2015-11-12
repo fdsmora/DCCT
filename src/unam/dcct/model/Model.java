@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -34,7 +35,8 @@ public class Model {
 	private Set<View> views = new HashSet<View>(5);
 	private List<Color> pColors;
 	private Color nonChromaticColor= null;
-	private ProcessViewBrackets selectedBrackets = ProcessViewBrackets.DEFAULT;
+	private List<String> pNames;
+	private String selectedBrackets = ProcessViewBrackets.DEFAULT.getBracketsWithFormat();
 	private int roundCount = 0;
 	private Configuration config = Configuration.getInstance();
 	
@@ -58,9 +60,9 @@ public class Model {
 	 */
 	public void reset(){
 		initialComplex =protocolComplex= null;
-		pColors = null;
+//		pColors = null;
 		communicationProtocol = null;
-		selectedBrackets = ProcessViewBrackets.DEFAULT;
+//		selectedBrackets = ProcessViewBrackets.DEFAULT.getBracketsWithFormat();
 		roundCount = 0;
 		updateViews(Constants.RESET_VIEW_COMMAND);
 	}
@@ -71,6 +73,7 @@ public class Model {
 	 * @return The initial complex that has been created. 
 	 */
 	public SimplicialComplex createInitialComplex(List<String> pNames){
+		setpNames(pNames);
 		int n = pNames.size();
 		List<Process> processes = new ArrayList<Process>(n);
 		int idCounter = 0;
@@ -210,7 +213,7 @@ public class Model {
 	}
 
 	public List<Color> getColors() {
-		if (pColors == null)
+		if (pColors == null || pColors.isEmpty())
 			return config.DEFAULT_COLORS;
 		return pColors;
 	}
@@ -227,6 +230,11 @@ public class Model {
 
 	public void setColors(List<Color> pColors) {
 		
+		if (this.pColors!=null && pColors!=null)
+			checkForUpdatesAndUpdate(this.pColors, pColors);
+		else 
+			this.pColors = pColors;
+		
 //		// Add additional colors to prevent cases when there are less colors than processes.
 //		if (pColors.size()<Constants.MAX_COLORS){
 //			for (int i=Constants.MAX_COLORS-pColors.size(); i>0; i--){
@@ -234,17 +242,52 @@ public class Model {
 //			}
 //		}
 //		this.pColors = config.DEFAULT_COLORS;
-		this.pColors = pColors;
+//		this.pColors = pColors;
 	}
 	public String getSelectedBrackets() {
-		return selectedBrackets.getBracketsWithFormat();
+		return selectedBrackets;
 	}
-	public void setSelectedBrackets(ProcessViewBrackets selectedBrackets) {
+	public void setSelectedBrackets(String selectedBrackets) {
 		this.selectedBrackets = selectedBrackets;
 	}
 	public int getRoundCount() {
 		return roundCount;
 	}
+	public List<String> getpNames() {
+		if (pNames==null || pNames.isEmpty()){
+			pNames = new ArrayList<String>();
+			// Add default process names.
+			for (int i=0; i<10; i++){
+				pNames.add(Integer.toString(i));
+			}
+		}
+		return pNames;
+	}
+	public void setpNames(List<String> pNames) {
+		if (this.pNames!=null && pNames!=null)
+			checkForUpdatesAndUpdate(this.pNames, pNames);
+		else
+			this.pNames = pNames;
+	}
 	
+	/**
+	 * Checks if any element in the old list was updated in the new list. If so, update the old element.
+	 * @param old_list
+	 * @param new_list
+	 */
+	private static <T> void checkForUpdatesAndUpdate(List<T> old_list, List<T> new_list){
+		Iterator<T> itold= old_list.iterator();
+		Iterator<T> itnew = new_list.iterator();
+		int i =0;
+		// Compare lists 
+		while(itold.hasNext() && itnew.hasNext()){
+			T oldVal = itold.next();
+			T newVal = itnew.next();
+			if (!oldVal.equals(newVal)) // Update
+				old_list.set(i, newVal);
+			i++;
+		}
+			
+	}
 	
 }

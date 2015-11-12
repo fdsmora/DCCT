@@ -110,13 +110,14 @@ class CommunicationProtocolStep extends Step {
 		
 		JLabel lbSelectBrackets = new JLabel("Select brackets for process views");
 		final JComboBox<ProcessViewBrackets> cbBrackets = new JComboBox<ProcessViewBrackets>(ProcessViewBrackets.values());
+		cbBrackets.setSelectedItem(ProcessViewBrackets.find(Model.getInstance().getSelectedBrackets()));
 		
 		cbBrackets.addActionListener(new ActionListener(){
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				Model m = Model.getInstance();
-				m.setSelectedBrackets((ProcessViewBrackets)cbBrackets.getSelectedItem());
+				m.setSelectedBrackets(((ProcessViewBrackets)cbBrackets.getSelectedItem()).getBracketsWithFormat());
 			}
 			
 		});

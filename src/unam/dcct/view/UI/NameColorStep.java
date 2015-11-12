@@ -53,7 +53,7 @@ class NameColorStep extends Step {
 		pNonChromaticColor.setLayout(new BoxLayout(pNonChromaticColor,BoxLayout.PAGE_AXIS));
 		pNonChromaticColor.setBorder(BorderFactory.createTitledBorder("Color for non-chromatic vertices"));
 		pNonChromaticColor.setAlignmentX(Component.CENTER_ALIGNMENT);
-		ncChooser = new ColorChooser(config.NON_CHROMATIC_COLOR);
+		ncChooser = new ColorChooser(model.getNonChromaticColor());
 		JButton btnColor = ncChooser.getButton();
 		btnColor.setAlignmentX(Component.CENTER_ALIGNMENT);
 		pNonChromaticColor.add(Box.createRigidArea(new Dimension(180,0)));
@@ -92,6 +92,9 @@ class NameColorStep extends Step {
 		
 		pProcessNameColor.removeAll();
 		
+		List<Color> colors = model.getColors(); 
+		List<String> pNames = model.getpNames();
+		
 		for (int i = 0; i<n ; i++){
 			
 			JPanel pBody = new JPanel();
@@ -100,14 +103,14 @@ class NameColorStep extends Step {
 			JTextField txtN = new JTextField();
 			// For limiting introduced text to one character. 
 			txtN.setDocument(new JTextFieldLimit(1));
-			txtN.setText(Integer.toString(i));
+			txtN.setText(pNames.get(i));
 			Dimension d = new Dimension(20,24);
 			txtN.setPreferredSize(d);
 			txtN.setMinimumSize(d);
 			txtN.setMaximumSize(d);
 			l_processNames.add(txtN);
 			
-			ColorChooser cChooser = new ColorChooser(config.DEFAULT_COLORS.get(i));
+			ColorChooser cChooser = new ColorChooser(colors.get(i));
 			l_processColors.add(cChooser);
 			
 			pBody.add(txtN);

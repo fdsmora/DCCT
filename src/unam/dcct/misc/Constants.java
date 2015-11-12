@@ -72,6 +72,18 @@ public final class Constants {
 		public String toString(){
 			return String.format(formatString, "");
 		}
+		
+		/**
+		 * Find by formatString 
+		 * @param formatString This should correspond to one of the defined ProcessViewBrackets in this enum (see the constructor calls to see which formatString corresponds to each ProcessViewBrackets)
+		 * @return The ProcessViewBrackets what corresponds to the passed formatString. If no formatString corresponds to any ProcessViewBrackets, returns null. 
+		 */
+		public static ProcessViewBrackets find(String formatString){
+			for (ProcessViewBrackets b : ProcessViewBrackets.values())
+				if (b.getBracketsWithFormat().equals(formatString))
+					return b;
+			return null;
+		}
 		public static final ProcessViewBrackets DEFAULT = CURLY;
 	}
 		
