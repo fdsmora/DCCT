@@ -99,9 +99,7 @@ public abstract class CommunicationProtocol{
 			List<Simplex> newSimplices= new ArrayList<Simplex>();
 			Iterable<Scenario> scenarioGenerator = createScenarioGenerator(s.dimension());
 			for (Scenario scenario : scenarioGenerator){
-				List<Process> originalProcesses = s.getProcesses();
-				List<Process> newProcesses = scenario.execute(originalProcesses);
-				Simplex newSimplex = chromatic ? new Simplex(newProcesses) : new Simplex(false, newProcesses);
+				Simplex newSimplex = scenario.execute(s);
 				newSimplex.setParent(s);
 				newSimplices.add(newSimplex);
 			}
@@ -122,22 +120,21 @@ public abstract class CommunicationProtocol{
 	protected abstract Iterable<Scenario> createScenarioGenerator(int dimension);
     
 	/**
-	 * This is intended for specific communication protocols to provide their names in order to
-	 * use it, for example, in UI combo boxes. 
-	 * @return The name of this communication protocol.
-	 * @see Constants#availableCommunicationProtocols
+	 * Please don't call this method. This is implemented just to let users know that this must be 
+	 * implemented in subclasses (this condition can't be enforced making this method abstract as Java
+	 * doesn't support static abstract methods, so that's why I expose this method, to let user know this). 
+	 * If this method is not implemented in subclasses, an exception will be thrown at program startup. 
+	 * @return A message just warning about this situation
+	 * @throws Exception 
+	 * @see unam.dcct.model.immediatesnapshot.ImmediateSnapshot#getName()
 	 */
-	public static String getName(){
-		return "Please implement this in subclass with appropiate name";
-	}
-	/**
-	 * This is intended for specific communication protocols to provide their names in order to
-	 * use it, for example, in UI combo boxes. 
-	 * @return The name of this communication protocol.
-	 * @see Constants#availableCommunicationProtocols
-	 */
-	public static String getBasicProtocolName(){
-		return "Please implement this in subclass with appropiate name";
+	public static String getName() throws Exception{
+		try{
+			throw new Exception();
+		}
+		catch(Exception e){
+			throw new Exception("This method should not be called directly. Only the version of this method in subclasses should be called.");
+		}
 	}
 	
 	/**
@@ -146,8 +143,10 @@ public abstract class CommunicationProtocol{
 	 * @return the communication protocol instance created. 
 	 */
 	public static CommunicationProtocol createCommunicationProtocol(String name){
-		if (name.equals(Constants.IMMEDIATE_SNAPSHOT))
-			return new ImmediateSnapshot();
+		if (name.equals(Constants.IMMEDIATE_SNAPSHOT_SHARED_MEMORY_ITERATED))
+			return new ImmediateSnapshot(true);
+		if (name.equals(Constants.IMMEDIATE_SNAPSHOT_SHARED_MEMORY_NON_ITERATED))
+			return new ImmediateSnapshot(false);
 		return null;
 	}
 	
@@ -172,10 +171,10 @@ public abstract class CommunicationProtocol{
 		/**
 		 * Simulates how the process communicate executing a round of the protocol but
 		 * in the order and circumstances specified in this scenario.
-		 * @param originalProcesses The process that will participate in the simulation. 
-		 * @return A list that contains copies of originalProcesses that have views that represent the knowledge this processes 
+		 * @param baseSimplex The simplex created in the last execution round whose processes will participate in the simulation of this round of execution. 
+		 * @return A new simplex that contains contains copies of processes in baseSimplex. These new processes have views that represent the knowledge the base processes 
 		 * acquired after communicating in the way specified by this scenario. 
 		 */
-		List<Process> execute(List<Process> originalProcesses);
+		Simplex execute(Simplex baseSimplex);
 	}
 }

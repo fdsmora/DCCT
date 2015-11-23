@@ -4,7 +4,7 @@ import unam.dcct.view.jRealityView;
 
 /***
  * Represents the Distributed Computing through Combinatorial Topology Application. 
- * It just starts the application.
+ * It just starts the application. 
  * @author Fausto Salazar
  *
  */

@@ -3,6 +3,7 @@ package unam.dcct.misc;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -53,7 +54,10 @@ public final class Constants {
 	public static final String MAX_ALLOWED_ROUNDS = "MAX_ALLOWED_ROUNDS";
 	public static final String DEFAULT_COLORS = "DEFAULT_COLORS";
 	public static final String CONFIG_FILE_NAME = "dcct.config";
-	
+	public static final String PROTOCOL_INFORMATION = "Protocol information";
+	public static final String GEOMETRIC_INFORMATION = "Geometric information";
+	public static final String IMMEDIATE_SNAPSHOT_SHARED_MEMORY_ITERATED = "Iterated " + Constants.IMMEDIATE_SNAPSHOT + " " + Constants.SHARED_MEMORY;
+	public static final String IMMEDIATE_SNAPSHOT_SHARED_MEMORY_NON_ITERATED = "Non-iterated " + Constants.IMMEDIATE_SNAPSHOT + " " + Constants.SHARED_MEMORY ;
 									
 	public enum ProcessViewBrackets{
 		CURLY("{%s}"),
@@ -86,47 +90,48 @@ public final class Constants {
 		}
 		public static final ProcessViewBrackets DEFAULT = CURLY;
 	}
-		
-	public static final String PROTOCOL_INFORMATION = "Protocol information";
-	public static final String GEOMETRIC_INFORMATION = "Geometric information";
 	
-	public static final Map<String, List<String>> availableCommunicationProtocols;
+	/**
+	 * List of the names of the implemented communication protocols in the program.
+	 * The names are obtained by scanning the program's classpath at startup (using Reflections library)
+	 * in order to find all classes that extend the class @link{unam.dcct.model.CommunicationProtocol}. 
+	 * Once the classes are found the static methods getName() implemented in each of these classes
+	 * are called using Reflections in order to populate this list. 
+	 * @see unam.dcct.view.UI.CommunicationProtocolStep
+	 * @see unam.dcct.model.Model#setCommunicationProtocol(String)
+	 * @see unam.dcct.model.Model#getCommunicationProtocol()
+	 * @see unam.dcct.model.immediatesnapshot.ImmediateSnapshot#getName()
+	 */
+	public static final List<String> availableCommunicationProtocols = new ArrayList<String>();
 	static {
-		availableCommunicationProtocols = new LinkedHashMap<String, List<String>>();
-		List<String[]> commMechInfo = getCommunicationProtocols();
-		for (String[] pair : commMechInfo){
-			
-			if (availableCommunicationProtocols.containsKey(pair[0]))
-			{
-				availableCommunicationProtocols.get(pair[0]).add(pair[1]);
-			}else{
-				List<String> names = new ArrayList<String>();
-				names.add(pair[1]);
-				availableCommunicationProtocols.put(pair[0], names);
-			}	
+		List<String> protocolNames = getCommunicationProtocols();
+		for (String name : protocolNames){
+			availableCommunicationProtocols.add(name);
 		}
 	}
-	private static List<String[]> getCommunicationProtocols() {
-
-		List<String[]> info = new ArrayList<String[]>();
-		
-		//Temporary code to test bug in linux
-//		String[] pair = new String[2];
-//		pair[0] = ImmediateSnapshot.getBasicProtocolName();
-//		pair[1] = ImmediateSnapshot.getName();
-//		info.add(pair);
+	
+	/**
+	 * Scans the classpath (using Reflections library) in order to find all
+	 * classes that extend the class @link{unam.dcct.model.CommunicationProtocol}. This classes 
+	 * represent the available communication protocols supported in the program. 
+	 * @return The list of names of the available communication protocols supported in the program.
+	 * @see unam.dcct.view.UI.CommunicationProtocolStep
+	 * @see unam.dcct.model.Model#setCommunicationProtocol(String)
+	 * @see unam.dcct.model.Model#getCommunicationProtocol()
+	 */
+	private static List<String> getCommunicationProtocols(){
+		List<String> info = new ArrayList<String>();
 		Reflections reflections = new Reflections("unam.dcct.model");
 		Set<Class<? extends unam.dcct.model.CommunicationProtocol>> allClasses = reflections
 				.getSubTypesOf(unam.dcct.model.CommunicationProtocol.class);
-
 		for (Class<? extends unam.dcct.model.CommunicationProtocol> c : allClasses) {
 			try {
-				String[] pair = new String[2];
-				pair[0] = (String) c.getMethod("getBasicProtocolName", null).invoke(null, null);
-				pair[1] = (String) c.getMethod("getName", null).invoke(null, null);
-				info.add(pair);
+				String name = (String) c.getMethod("getName", null).invoke(null, null);
+				info.add(name);
 			} catch (Exception e) {}
 		}
+		// Sort the names so that they appear nice in the drop down list. 
+		Collections.sort(info);
 		return info;
 	}
 	

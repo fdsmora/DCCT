@@ -158,7 +158,8 @@ public class Face implements Geometry {
 	/**
 	 * Represents an object that is responsible for calculating
 	 * the coordinates of a chromatic face's vertices and also
-	 * setting their colors. 
+	 * setting their colors. To understand the formulas that calculate the 
+	 * vertices coordinates, refer to section 5.5.3 of my thesis. 
 	 * @author Fausto Salazar
 	 *
 	 */
@@ -214,7 +215,8 @@ public class Face implements Geometry {
 	/**
 	 * Represents an object that is responsible for calculating
 	 * the coordinates of a non-chromatic face's vertices and also
-	 * setting their colors. 
+	 * setting their colors. To understand the formulas that calculate the 
+	 * vertices coordinates, refer to section 5.5.3 of my thesis. 
 	 * @author Fausto Salazar
 	 *
 	 */
@@ -243,7 +245,10 @@ public class Face implements Geometry {
 		}
 		
 		private double[] getCoordinates(String processView){
-			return coordinatesMap.get(processView).getCoordinates();
+			Vertex v = coordinatesMap.get(processView);
+			if (v!=null)
+				return v.getCoordinates();
+			return null;
 		}
 		
 
@@ -266,7 +271,14 @@ public class Face implements Geometry {
 			for (int i = 0; i<processView.length; i++){
 				if (processView[i]!=null){
 					pCoords = parentNcBehaviour.getCoordinates(processView[i]);
-			
+					// The case when pCoords is null happens when:
+					// 1) the protocol is non-iterated immediate snapshot 
+					// 2) non-chromatic complex
+					// 3) three processes
+					// 4) 2nd round of execution
+					// 5) When the simplex is dimension 1 (edge)
+					if (pCoords==null) continue;
+					
 					res = LinearAlgebraHelper.vectorSum(
 							LinearAlgebraHelper.scalarVectorMultiply(factor, pCoords),res);
 				}

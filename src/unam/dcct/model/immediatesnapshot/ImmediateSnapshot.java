@@ -2,21 +2,29 @@ package unam.dcct.model.immediatesnapshot;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+
 import unam.dcct.misc.Constants;
 import unam.dcct.model.CommunicationProtocol;
-import unam.dcct.model.CommunicationProtocol.Scenario;
 import unam.dcct.topology.Process;
+import unam.dcct.topology.Simplex;
 
 /**
- * Represents the shared memory communication protocol known as 'atomic immediate snapshot'. 
+ * Represents the shared memory communication protocol known as 'atomic immediate snapshot', in 
+ * both the "iterated" and "non-iterated" versions. 
  * <p>
  * In this protocol n processes communicate by first writing to a shared memory, which is 
  * an array with n entries, each ith-entry, 0&lt;=i&lt;=n, is assigned to each process with id equals to i.
  * Each process writes the contents of it's view to its entry in the array and 
  * when the writing is complete it immediately reads the whole array atomically, that is,
  * it gets a snapshot of the whole content of the array, so it is an operation that takes time O(1).
+ * <p>
+ * In the iterated version processes write and read a blank new memory in each communication round.
+ * <p>
+ * In the non-iterated version processes write and read the same memory during all communication rounds. 
  * <p> 
  * This class provides functionality to first generate all possible scenarios of execution that could have taken place
  * place during a round of execution of this protocol and second, to simulate the communication of processes
@@ -34,8 +42,20 @@ public class ImmediateSnapshot extends CommunicationProtocol {
 	 * for each number of processes in each simplex minus one.  
 	 */
 	private String[] allScenariosPerDimension = new String[3];
+	/**
+	 * As in the non-iterated protocol the same memory is reused across rounds, we need to keep track of it
+	 * for each generated simplex. 
+	 */
+	private Map<Simplex, String[]> simplexMemoryMap;
+	private boolean iterated;
 	
-	public ImmediateSnapshot(){}
+	/**
+	 * Creates an ImmediateSnapshot instance.
+	 * @param iterated If the ImmediateSnapshot instance will be iterated or no.
+	 */
+	public ImmediateSnapshot(boolean iterated){
+		this.iterated = iterated;
+	}
 
 	/**
 	 * It is the implementation of the abstract method {@link CommunicationProtocol#createScenarioGenerator(int)}.
@@ -44,14 +64,7 @@ public class ImmediateSnapshot extends CommunicationProtocol {
 	@Override
 	protected Iterable<Scenario> createScenarioGenerator(int dimension) {
 		final String allScenarios = getAllScenarios(dimension);
-//		return new ScenarioGenerator(){
-//
-//			@Override
-//			public Iterator<Scenario> iterator() {
-//				return new ImmediateSnapshotIterator(allScenarios);
-//			}
-//			
-//		};
+
 		return new Iterable<Scenario>(){
 			@Override
 			public Iterator<Scenario> iterator() {
@@ -105,15 +118,16 @@ public class ImmediateSnapshot extends CommunicationProtocol {
 	
 	@Override 
 	public String toString(){
-		return Constants.IMMEDIATE_SNAPSHOT + " " + Constants.SHARED_MEMORY ;
+		return getName();
 	}
 	
+	/**
+	 * Returns the name of the current implementation of the @link{unam.dcct.model.CommunicationProtocol}
+	 * This implementation is required as described in @link{unam.dcct.model.CommunicationProtocol#getName()}
+	 * @return the name of the current implementation of the communication protocol.
+	 */
 	public static String getName(){
-		return Constants.IMMEDIATE_SNAPSHOT;
-	}
-	
-	public static String getBasicProtocolName(){
-		return Constants.SHARED_MEMORY;
+		return Constants.IMMEDIATE_SNAPSHOT_SHARED_MEMORY_ITERATED;
 	}
 	
 	private String getAllScenarios(int dimension){
@@ -159,14 +173,75 @@ public class ImmediateSnapshot extends CommunicationProtocol {
 		}
 		
 		@Override
-		public List<Process> execute(List<Process> originalProcesses) {
-			String[] sharedMemory = new String[originalProcesses.size()];
+		public Simplex execute(Simplex baseSimplex) {
+			List<Process> originalProcesses = baseSimplex.getProcesses();
+			String[] sharedMemory = getSharedMemory(baseSimplex);
 			List<Process> newProcesses = new ArrayList<Process>(originalProcesses.size());
 			for (String b : blocks) {
 				int[] order = ImmediateSnapshot.toIndices(b);
 				newProcesses.addAll(ImmediateSnapshot.simulateCommunication(originalProcesses, sharedMemory, order));
 			}
-			return newProcesses;
+			Simplex newSimplex = new Simplex(baseSimplex.isChromatic(), newProcesses);
+			// if it is not iterated, save a copy of the memory associated to the new simplex in order to use it for the next round.
+			if (!iterated)
+				simplexMemoryMap.put(newSimplex, sharedMemory);
+			return newSimplex;
+		}
+		
+		private String[] getSharedMemory(Simplex s){
+			int n = s.getProcessCount();
+			String[] sharedMemory;
+			if (iterated) {
+				// In the iterated immediate snapshot memory model processes read and write a new memory in each round. 
+				sharedMemory = new String[n];
+			}else {
+				// In the non-iterated immediate snapshot memory model processes read and write the same memory during the whole execution of the protocol.
+				// so here we get the previous memory associated with the simplex in the previous round. 
+				
+				// First communication round, add the "base case" memory.
+				if (simplexMemoryMap== null) {
+					simplexMemoryMap = new HashMap<Simplex, String[]>();
+					simplexMemoryMap.put(s, new String[n]);
+				} 
+				
+				// For each round a copy of the memory of the last round is needed. 
+				
+				sharedMemory = simplexMemoryMap.get(s).clone();				
+			}
+			return sharedMemory;
+		}
+		
+	}
+	
+	/**
+	 * This class does nothing special but help populate the global list
+	 * @link{unam.dcct.misc.Constants#availableCommunicationProtocols} at 
+	 * application's startup. The actual logic for generating Non-iterated 
+	 * immediate snapshot scenarios is implemented in @link{unam.dcct.model.immediatesnapshot.ImmediateSnapshot}
+	 * itself (see the iterated field in that class). 
+	 * @author Fausto
+	 * @see unam.dcct.model.immediatesnapshot.ImmediateSnapshot
+	 * @see unam.dcct.model.immediatesnapshot.ImmediateSnapshotScenario
+	 */
+	public static class ImmediateSnapshotNonIterated extends CommunicationProtocol{
+
+		@Override
+		protected Iterable<Scenario> createScenarioGenerator(int dimension) {
+			return null;
+		}
+		
+		@Override 
+		public String toString(){
+			return getName();
+		}
+		
+		/**
+		 * Returns the name of the current implementation of the @link{unam.dcct.model.CommunicationProtocol}
+		 * This implementation is required as described in @link{unam.dcct.model.CommunicationProtocol#getName()}
+		 * @return the name of the current implementation of the communication protocol.
+		 */
+		public static String getName(){
+			return Constants.IMMEDIATE_SNAPSHOT_SHARED_MEMORY_NON_ITERATED;
 		}
 		
 	}

@@ -29,17 +29,19 @@ public class GeometricComplex implements Geometry{
 
 	public GeometricComplex(SimplicialComplex complex){
 		
+		// Save the original chromaticity state
 		boolean originalChromaticState = complex.isChromatic();
 
+		// Build the chromatic version of the complex. 
 		complex.setChromatic(true);
 		chromaticFaces = buildFaces(complex);
 
+		// Now build the non-chromatic version of the complex. 
 		complex.setChromatic(false);
 		nonChromaticFaces = buildFaces(complex);
 		
-		this.chromatic = originalChromaticState;
-		
 		// Leave it as it was
+		this.chromatic = originalChromaticState;
 		complex.setChromatic(originalChromaticState);
 		
 		setAttributes();
