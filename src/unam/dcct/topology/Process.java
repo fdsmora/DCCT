@@ -104,12 +104,16 @@ public class Process implements Cloneable {
 	}
 	
 	/**
+	 * Format string that is used in toString() method. 
+	 */
+	public static final String STR_FORMAT ="(%d,%s)"; 
+	/**
 	 * Returns a text representation of the process in the format: "(id, view)". 
 	 * @return The string representation of the process. 
 	 */
 	@Override 
 	public String toString(){
-		return String.format("(%d, %s)", this.id, getView());
+		return String.format(STR_FORMAT, this.id, getView());
 	}
 	
 	@Override
