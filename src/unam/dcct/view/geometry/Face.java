@@ -163,22 +163,19 @@ public class Face implements Geometry {
 		Face ancestor = this.parent;
 		Vertex x = null;
 		int count = 0;
-		while(ancestor!=null && 
-				(x = ancestor.verticesMap.get(key))==null){
+		
+		while(ancestor!=null){ 
 			if (levels!=null){
 				if (count<levels)
 					count++;
 				else break;
 			}
+			x = ancestor.verticesMap.get(key);
+			if (x!=null)
+				return x.getCoordinates(); 
+
 			ancestor = ancestor.parent; // Now search in the next parent.
-		}
-		if (x!=null) // vertex found
-		{
-			System.out.printf("%s found!\n", key);
-			return x.getCoordinates();
-		}
-		System.out.printf("%s NOT found!\n", key);
-		
+		}		
 		return null;
 	}
 
