@@ -114,6 +114,7 @@ public class Model {
 	 */
 	public void clearProtocolComplex() {
 		this.protocolComplex = null;
+		this.roundCount = 0;
 	}
 
 	/**
