@@ -25,7 +25,7 @@ public final class Constants {
 	public static final String NEXT = "Next";
 	public static final String EXECUTE_ROUND = "Execute round";
 	public static final String START_OVER = "Start over";
-	public static final String CHANGE_MODEL = "Change model";
+	public static final String CHANGE_MODEL = "Change protocol";
 	public static final String NEXT_ROUND = "Next round";
 	public static final String MAX_ROUNDS_REACHED_MSG = "Maximum number of rounds allowed reached.";
 	public static final String CHROMATIC = "Chromatic";
