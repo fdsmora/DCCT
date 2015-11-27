@@ -118,7 +118,9 @@ public class ImmediateSnapshot extends CommunicationProtocol {
 	
 	@Override 
 	public String toString(){
-		return getName();
+		if (iterated)
+			return getName();
+		else return ImmediateSnapshotNonIterated.getName();
 	}
 	
 	/**
@@ -181,10 +183,18 @@ public class ImmediateSnapshot extends CommunicationProtocol {
 				int[] order = ImmediateSnapshot.toIndices(b);
 				newProcesses.addAll(ImmediateSnapshot.simulateCommunication(originalProcesses, sharedMemory, order));
 			}
-			Simplex newSimplex = new Simplex(baseSimplex.isChromatic(), newProcesses);
+			boolean chromatic = baseSimplex.isChromatic();
+			Simplex newSimplex = new Simplex(chromatic, newProcesses);
 			// if it is not iterated, save a copy of the memory associated to the new simplex in order to use it for the next round.
-			if (!iterated)
+			if (!iterated){
+				if (!chromatic){
+					// If the newSimplex decremented in dimension with respect to baseSimplex (e.g. a triangle became an edge due to two processes with duplicate views merging into one process), give it a new memory to avoid inconsistencies. 
+					int oldDimension = baseSimplex.dimension();
+					int newDimension = newSimplex.dimension();
+					sharedMemory = oldDimension == newDimension ? sharedMemory : new String[newDimension + 1];
+				}
 				simplexMemoryMap.put(newSimplex, sharedMemory);
+			}
 			return newSimplex;
 		}
 		

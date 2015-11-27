@@ -6,8 +6,10 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 
 import unam.dcct.topology.Process;
 import unam.dcct.view.geometry.Face;
@@ -78,14 +80,15 @@ public class Simplex {
 	 * @param processes The array of processes that will make up this simplex. 
 	 */
 	public Simplex(boolean chromatic, List<Process> processes){
+		
+		sort(processes);
+
 		this.chromatic = chromatic;
 		if (!chromatic)
 			this.processes = makeProcessesNonChromatic(processes);
 		else 
 			this.processes = processes;
 		
-		sortProcesses(this.processes);
-
 		this.n = this.processes.size();
 	}
 	
@@ -99,19 +102,29 @@ public class Simplex {
 	 * @return A List of processes that are non-chromatic and each process is distinct in terms of their views. 
 	 */
 	private List<Process> makeProcessesNonChromatic(List<Process> processes) {
-		Map<String, Process> uniqueProcesses = new HashMap<String, Process>(processes.size());
+		Map<String, Process> uniqueProcesses = new LinkedHashMap<String, Process>(processes.size());
+		
+//		if (!chromatic){
+//			System.out.println("Printing processes, chromatic:" + chromatic);
+//			System.out.println(processes);
+//		}
 		
 		int idCounter = 0;
 		for (Process p : processes){
-			if (!uniqueProcesses.containsKey(p.getView())){
+			String key = p.getView();
+			if (!uniqueProcesses.containsKey(key)){
 				Process _p = (Process)p.clone();
-				uniqueProcesses.put(p.getView(), _p);
+				uniqueProcesses.put(key, _p);
 				_p.setChromatic(false);
 				// Re-set process ids
 				_p.setId(idCounter++);
 			}
 		}
-		return new ArrayList<Process>(uniqueProcesses.values());
+//		if (!chromatic){
+//			System.out.println("New processes:");
+//			System.out.println(uniqueProcesses.toString());
+//		}
+		return  new ArrayList<Process>(uniqueProcesses.values());
 	}
 
 	/**
@@ -136,7 +149,7 @@ public class Simplex {
 	 * Sort processes in non-decreasing order by their id's. 
 	 * @param processes
 	 */
-	private void sortProcesses(List<Process> processes){
+	private void sort(List<Process> processes){
 		// Processes must be sorted in increasing order by id.
 		Collections.sort(processes, new Comparator<Process>(){
 			@Override
@@ -193,8 +206,7 @@ public class Simplex {
 		sb.append("{");
 		for (Process p : getProcesses()){
 			sb.append(prefix);
-			sb.append(chromatic? 
-					p.toString() : p.getView());
+			sb.append(p.toString());
 			prefix = ",";
 		}
 		sb.append("}");
