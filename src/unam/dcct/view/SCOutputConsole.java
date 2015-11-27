@@ -3,6 +3,9 @@ package unam.dcct.view;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
 import com.google.common.base.Strings;
@@ -14,6 +17,7 @@ import de.jtem.jrworkspace.plugin.sidecontainer.SideContainerPerspective;
 import de.jtem.jrworkspace.plugin.sidecontainer.template.ShrinkPanelPlugin;
 import unam.dcct.misc.Constants;
 import unam.dcct.model.Model;
+import unam.dcct.topology.Simplex;
 import unam.dcct.topology.SimplicialComplex;
 import unam.dcct.view.geometry.GeometricComplex;
 
@@ -35,7 +39,7 @@ public class SCOutputConsole extends ShrinkPanelPlugin implements View{
 			+ "Type:%s\n" // Initial or protocol
 			+ "%s" // field for distributed computing model information
 			+ "%s\n" // field for chromaticity information
-			+ "Number of simplices: %d\n" 
+			+ Constants.NUMBER_OF_SIMPLICIES + ":%d\n" 
 			+ "Dimension of complex: %d\n" // field for complex dimension
 			+ Constants.SET_NOTATION_REPRESENTATION + ":" + newLine
 			+ "%s\n";
@@ -43,7 +47,7 @@ public class SCOutputConsole extends ShrinkPanelPlugin implements View{
 			newLine + Constants.GEOMETRIC_INFORMATION + newLine
 			+ Constants.OUTPUT_CONSOLE_DELIMITER
 			+ "Number of vertices: %d\n"
-			+ "Number of %d-faces: %d\n";
+			+ "Faces summary:\n%s\n";
 	private String geometricInformation = "";
 	
 	private static SCOutputConsole instance = null;
@@ -98,7 +102,34 @@ public class SCOutputConsole extends ShrinkPanelPlugin implements View{
 								(complex.isChromatic()? Constants.CHROMATIC : Constants.NON_CHROMATIC))),
 						complex.getSimplices().size(),
 						complex.dimension(),
-						complex.toString()));
+//						complex.toString()));
+						buildSimplicesReport(complex)));
+	}
+	
+	private String buildSimplicesReport(SimplicialComplex complex){
+		StringBuilder sb = new StringBuilder();
+		int capacity = complex.dimension() + 1;
+		List<List<String>> simplicesPerDimension = new ArrayList<List<String>>(capacity);
+		// Initialize
+		for (int i = 0; i<capacity; i++)
+			simplicesPerDimension.add(null);
+		// Add simplices to corresponding dimension entry. 
+		for (Simplex s : complex.getSimplices()){
+			int dim = s.dimension();
+			if (simplicesPerDimension.get(dim)==null)
+				simplicesPerDimension.set(dim, new ArrayList<String>());
+			simplicesPerDimension.get(dim).add(s.toString());
+		}
+		final String entryFormat = "  Number of %d-simplices: %d\n  %d-simplices:%s\n";
+		int len = simplicesPerDimension.size();
+		for (int i=0; i<len; i++){
+			List<String> entry = simplicesPerDimension.get(i);
+			if (entry!=null){
+				sb.append(String.format(entryFormat, i, entry.size(), i, entry.toString()));
+			}
+		}
+
+		return sb.toString();
 	}
 	
 	/**
@@ -159,7 +190,8 @@ public class SCOutputConsole extends ShrinkPanelPlugin implements View{
 		if (geom!=null){
 
 			geometricInformation = String.format(
-					geometricInfoFormat, geom.getVertexCount(), geom.getFacesIndices()[0].length-1,geom.getFacesIndices().length);
+					geometricInfoFormat, geom.getVertexCount(), 
+					buildFacesReport(geom));//geom.getFacesIndices()[0].length-1,geom.getFacesIndices().length);
 			
 			// If displayComplex() has already been called, the text to display in the console has already been built,
 			// so we just append the geometric information to it. 
@@ -167,6 +199,20 @@ public class SCOutputConsole extends ShrinkPanelPlugin implements View{
 				textPane.setText(complexInfo.toString() + geometricInformation.toString());
 			}
 		}
+	}
+	
+	private String buildFacesReport(GeometricComplex geom){
+		StringBuilder sb = new StringBuilder();
+		int[] facesDimensionCounts = new int[5];
+		for (int[]face : geom.getFacesIndices()){
+			facesDimensionCounts[face.length-1]++;
+		}
+		final String facesFormat = "  Number of %d-faces:%d\n";
+		for (int i =0; i< facesDimensionCounts.length; i++){
+			if (facesDimensionCounts[i]>0)
+				sb.append(String.format(facesFormat, i, facesDimensionCounts[i]));
+		}
+		return sb.toString();
 	}
 
 	public void updateChromaticity() {

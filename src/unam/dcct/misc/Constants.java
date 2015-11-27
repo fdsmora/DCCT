@@ -35,8 +35,8 @@ public final class Constants {
 	public static final String SIMPLICIAL_COMPLEX_CONSOLE = "Simplicial Complex Output Console";
 	public static final String SIMPLICIAL_COMPLEX_PANEL = "Simplicial Complex Panel";
 	public static final String OUTPUT_CONSOLE_DELIMITER = "===================\n";
-	public static final String NUMBER_OF_SIMPLICIES = "Number of simplicies";
-	public static final String SET_NOTATION_REPRESENTATION = "Set notation representation";
+	public static final String NUMBER_OF_SIMPLICIES = "Total number of simplicies";
+	public static final String SET_NOTATION_REPRESENTATION = "Simplices summary and set notation representation";
 	public static final String UNKNOWN = "Unknown";
 	public static final String RESET_VIEW_COMMAND = "r";
 	public static final String COMPLEX_UPDATE_COMMAND = "cxu";
