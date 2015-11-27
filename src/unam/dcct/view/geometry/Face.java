@@ -2,7 +2,6 @@ package unam.dcct.view.geometry;
 
 import java.awt.Color;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -10,7 +9,6 @@ import java.util.Map;
 import java.util.Queue;
 
 import unam.dcct.misc.Configuration;
-import unam.dcct.misc.Constants;
 import unam.dcct.misc.LinearAlgebraHelper;
 import unam.dcct.model.Model;
 import unam.dcct.topology.Process;
@@ -54,9 +52,7 @@ public class Face implements Geometry {
 			this.parent = parent.getFace();
 		this.chromatic = chromatic;
 		setVertices();
-		
-//		this.chromaticityBehaviour = chromatic? new ChromaticBehaviour(this) :
-//									new NonChromaticBehaviour(this); 
+
 		this.chromaticityBehaviour = chromatic? new ChromaticBehaviour() :
 			new NonChromaticBehaviour(); 
 		setAttributes();
@@ -67,10 +63,6 @@ public class Face implements Geometry {
 	 */
 	private void setVertices(){
 		vertices = new ArrayList<Vertex>(simplex.getProcessCount());
-//		for (Process p : simplex.getProcesses()){
-//			Vertex v = new Vertex(p);
-//			vertices.add(v);
-//		}
 		verticesMap = new LinkedHashMap<String, Vertex>(simplex.getProcessCount());
 		for (Process p : simplex.getProcesses()){
 			Vertex v = new Vertex(p);
@@ -151,7 +143,6 @@ public class Face implements Geometry {
 	}
 
 	public List<Vertex> getVertices() {
-//		return new ArrayList<Vertex>(verticesMap.values());
 		return vertices;
 	}
 
@@ -202,11 +193,7 @@ public class Face implements Geometry {
 	private class ChromaticBehaviour implements ChromaticityBehaviour {
 
 		private Queue<Color> qColors;
-//		private Face face;
-//		
-//		private ChromaticBehaviour(Face face){
-//			this.face = face;
-//		}
+
 
 		@Override
 		public double[] calculateCoordinatesPerProcess(Process p) {
@@ -220,7 +207,6 @@ public class Face implements Geometry {
 			if (count == 1){
 				String key = String.format(Process.STR_FORMAT, pid, processView[pid]);
 				return locateAncestorCoordinates(key, null);
-//				return parent.getCoordinates()[pid];
 			}
 			
 			final float EPSILON = Configuration.getInstance().EPSILON_VALUE  ;
@@ -245,17 +231,7 @@ public class Face implements Geometry {
 									,res);
 					}
 				}
-				
-//				if (i==pid)
-//					res = LinearAlgebraHelper.vectorSum(
-//							LinearAlgebraHelper.scalarVectorMultiply(smallFactor,parent.getCoordinates()[pid])
-//							,res);
-//				else if (processView[i]!=null){
-//					double[] coords =  parent.getCoordinates()[i];
-//															
-//					res = LinearAlgebraHelper.vectorSum(
-//							LinearAlgebraHelper.scalarVectorMultiply(bigFactor, coords),res);
-//				}
+
 			}
 			return res;
 		}
@@ -277,48 +253,12 @@ public class Face implements Geometry {
 	 *
 	 */
 	private class NonChromaticBehaviour implements ChromaticityBehaviour {
-
-//		private Map<String, Vertex> coordinatesMap; 
-//		protected Face face;
-//		
-//		private NonChromaticBehaviour(Face face){
-//			this.face = face;
-//			setCoordinatesMap();
-//		}
-		
-		/**
-		 * In the non-chromatic representation of a face
-		 * vertices are referenced by process's views, not by process's id's
-		 * like in the chromatic representation, so we need to build
-		 * a map to support this kind of referencing schema. 
-		 */
-//		private void setCoordinatesMap() {
-//			List<Vertex> vertices = face.vertices;
-//			coordinatesMap = new HashMap<String, Vertex>(vertices.size());
-//			for (Vertex v : vertices){
-//				coordinatesMap.put(v.getLabel(), v);
-//			}
-//		}
-		
-//		private double[] getCoordinates(String processView){
-//			Vertex v = coordinatesMap.get(processView);
-//			if (v!=null)
-//				return v.getCoordinates();
-//			return null;
-//		}
 		
 
 		@Override
 		public double[] calculateCoordinatesPerProcess(Process p) throws ClassCastException{
 			String[] processView = p.getViewArray();
 			int count = p.getViewElementsCount();
-			
-//			NonChromaticBehaviour parentNcBehaviour = null;
-//			try {
-//				parentNcBehaviour = (NonChromaticBehaviour)parent.chromaticityBehaviour;
-//			} catch (ClassCastException e) {
-//				throw new ClassCastException("The parent's face chromaticity behaviour must be non-chromatic ");
-//			}
 			
 			double factor = 1.0/count;
 			double[] res = {0.0,0.0,0.0};
@@ -327,21 +267,12 @@ public class Face implements Geometry {
 			for (int i = 0; i<len; i++){
 				double[] pCoords = null;
 				if (processView[i]!=null){
-//					pCoords = parentNcBehaviour.getCoordinates(processView[i]);
-					// Temp
-//					Vertex x = verticesMap.get(processView[i]);
 					
 					pCoords = locateAncestorCoordinates(processView[i], 1);
 					if (pCoords !=null)
 						res = LinearAlgebraHelper.vectorSum(
 								LinearAlgebraHelper.scalarVectorMultiply(factor, pCoords),res);
-					// The case when pCoords is null happens when:
-					// 1) the protocol is non-iterated immediate snapshot 
-					// 2) non-chromatic complex
-					// 3) three processes
-					// 4) 2nd round of execution
-					// 5) When the simplex is dimension 1 (edge)
-//					if (pCoords==null) continue;
+
 				}
 
 			}
