@@ -148,7 +148,15 @@ public class Face implements Geometry {
 	public Face getParent() {
 		return parent;
 	}
-	
+	/**
+	 * In some communication protocols such as the non-iterated immediate snapshot
+	 * we need to reference the information of other upper-level parents (ancestors),
+	 * so this method searches for the key in these ancestors. 
+	 * @param key The string that represents the label of a vertex in an ancestor
+	 * complex. 
+	 * @param levels The number of levels of depth in the hierarchy of ancestors to search into.  
+	 * @return The coordinates of the vertex whose label was found or empty null if not found. 
+	 */
 	private double[] locateAncestorCoordinates(String key, Integer levels){
 		Face ancestor = this.parent;
 		Vertex x = null;

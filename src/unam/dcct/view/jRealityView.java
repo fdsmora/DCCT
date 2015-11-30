@@ -372,10 +372,10 @@ public class jRealityView implements View {
 		// Check if the generated complex is initial
 		SimplicialComplex protocolComplex = model.getProtocolComplex();
 		if (protocolComplex==null){
-			geometricObject = new GeometricComplex(model.getInitialComplex());
+			geometricObject = new GeometricComplex(model.getInitialComplex(), null);
 		}else
 		{
-			geometricObject = new GeometricComplex(protocolComplex);
+			geometricObject = new GeometricComplex(protocolComplex, (GeometricComplex)geometricObject);
 		}
 		
 		/* For testing purposes uncomment this line in order to see that also single faces can also be
