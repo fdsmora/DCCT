@@ -97,7 +97,6 @@ public final class Constants {
 	 * in order to find all classes that extend the class @link{unam.dcct.model.CommunicationProtocol}. 
 	 * Once the classes are found the static methods getName() implemented in each of these classes
 	 * are called using Reflections in order to populate this list. 
-	 * @see unam.dcct.view.UI.CommunicationProtocolStep
 	 * @see unam.dcct.model.Model#setCommunicationProtocol(String)
 	 * @see unam.dcct.model.Model#getCommunicationProtocol()
 	 * @see unam.dcct.model.immediatesnapshot.ImmediateSnapshot#getName()

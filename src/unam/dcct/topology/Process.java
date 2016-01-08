@@ -40,7 +40,7 @@ public class Process implements Cloneable {
 	 * where: 
 	 * <ul>
 	 * <li><i>openingBracket</i> and <i>closingBracket</i> are the style of brackets selected by the user. 
-	 * The options are {}, (), [], and &lt;&gt; . Default is {}. (See {@link Model#getSelectedBrackets()} and {@link Model#setSelectedBrackets(unam.dcct.misc.Constants.ProcessViewBrackets)}). 
+	 * The options are {}, (), [], and &lt;&gt; . Default is {}. (See {@link unam.dcct.model.Model#getSelectedBrackets()} and {@link unam.dcct.model.Model#setSelectedBrackets(String)}). 
 	 * <li>\(v_j\) can be either the view of the other processes (let's call them \(p_j\)) if the view of \(p_j\) is known to this process;
 	 * or the character "-" if it is unknown.
 	 * </ul>

@@ -225,13 +225,12 @@ public class ImmediateSnapshot extends CommunicationProtocol {
 	
 	/**
 	 * This class does nothing special but help populate the global list
-	 * @link{unam.dcct.misc.Constants#availableCommunicationProtocols} at 
+	 * {@link unam.dcct.misc.Constants#availableCommunicationProtocols} at 
 	 * application's startup. The actual logic for generating Non-iterated 
 	 * immediate snapshot scenarios is implemented in @link{unam.dcct.model.immediatesnapshot.ImmediateSnapshot}
 	 * itself (see the iterated field in that class). 
 	 * @author Fausto
 	 * @see unam.dcct.model.immediatesnapshot.ImmediateSnapshot
-	 * @see unam.dcct.model.immediatesnapshot.ImmediateSnapshotScenario
 	 */
 	public static class ImmediateSnapshotNonIterated extends CommunicationProtocol{
 
