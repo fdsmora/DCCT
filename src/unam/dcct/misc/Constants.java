@@ -58,7 +58,9 @@ public final class Constants {
 	public static final String GEOMETRIC_INFORMATION = "Geometric information";
 	public static final String IMMEDIATE_SNAPSHOT_SHARED_MEMORY_ITERATED = "Iterated " + Constants.IMMEDIATE_SNAPSHOT + " " + Constants.SHARED_MEMORY;
 	public static final String IMMEDIATE_SNAPSHOT_SHARED_MEMORY_NON_ITERATED = "Non-iterated " + Constants.IMMEDIATE_SNAPSHOT + " " + Constants.SHARED_MEMORY ;
-									
+	public static final String WRITE_READ = "Iterated Write/Read (WR)";
+	
+	
 	public enum ProcessViewBrackets{
 		CURLY("{%s}"),
 		ROUND("(%s)"),

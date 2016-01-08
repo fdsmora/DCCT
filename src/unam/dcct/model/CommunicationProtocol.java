@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import unam.dcct.misc.Constants;
+import unam.dcct.model.WR.WriteRead;
 import unam.dcct.model.immediatesnapshot.ImmediateSnapshot;
 import unam.dcct.topology.Process;
 import unam.dcct.topology.Simplex;
@@ -41,8 +42,8 @@ public abstract class CommunicationProtocol{
 		newComplex = null;
 		generateOrCompleteNewComplex(baseComplex);
 		// Now lets generate all non-chromatic simplices
-		baseComplex.setChromatic(false);
-		generateOrCompleteNewComplex(baseComplex);
+//		baseComplex.setChromatic(false);
+//		generateOrCompleteNewComplex(baseComplex);
 		
 		// Leave it as it was.
 		baseComplex.setChromatic(originalChromaticity);
@@ -147,6 +148,8 @@ public abstract class CommunicationProtocol{
 			return new ImmediateSnapshot(true);
 		if (name.equals(Constants.IMMEDIATE_SNAPSHOT_SHARED_MEMORY_NON_ITERATED))
 			return new ImmediateSnapshot(false);
+		if (name.equals(Constants.WRITE_READ))
+			return new WriteRead();
 		return null;
 	}
 	
