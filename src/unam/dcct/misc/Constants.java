@@ -1,19 +1,12 @@
 package unam.dcct.misc;
 
-import java.awt.Color;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import org.reflections.Reflections;
 
-import unam.dcct.misc.Constants.ProcessViewBrackets;
-import unam.dcct.model.immediatesnapshot.ImmediateSnapshot;
 /***
  * The purpose of this class is to provide a global access to the most commonly used constant values used throughout the application. 
  * @author Fausto

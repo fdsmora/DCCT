@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
 import unam.dcct.misc.Constants;
 import unam.dcct.model.CommunicationProtocol;
 import unam.dcct.topology.Process;

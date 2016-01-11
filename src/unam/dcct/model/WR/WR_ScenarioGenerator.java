@@ -2,12 +2,9 @@ package unam.dcct.model.WR;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
-
 import org.paukov.combinatorics.Factory;
 import org.paukov.combinatorics.Generator;
 import org.paukov.combinatorics.ICombinatoricsVector;
@@ -35,7 +32,7 @@ public class WR_ScenarioGenerator {
     	
     	if (n<2)
     	{
-    		M[0][0]=0;
+    		M[0][0]=1;
     		matrices.add(M);
     		return matrices;
     	}

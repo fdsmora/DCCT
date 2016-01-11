@@ -124,9 +124,9 @@ public class GeometricComplex implements Geometry{
 					v.setIndex(dup.getIndex());
 				}
 				else {
-					if (!chromatic) {
-						System.out.println("Key: " + key + " vertex: " + v.getLabel() );
-					}
+//					if (!chromatic) {
+//						System.out.println("Key: " + key + " vertex: " + v.getLabel() );
+//					}
 					vertices.put(key,v);
 					v.setIndex(indexCount++);
 				}
@@ -202,7 +202,7 @@ public class GeometricComplex implements Geometry{
 		GeometricComplex ancestor = this.parent;
 		
 		while (ancestor!=null){
-			System.out.println("Key: " +key);
+//			System.out.println("Key: " +key);
 			String foundKey = ancestor.nonChromaticSortedVertexLabels.get(key);
 			if (foundKey!=null)
 				return foundKey;

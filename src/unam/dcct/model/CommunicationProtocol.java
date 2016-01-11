@@ -1,12 +1,10 @@
 package unam.dcct.model;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import unam.dcct.misc.Constants;
 import unam.dcct.model.WR.WriteRead;
 import unam.dcct.model.immediatesnapshot.ImmediateSnapshot;
-import unam.dcct.topology.Process;
 import unam.dcct.topology.Simplex;
 import unam.dcct.topology.SimplicialComplex;
 
@@ -42,8 +40,8 @@ public abstract class CommunicationProtocol{
 		newComplex = null;
 		generateOrCompleteNewComplex(baseComplex);
 		// Now lets generate all non-chromatic simplices
-//		baseComplex.setChromatic(false);
-//		generateOrCompleteNewComplex(baseComplex);
+		baseComplex.setChromatic(false);
+		generateOrCompleteNewComplex(baseComplex);
 		
 		// Leave it as it was.
 		baseComplex.setChromatic(originalChromaticity);

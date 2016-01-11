@@ -1,18 +1,16 @@
 package unam.dcct.model.WR;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import unam.dcct.misc.Constants;
 import unam.dcct.model.CommunicationProtocol;
-import unam.dcct.model.CommunicationProtocol.Scenario;
-import unam.dcct.model.immediatesnapshot.ImmediateSnapshot;
-import unam.dcct.model.immediatesnapshot.PartitionGenerator;
+import unam.dcct.model.Model;
 import unam.dcct.topology.Process;
 import unam.dcct.topology.Simplex;
 
 public class WriteRead extends CommunicationProtocol {
+
 
 	private List<List<int[][]>> allScenariosPerDimension;
 	
@@ -40,7 +38,7 @@ public class WriteRead extends CommunicationProtocol {
 				allScenariosPerDimension.add(null);
 		}
 		if (allScenariosPerDimension.get(dimension)==null)
-			allScenariosPerDimension.add(dimension, WR_ScenarioGenerator.generate(dimension));
+			allScenariosPerDimension.set(dimension, WR_ScenarioGenerator.generate(dimension));
 		return allScenariosPerDimension.get(dimension);
 	}
 	
@@ -99,6 +97,7 @@ public class WriteRead extends CommunicationProtocol {
 			List<Process> originalProcesses = baseSimplex.getProcesses();
 			int n = baseSimplex.getProcessCount();
 			List<Process> newProcesses = new ArrayList<Process>(n);
+
 			for (int pid = 0; pid <n ; pid++){
 				Process newP = new Process(pid);
 				String[] view = new String[n];
@@ -110,7 +109,7 @@ public class WriteRead extends CommunicationProtocol {
 				newProcesses.add(newP);
 			}
 			
-			return new Simplex(newProcesses);
+			return new Simplex(baseSimplex.isChromatic(), newProcesses);
 		}
 	}
 }
