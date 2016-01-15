@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import unam.dcct.misc.Constants;
 import unam.dcct.model.WR.WriteRead;
+import unam.dcct.model.WR.test_immediate_snapshot;
 import unam.dcct.model.immediatesnapshot.ImmediateSnapshot;
+import unam.dcct.model.nonimmediatesnapshot.NonImmediateSnapshot;
 import unam.dcct.topology.Simplex;
 import unam.dcct.topology.SimplicialComplex;
 
@@ -148,6 +150,10 @@ public abstract class CommunicationProtocol{
 			return new ImmediateSnapshot(false);
 		if (name.equals(Constants.WRITE_READ))
 			return new WriteRead();
+		if (name.equals(Constants.NON_IMMEDIATE_SNAPSHOT_SHARED_MEMORY))
+			return new NonImmediateSnapshot();
+		if (name.equals("test immediate snapshot"))
+			return new test_immediate_snapshot();
 		return null;
 	}
 	

@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import unam.dcct.misc.Configuration;
 import unam.dcct.misc.Constants;
 import unam.dcct.model.CommunicationProtocol;
 import unam.dcct.topology.Process;
@@ -40,7 +41,7 @@ public class ImmediateSnapshot extends CommunicationProtocol {
 	 * It stores all scenarios codification for each dimension of simplex, that is,
 	 * for each number of processes in each simplex minus one.  
 	 */
-	private String[] allScenariosPerDimension = new String[3];
+	private String[] allScenariosPerDimension = new String[Configuration.getInstance().SUPPORTED_NUMBER_OF_PROCESSES];
 	/**
 	 * As in the non-iterated protocol the same memory is reused across rounds, we need to keep track of it
 	 * for each generated simplex. 

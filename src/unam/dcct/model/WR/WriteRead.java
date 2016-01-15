@@ -3,14 +3,13 @@ package unam.dcct.model.WR;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import unam.dcct.misc.Configuration;
 import unam.dcct.misc.Constants;
 import unam.dcct.model.CommunicationProtocol;
-import unam.dcct.model.Model;
 import unam.dcct.topology.Process;
 import unam.dcct.topology.Simplex;
 
 public class WriteRead extends CommunicationProtocol {
-
 
 	private List<List<int[][]>> allScenariosPerDimension;
 	
@@ -32,13 +31,13 @@ public class WriteRead extends CommunicationProtocol {
 	
 	private List<int[][]> getAllScenarios(int dimension){
 		if (allScenariosPerDimension==null){
-			int maxDimensions = 3;
+			int maxDimensions = Configuration.getInstance().SUPPORTED_NUMBER_OF_PROCESSES;
 			allScenariosPerDimension = new ArrayList<List<int[][]>>(maxDimensions);
 			for (int i =0; i<maxDimensions; i++)
 				allScenariosPerDimension.add(null);
 		}
 		if (allScenariosPerDimension.get(dimension)==null)
-			allScenariosPerDimension.set(dimension, WR_ScenarioGenerator.generate(dimension));
+			allScenariosPerDimension.set(dimension, new WR_ScenarioGenerator().generate(dimension));
 		return allScenariosPerDimension.get(dimension);
 	}
 	

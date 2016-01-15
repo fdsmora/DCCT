@@ -23,6 +23,7 @@ public class Configuration {
 	private Color _NON_CHROMATIC_COLOR;
 	private List<Color> _DEFAULT_COLORS;
 	public final int MAX_ALLOWED_ROUNDS ;
+	public final int SUPPORTED_NUMBER_OF_PROCESSES = 3;
 	public final float EPSILON_VALUE;
 	public final Constants.ProcessViewBrackets DEFAULT_BRACKETS;
 	public final Color NON_CHROMATIC_COLOR;

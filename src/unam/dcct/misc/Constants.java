@@ -7,6 +7,7 @@ import java.util.Set;
 
 import org.reflections.Reflections;
 
+
 /***
  * The purpose of this class is to provide a global access to the most commonly used constant values used throughout the application. 
  * @author Fausto
@@ -36,7 +37,7 @@ public final class Constants {
 	public static final String CHROMATICITY_UPDATE_COMMAND = "chu";
 	public static final String SIMPLICIAL_COMPLEX = "Simplicial complex";
 	public static final String SHARED_MEMORY = "Shared memory";
-	public static final String IMMEDIATE_SNAPSHOT = "Immediate snapshot";
+	public static final String IMMEDIATE_SNAPSHOT = "Immediate Snapshot";
 	public static final String SELECTED_DEFAULT_COLORS = "SELECTED_DEFAULT_COLORS";
 	public static final String DEFAULT_COORDINATES_REGEX = "DEFAULT_\\d_SIMPLEX_VERTEX_COORDINATES";
 	public static final String SELECTED_DEFAULT_NON_CHROMATIC_COLOR = "SELECTED_DEFAULT_NON_CHROMATIC_COLOR";
@@ -50,8 +51,9 @@ public final class Constants {
 	public static final String PROTOCOL_INFORMATION = "Protocol information";
 	public static final String GEOMETRIC_INFORMATION = "Geometric information";
 	public static final String IMMEDIATE_SNAPSHOT_SHARED_MEMORY_ITERATED = "Iterated " + Constants.IMMEDIATE_SNAPSHOT + " " + Constants.SHARED_MEMORY;
-	public static final String IMMEDIATE_SNAPSHOT_SHARED_MEMORY_NON_ITERATED = "Non-iterated " + Constants.IMMEDIATE_SNAPSHOT + " " + Constants.SHARED_MEMORY ;
-	public static final String WRITE_READ = "Iterated Write/Read (WR)";
+	public static final String IMMEDIATE_SNAPSHOT_SHARED_MEMORY_NON_ITERATED = "Non-Iterated " + Constants.IMMEDIATE_SNAPSHOT + " " + Constants.SHARED_MEMORY ;
+	public static final String NON_IMMEDIATE_SNAPSHOT_SHARED_MEMORY = "Non-" + Constants.IMMEDIATE_SNAPSHOT + " " + Constants.SHARED_MEMORY ;
+	public static final String WRITE_READ = "Iterated Write/Read (WR) " + Constants.SHARED_MEMORY ;;
 	
 	
 	public enum ProcessViewBrackets{
@@ -97,6 +99,7 @@ public final class Constants {
 	 * @see unam.dcct.model.immediatesnapshot.ImmediateSnapshot#getName()
 	 */
 	public static final List<String> availableCommunicationProtocols = new ArrayList<String>();
+
 	static {
 		List<String> protocolNames = getCommunicationProtocols();
 		for (String name : protocolNames){
