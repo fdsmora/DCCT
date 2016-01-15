@@ -42,20 +42,7 @@ public class ImmediateSnapshot extends CommunicationProtocol {
 	 * for each number of processes in each simplex minus one.  
 	 */
 	private String[] allScenariosPerDimension = new String[Configuration.getInstance().SUPPORTED_NUMBER_OF_PROCESSES];
-	/**
-	 * As in the non-iterated protocol the same memory is reused across rounds, we need to keep track of it
-	 * for each generated simplex. 
-	 */
-	private Map<Simplex, String[]> simplexMemoryMap;
-	private boolean iterated;
-	
-	/**
-	 * Creates an ImmediateSnapshot instance.
-	 * @param iterated If the ImmediateSnapshot instance will be iterated or no.
-	 */
-	public ImmediateSnapshot(boolean iterated){
-		this.iterated = iterated;
-	}
+
 
 	/**
 	 * It is the implementation of the abstract method {@link CommunicationProtocol#createScenarioGenerator(int)}.
@@ -118,9 +105,7 @@ public class ImmediateSnapshot extends CommunicationProtocol {
 	
 	@Override 
 	public String toString(){
-		if (iterated)
 			return getName();
-		else return ImmediateSnapshotNonIterated.getName();
 	}
 	
 	/**
@@ -185,74 +170,16 @@ public class ImmediateSnapshot extends CommunicationProtocol {
 			}
 			boolean chromatic = baseSimplex.isChromatic();
 			Simplex newSimplex = new Simplex(chromatic, newProcesses);
-			// if it is not iterated, save a copy of the memory associated to the new simplex in order to use it for the next round.
-			if (!iterated){
-				if (!chromatic){
-					// If the newSimplex decremented in dimension with respect to baseSimplex (e.g. a triangle became an edge due to two processes with duplicate views merging into one process), give it a new memory to avoid inconsistencies. 
-					int oldDimension = baseSimplex.dimension();
-					int newDimension = newSimplex.dimension();
-					sharedMemory = oldDimension == newDimension ? sharedMemory : new String[newDimension + 1];
-				}
-				simplexMemoryMap.put(newSimplex, sharedMemory);
-			}
+
 			return newSimplex;
 		}
 		
 		private String[] getSharedMemory(Simplex s){
 			int n = s.getProcessCount();
-			String[] sharedMemory;
-			if (iterated) {
-				// In the iterated immediate snapshot memory model processes read and write a new memory in each round. 
-				sharedMemory = new String[n];
-			}else {
-				// In the non-iterated immediate snapshot memory model processes read and write the same memory during the whole execution of the protocol.
-				// so here we get the previous memory associated with the simplex in the previous round. 
-				
-				// First communication round, add the "base case" memory.
-				if (simplexMemoryMap== null) {
-					simplexMemoryMap = new HashMap<Simplex, String[]>();
-					simplexMemoryMap.put(s, new String[n]);
-				} 
-				
-				// For each round a copy of the memory of the last round is needed. 
-				
-				sharedMemory = simplexMemoryMap.get(s).clone();				
-			}
+			String[] sharedMemory = new String[n];
+			
 			return sharedMemory;
 		}
 		
 	}
-	
-	/**
-	 * This class does nothing special but help populate the global list
-	 * {@link unam.dcct.misc.Constants#availableCommunicationProtocols} at 
-	 * application's startup. The actual logic for generating Non-iterated 
-	 * immediate snapshot scenarios is implemented in @link{unam.dcct.model.immediatesnapshot.ImmediateSnapshot}
-	 * itself (see the iterated field in that class). 
-	 * @author Fausto
-	 * @see unam.dcct.model.immediatesnapshot.ImmediateSnapshot
-	 */
-	public static class ImmediateSnapshotNonIterated extends CommunicationProtocol{
-
-		@Override
-		protected Iterable<Scenario> createScenarioGenerator(int dimension) {
-			return null;
-		}
-		
-		@Override 
-		public String toString(){
-			return getName();
-		}
-		
-		/**
-		 * Returns the name of the current implementation of the @link{unam.dcct.model.CommunicationProtocol}
-		 * This implementation is required as described in @link{unam.dcct.model.CommunicationProtocol#getName()}
-		 * @return the name of the current implementation of the communication protocol.
-		 */
-		public static String getName(){
-			return Constants.IMMEDIATE_SNAPSHOT_SHARED_MEMORY_NON_ITERATED;
-		}
-		
-	}
-
 }

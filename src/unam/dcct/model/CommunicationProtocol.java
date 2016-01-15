@@ -145,9 +145,7 @@ public abstract class CommunicationProtocol{
 	 */
 	public static CommunicationProtocol createCommunicationProtocol(String name){
 		if (name.equals(Constants.IMMEDIATE_SNAPSHOT_SHARED_MEMORY_ITERATED))
-			return new ImmediateSnapshot(true);
-		if (name.equals(Constants.IMMEDIATE_SNAPSHOT_SHARED_MEMORY_NON_ITERATED))
-			return new ImmediateSnapshot(false);
+			return new ImmediateSnapshot();
 		if (name.equals(Constants.WRITE_READ))
 			return new WriteRead();
 		if (name.equals(Constants.NON_IMMEDIATE_SNAPSHOT_SHARED_MEMORY))
@@ -157,7 +155,6 @@ public abstract class CommunicationProtocol{
 		return null;
 	}
 	
-	//
 	public int getRounds(){
 		return rounds;
 	}
