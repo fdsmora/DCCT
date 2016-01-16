@@ -58,7 +58,7 @@ public class Configuration {
 	}
 	
 	private Configuration() {
-		MAX_ALLOWED_ROUNDS = 3;
+		MAX_ALLOWED_ROUNDS = 5;
 		EPSILON_VALUE = 0.35f;
 		DEFAULT_BRACKETS = Constants.ProcessViewBrackets.DEFAULT;
 		NON_CHROMATIC_COLOR = Color.GRAY;

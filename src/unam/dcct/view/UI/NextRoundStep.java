@@ -71,7 +71,7 @@ class NextRoundStep extends Step {
 	@Override
 	public void validateAndExecute(){
 		int capture = 0;
-		if (roundCount==2) 
+		if (roundCount>=2) 
 			capture = JOptionPane.showConfirmDialog(null,"Performance of the application may decrease after executing this round. Do you want to proceed?");
 		if (capture==0) {
 			model.executeRound();
