@@ -144,14 +144,15 @@ public abstract class CommunicationProtocol{
 	 * @return the communication protocol instance created. 
 	 */
 	public static CommunicationProtocol createCommunicationProtocol(String name){
-		if (name.equals(Constants.IMMEDIATE_SNAPSHOT_SHARED_MEMORY_ITERATED))
-			return new ImmediateSnapshot();
-		if (name.equals(Constants.WRITE_READ))
-			return new WriteRead();
-		if (name.equals(Constants.NON_IMMEDIATE_SNAPSHOT_SHARED_MEMORY))
-			return new NonImmediateSnapshot();
-		if (name.equals("test immediate snapshot"))
-			return new test_immediate_snapshot();
+		for (Class<? extends unam.dcct.model.CommunicationProtocol> clazz 
+				: Constants.availableCommunicationProtocolsClasses){
+			try {
+				String clazzName = (String) clazz.getMethod("getName", null).invoke(null, null);
+				if (clazzName.equals(name)){
+					return clazz.newInstance();
+				}
+			} catch (Exception e) {}
+		}
 		return null;
 	}
 	

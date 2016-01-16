@@ -98,15 +98,16 @@ public final class Constants {
 	 * @see unam.dcct.model.Model#getCommunicationProtocol()
 	 * @see unam.dcct.model.immediatesnapshot.ImmediateSnapshot#getName()
 	 */
-	public static final List<String> availableCommunicationProtocols = new ArrayList<String>();
+	public static final List<String> availableCommunicationProtocolsNames = new ArrayList<String>();
 
 	static {
 		List<String> protocolNames = getCommunicationProtocols();
 		for (String name : protocolNames){
-			availableCommunicationProtocols.add(name);
+			availableCommunicationProtocolsNames.add(name);
 		}
 	}
 	
+	public static Set<Class<? extends unam.dcct.model.CommunicationProtocol>> availableCommunicationProtocolsClasses;
 	/**
 	 * Scans the classpath (using Reflections library) in order to find all
 	 * classes that extend the class @link{unam.dcct.model.CommunicationProtocol}. This classes 
@@ -119,9 +120,9 @@ public final class Constants {
 	private static List<String> getCommunicationProtocols(){
 		List<String> info = new ArrayList<String>();
 		Reflections reflections = new Reflections("unam.dcct.model");
-		Set<Class<? extends unam.dcct.model.CommunicationProtocol>> allClasses = reflections
+		availableCommunicationProtocolsClasses = reflections
 				.getSubTypesOf(unam.dcct.model.CommunicationProtocol.class);
-		for (Class<? extends unam.dcct.model.CommunicationProtocol> c : allClasses) {
+		for (Class<? extends unam.dcct.model.CommunicationProtocol> c : availableCommunicationProtocolsClasses) {
 			try {
 				String name = (String) c.getMethod("getName", null).invoke(null, null);
 				info.add(name);

@@ -188,7 +188,6 @@ public class Model {
 	 */
 	public void setCommunicationProtocol(String cm) {
 		this.communicationProtocol = CommunicationProtocol.createCommunicationProtocol(cm);
-
 	}
 
 	public String toString(){

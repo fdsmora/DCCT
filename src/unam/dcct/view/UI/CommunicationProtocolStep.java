@@ -52,7 +52,7 @@ class CommunicationProtocolStep extends Step {
 		// and in general, the most you can about Swing Layout managers. 
 		lbProtocol.setAlignmentX(Component.LEFT_ALIGNMENT);
 		
-		List<String> l_protocols = new ArrayList<String>(Constants.availableCommunicationProtocols);
+		List<String> l_protocols = new ArrayList<String>(Constants.availableCommunicationProtocolsNames);
 		String[] a_protocols = new String[l_protocols.size()];
 		l_protocols.toArray(a_protocols);
 		cbProtocols = new JComboBox<String>(new DefaultComboBoxModel<String>(a_protocols));
