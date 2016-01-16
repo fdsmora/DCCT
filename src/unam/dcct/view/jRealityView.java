@@ -59,6 +59,8 @@ public class jRealityView implements View {
 	private PointSetFactory psf;
 	private static jRealityView instance = null;
 	
+	private ContentAppearance ca;
+	
 	/**
 	 * Global point of access that returns the singleton instance of this class. 
 	 * @return
@@ -86,6 +88,11 @@ public class jRealityView implements View {
 		sgc.setGeometry(null);
 		sgc.removeAllChildren();
 		sgc.addChild(sgcV);
+		
+		// Hide unnecessary panels
+		ca.setShowPanel(false);
+		viewer.setShowPanelSlots(true, false, false, false);
+
 	}
 
 	private void updateView() {
@@ -318,13 +325,15 @@ public class jRealityView implements View {
 		
 		// We enable zoom tool by default. 
 		viewer.getController().getPlugin(CameraMenu.class).setZoomEnabled(true);
-		viewer.registerPlugin(new ContentAppearance());
+		ca = new ContentAppearance();
+		ca.setShowPanel(false);
+		viewer.registerPlugin(ca);
 		viewer.registerPlugin(new ContentLoader());
 		viewer.registerPlugin(new ContentTools());
 		viewer.registerPlugin(simplicialComplexPanelPlugin);
 		//viewer.registerPlugin(new Inspector());
 		viewer.registerPlugin(SCOutputConsole.getInstance());
-		viewer.setShowPanelSlots(true, false, false, true);
+		viewer.setShowPanelSlots(true, false, false, false);
 		viewer.setContent(sgc);
 
 	}
@@ -386,6 +395,10 @@ public class jRealityView implements View {
 		// Append geometric complex information to console.
 		if (geometricObject instanceof GeometricComplex)
 			SCOutputConsole.getInstance().setGeometricComplexInformation((GeometricComplex)geometricObject);
+	
+		// Show pertinent panels
+		ca.setShowPanel(true);
+		viewer.setShowPanelSlots(true, false, false, true);
 	}
 
 	/**
