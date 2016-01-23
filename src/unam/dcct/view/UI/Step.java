@@ -34,7 +34,6 @@ abstract class Step implements ActionListener {
 	protected JButton btnNext =null;
 	protected JButton btnBack =null;
 	protected Model model = null;
-//	protected static Map<String, Step> steps ; 	
 	
 	/**
 	 * Sets up the controls common to all steps. 
@@ -66,16 +65,6 @@ abstract class Step implements ActionListener {
 		scPanel.remove(0);
 		scPanel.add(pContent,0);
 	}
-	
-//	public static void resetAllSteps(SimplicialComplexPanel scPanel){
-//				
-//		steps = new HashMap<String, Step>();
-//		steps.put(NumberOfProcessesStep.class.getName(), new NumberOfProcessesStep(scPanel));
-//		steps.put(NameColorStep.class.getName(), new NameColorStep(scPanel));
-//		steps.put(CommunicationMechanismStep.class.getName(), new CommunicationMechanismStep(scPanel));
-//		steps.put(NextRoundStep.class.getName(), new NextRoundStep(scPanel));
-//
-//	}
 	
 	/**
 	 * Subclasses should provide logic that validates input data and perform some processing. 
