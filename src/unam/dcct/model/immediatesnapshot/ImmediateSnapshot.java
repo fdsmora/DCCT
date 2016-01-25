@@ -2,10 +2,8 @@ package unam.dcct.model.immediatesnapshot;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import unam.dcct.misc.Configuration;
 import unam.dcct.misc.Constants;
 import unam.dcct.model.CommunicationProtocol;

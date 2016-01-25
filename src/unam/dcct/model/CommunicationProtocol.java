@@ -3,10 +3,7 @@ package unam.dcct.model;
 import java.util.ArrayList;
 import java.util.List;
 import unam.dcct.misc.Constants;
-import unam.dcct.model.WR.WriteRead;
-import unam.dcct.model.WR.test_immediate_snapshot;
 import unam.dcct.model.immediatesnapshot.ImmediateSnapshot;
-import unam.dcct.model.nonimmediatesnapshot.NonImmediateSnapshot;
 import unam.dcct.topology.Simplex;
 import unam.dcct.topology.SimplicialComplex;
 

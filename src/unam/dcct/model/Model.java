@@ -1,12 +1,12 @@
 package unam.dcct.model;
 
-import java.awt.Color;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import de.jreality.shader.Color;
 //import javax.security.auth.login.Configuration;
 import unam.dcct.misc.Constants;
 import unam.dcct.misc.Configuration;

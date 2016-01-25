@@ -1,6 +1,5 @@
 package unam.dcct.misc;
 
-import java.awt.Color;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -13,6 +12,7 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import de.jreality.shader.Color;
 import unam.dcct.misc.Constants.ProcessViewBrackets;
 
 public class Configuration {

@@ -9,7 +9,6 @@ import java.util.Map;
 import unam.dcct.misc.Configuration;
 import unam.dcct.misc.Constants;
 import unam.dcct.model.CommunicationProtocol;
-import unam.dcct.model.WR.WR_ScenarioGenerator;
 import unam.dcct.topology.Process;
 import unam.dcct.topology.Simplex;
 

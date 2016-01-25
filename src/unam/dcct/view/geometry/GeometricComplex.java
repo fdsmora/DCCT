@@ -1,12 +1,13 @@
 package unam.dcct.view.geometry;
 
-import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+
+import de.jreality.shader.Color;
 import unam.dcct.topology.Process;
 import unam.dcct.topology.Simplex;
 import unam.dcct.topology.SimplicialComplex;

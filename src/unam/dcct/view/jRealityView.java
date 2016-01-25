@@ -1,6 +1,5 @@
 package unam.dcct.view;
 
-import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 import unam.dcct.misc.Configuration;
@@ -26,8 +25,11 @@ import de.jreality.scene.IndexedFaceSet;
 import de.jreality.scene.IndexedLineSet;
 import de.jreality.scene.SceneGraphComponent;
 import de.jreality.scene.data.Attribute;
+import de.jreality.scene.data.DoubleArrayArray;
 import de.jreality.scene.data.StorageModel;
 import de.jreality.scene.tool.InputSlot;
+import de.jreality.shader.Color;
+import de.jreality.shader.CommonAttributes;
 //import de.jreality.scene.Appearance;
 //import de.jreality.shader.DefaultGeometryShader;
 //import de.jreality.shader.DefaultLineShader;
@@ -128,6 +130,7 @@ public class jRealityView implements View {
 			psf.setVertexCount(geometricObject.getVertexCount());
 			psf.setVertexCoordinates(geometricObject.getCoordinates());
 			// Need to convert colors to a double array, otherwise doesn't work. 
+//			psf.setVertexColors(geometricObject.getVertexColors());
 			psf.setVertexColors(toDoubleArray(geometricObject.getVertexColors()));
 			psf.setVertexAttribute(Attribute.LABELS, StorageModel.STRING_ARRAY.createReadOnly(geometricObject.getVertexLabels()));
 			psf.update();
@@ -145,11 +148,16 @@ public class jRealityView implements View {
 			
 //			Color[] faceColors = new Color[faces.length];
 //			for (int i = 0; i<faces.length; i++){
-//				faceColors[i]=Constants.DEFAULT_FACE_COLOR;
-//			}
-						
+//				if (i%3==0)
+//					faceColors[i]=Color.magenta;
+//				else if (i%3==1)
+//					faceColors[i]=Color.green;
+//				else
+//					faceColors[i]=Color.red;
+//			}				
 //			faceFactory.setFaceColors(toDoubleArray(faceColors));
-			
+//			faceFactory.setFaceColors(faceColors);
+							
 			faceFactory.setFaceIndices(faces);
 			faceFactory.setGenerateFaceNormals(true);
 			faceFactory.setGenerateEdgesFromFaces(true);
@@ -161,11 +169,14 @@ public class jRealityView implements View {
 
 	/**
 	 * Converts the color to a double array representation. 
+	 * This is a 'patch' to fix a bug in jReality. This method is originally
+	 * copy and pasted from de.jreality.geometry.AbstractPointSetFactory#toDoubleArray.
 	 * @param color
 	 * @return
 	 */
 	private static double [] toDoubleArray( Color [] color ) {
-		float [] c = new float[5];
+//		float [] c = new float[5]; Original bug from jReality
+		float [] c = new float[4]; // This is the fix.
 		double [] array = new double[color.length * 4 ];
 		for( int i=0, j=0; i<array.length; i+=4, j++ ) {
 			color[j].getComponents(c);
@@ -376,7 +387,7 @@ public class jRealityView implements View {
 	 * in particular check the DragEventTool01 and DragEventTool02 classes in the jReality tools tutorial (de.jreality.tutorial.tool) 
 	 * @param sgc The SceneGraphComponent to which the tools will be attached so that they can interact with the visualizations it represents.
 	 */
-	private void addInteractiveTools(SceneGraphComponent sgc) {
+	private void addInteractiveTools(final SceneGraphComponent sgc) {
 		/*		 
 		 * Create DraggingTool to let user drag the whole geometric object around the visualization space.
 		 Needed to tweak it a bit in order to enable it back, as this feature was removed 
@@ -439,7 +450,7 @@ public class jRealityView implements View {
 			
 			private IndexedFaceSet faceSet;
 			private double[][] points;
-			
+						
 			public void faceDragStart(FaceDragEvent e) {
 				if (faceDragEnabled){
 					faceSet = e.getIndexedFaceSet();
@@ -460,6 +471,16 @@ public class jRealityView implements View {
 					}
 					// I think this is not necessary, but I leave it (commented) in case. 
 //					faceSet.setVertexAttributes(Attribute.COORDINATES,StorageModel.DOUBLE_ARRAY.array(3).createReadOnly(newPoints));	
+					
+					// Test code for developing 'faces click and color' feature. 
+					//					faceSet.setFaceAttributes(Attribute.COLORS, StorageModel.DOUBLE_ARRAY.array()..createReadOnly(toDoubleArray(new Color[]{Color.red})));
+//					faceSet.setFaceAttributes(Attribute.COLORS, StorageModel.DOUBLE_ARRAY.array().toDoubleArrayArray(new float[][]{Color.red.getColorComponents(null)}));
+					
+//					faceSet.setFaceAttributes(Attribute.COLORS, StorageModel.DOUBLE3_INLINED.createReadOnly((toDoubleArray(new Color[]{Color.blue}))));
+//					viewer.getViewer().getSceneRoot().getChildComponent(1).getAppearance().getAttribute(CommonAttributes.POLYGON_SHADER+"."+CommonAttributes.DIFFUSE_COLOR);
+//					faceSet.setFaceAttributes(Attribute.COLORS, StorageModel.DOUBLE3_INLINED.createWritableDataList(toDoubleArray(new Color[]{Color.blue, Color.gray, Color.cyan})));
+//					faceSet.getFaceAttributes(Attribute.COLORS);
+//					faceSet.setFaceAttributes(Attribute.COLORS, new DoubleArrayArray.Inlined( toDoubleArray(new Color[]{Color.blue, Color.gray, Color.cyan}), 1 ));
 				}
 			}
 

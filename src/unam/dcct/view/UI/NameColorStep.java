@@ -26,7 +26,7 @@ import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.PlainDocument;
 
-import unam.dcct.misc.Configuration;
+import de.jreality.util.ColorConverter;
 import unam.dcct.misc.Constants;
 
 /***
@@ -41,7 +41,6 @@ class NameColorStep extends Step {
 	private List<JTextField> l_processNames;
 	private List<ColorChooser> l_processColors;
 	private ColorChooser ncChooser;
-	private Configuration config = Configuration.getInstance();
 	private int n = 0;
 	
 	public NameColorStep() {
@@ -53,7 +52,7 @@ class NameColorStep extends Step {
 		pNonChromaticColor.setLayout(new BoxLayout(pNonChromaticColor,BoxLayout.PAGE_AXIS));
 		pNonChromaticColor.setBorder(BorderFactory.createTitledBorder("Color for non-chromatic vertices"));
 		pNonChromaticColor.setAlignmentX(Component.CENTER_ALIGNMENT);
-		ncChooser = new ColorChooser(model.getNonChromaticColor());
+		ncChooser = new ColorChooser(new Color(model.getNonChromaticColor().getRGB()));
 		JButton btnColor = ncChooser.getButton();
 		btnColor.setAlignmentX(Component.CENTER_ALIGNMENT);
 		pNonChromaticColor.add(Box.createRigidArea(new Dimension(180,0)));
@@ -92,7 +91,7 @@ class NameColorStep extends Step {
 		
 		pProcessNameColor.removeAll();
 		
-		List<Color> colors = model.getColors(); 
+		List<de.jreality.shader.Color> colors = model.getColors(); 
 		List<String> pNames = model.getpNames();
 		
 		for (int i = 0; i<n ; i++){
@@ -110,7 +109,7 @@ class NameColorStep extends Step {
 			txtN.setMaximumSize(d);
 			l_processNames.add(txtN);
 			
-			ColorChooser cChooser = new ColorChooser(colors.get(i));
+			ColorChooser cChooser = new ColorChooser(ColorConverter.toAwt(colors.get(i)));
 			l_processColors.add(cChooser);
 			
 			pBody.add(txtN);
@@ -152,12 +151,17 @@ class NameColorStep extends Step {
 		List<String> lprocNames = new ArrayList<String>(n);
 		lprocNames.addAll(procNames);
 		
-		List<Color> lprocColors = new ArrayList<Color>(n);
-		for (ColorChooser ce : l_processColors)
-			lprocColors.add(ce.getCurrentColor());
+		List<de.jreality.shader.Color> lprocColors = new ArrayList<de.jreality.shader.Color>(n);
+		for (ColorChooser ce : l_processColors){
+			Color oldColor = ce.getCurrentColor();
+			de.jreality.shader.Color newColor = ColorConverter.toJR(oldColor);
+			lprocColors.add(newColor);
+		}
 		
 		model.setColors(lprocColors);
-		model.setNonChromaticColor(ncChooser.getCurrentColor());
+		
+		Color oldColor = ncChooser.getCurrentColor();
+		model.setNonChromaticColor(ColorConverter.toJR(oldColor));
 		model.createInitialComplex(lprocNames);
 		
 		//Step nextStep = Step.steps.get(CommunicationMechanismStep.class.getName());

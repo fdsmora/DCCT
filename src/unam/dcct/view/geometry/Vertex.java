@@ -1,7 +1,6 @@
 package unam.dcct.view.geometry;
 
-import java.awt.Color;
-
+import de.jreality.shader.Color;
 import unam.dcct.topology.Process; 
 
 public class Vertex {
