@@ -1,6 +1,5 @@
 package unam.dcct.view.UI;
 
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -19,7 +18,6 @@ import javax.swing.event.ChangeListener;
 
 import de.jreality.plugin.basic.Scene;
 import de.jreality.plugin.basic.ViewShrinkPanelPlugin;
-import de.jreality.plugin.icon.ImageHook;
 import de.jreality.scene.SceneGraphComponent;
 import de.jreality.scene.Transformation;
 import de.jreality.scene.tool.InputSlot;
@@ -30,6 +28,7 @@ import de.jtem.jrworkspace.plugin.Controller;
 import de.jtem.jrworkspace.plugin.PluginInfo;
 import unam.dcct.misc.Constants;
 import unam.dcct.view.jRealityView;
+import unam.dcct.view.tools.ColorFacesTool;
 import unam.dcct.view.tools.DragGeometryTool;
 
 /**
@@ -38,7 +37,7 @@ import unam.dcct.view.tools.DragGeometryTool;
  * <br>
  * Controls are for enabling/disabling vertex, edge and face dragging, reseting the original
  * camera perspective, dragging the whole geometric object, etc. 
- * @author Fausto
+ * @author Fausto Salazar
  *
  */
 public class InteractiveToolsPanel extends ViewShrinkPanelPlugin implements ItemListener {
@@ -53,6 +52,8 @@ public class InteractiveToolsPanel extends ViewShrinkPanelPlugin implements Item
 	
 	private DragGeometryTool dragGeometryTool;
 	private DraggingTool dragWholeObjectTool;
+	private ColorFacesTool colorFacesTool;
+	private ColorChooser faceColorChooser;
 
 	public InteractiveToolsPanel(){
 		// Define the position of the controls within jReality UI
@@ -60,13 +61,13 @@ public class InteractiveToolsPanel extends ViewShrinkPanelPlugin implements Item
 		
 		jrview = jRealityView.getInstance();
 		
-		dragGeometryTool = new DragGeometryTool(this);
+		dragGeometryTool = new DragGeometryTool();
+		colorFacesTool = new ColorFacesTool(this);
 		
 		pContent = new JPanel();
 		pContent.setBorder(BorderFactory.createTitledBorder("Interaction tools"));
 		pContent.setLayout(new BoxLayout(pContent,BoxLayout.PAGE_AXIS));
 
-		
 		JPanel dragPanel = new JPanel();
 		dragPanel.setLayout(new BoxLayout(dragPanel,BoxLayout.PAGE_AXIS));
 		dragPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -86,7 +87,7 @@ public class InteractiveToolsPanel extends ViewShrinkPanelPlugin implements Item
 		 * This button is for allowing the user to reset the original camera perspective when she
 		 * rotated or translated the visualized object. 
 		 */
-		btnResetPerspective.setText("Reset perspective");
+		btnResetPerspective.setText("NO SIRVE");
 		btnResetPerspective.setActionCommand("R");
 		btnResetPerspective.addActionListener(new ActionListener(){
 			@Override
@@ -119,26 +120,38 @@ public class InteractiveToolsPanel extends ViewShrinkPanelPlugin implements Item
 		sfPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
 		
 		chkActiveColorFacesTool = new JCheckBox("Active");
-		chkActiveColorFacesTool.setSelected(false);
 		chkActiveColorFacesTool.addItemListener(this);
 		// Proper alignment properties
 		chkActiveColorFacesTool.setAlignmentX(Component.CENTER_ALIGNMENT);
 		sfPanel.add(chkActiveColorFacesTool);
 		
-		final ColorChooser faceColorChooser = new ColorChooser(Constants.FACE_COLOR_CHOOSER_DEFAULT_COLOR);
+		faceColorChooser = new ColorChooser(Constants.FACE_COLOR_CHOOSER_DEFAULT_COLOR);
 		faceColorChooser.setAlignmentX(Component.CENTER_ALIGNMENT);
 		faceColorChooser.addChangeListener(new ChangeListener(){
 
 			@Override
 			public void stateChanged(ChangeEvent arg0) {
-				dragGeometryTool.setSelectedColor(ColorConverter.toJR(faceColorChooser.getSelectedColor()));				
+				colorFacesTool.setSelectedColor(ColorConverter.toJR(faceColorChooser.getSelectedColor()));				
 			}
 			
 		});
+		
+		setEnabledColorFacesToolUserControls(false);
+		
 		sfPanel.add(Box.createRigidArea(new Dimension(180,0)));
 		sfPanel.add(faceColorChooser);
 		
 		pContent.add(sfPanel);
+	}
+	
+	/**
+	 * Depending on the value of the parameter, checks or unchecks the color faces tool's activation's checkbox
+	 * and hides or displays its color chooser button.
+	 * @param enabled 
+	 */
+	public void setEnabledColorFacesToolUserControls(boolean enabled){
+		chkActiveColorFacesTool.setSelected(enabled);
+		faceColorChooser.setVisible(enabled);
 	}
 	
 	public void itemStateChanged(ItemEvent e) {
@@ -150,7 +163,9 @@ public class InteractiveToolsPanel extends ViewShrinkPanelPlugin implements Item
 		}else if (src == chkDragFace){
 			dragGeometryTool.setFaceDragEnabled(chkDragFace.isSelected());
 		}else if (src == chkActiveColorFacesTool ){
-			dragGeometryTool.setColorFacesToolEnabled(chkActiveColorFacesTool.isSelected());
+			boolean selected = chkActiveColorFacesTool.isSelected();
+			setEnabledColorFacesToolUserControls(selected);
+			colorFacesTool.setEnabled(selected);
 		}
 	}
 		
@@ -161,6 +176,7 @@ public class InteractiveToolsPanel extends ViewShrinkPanelPlugin implements Item
 		Scene scene = c.getPlugin(Scene.class);
 		SceneGraphComponent sgc = scene.getContentComponent();
 		sgc.addTool(dragGeometryTool);
+		sgc.addTool(colorFacesTool);
 		
 		/*		 
 		 * Create DraggingTool to let user drag the whole geometric object around the visualization space.
@@ -181,6 +197,7 @@ public class InteractiveToolsPanel extends ViewShrinkPanelPlugin implements Item
 		SceneGraphComponent content = scene.getContentComponent();
 		content.removeTool(dragGeometryTool);
 		content.removeTool(dragWholeObjectTool);
+		content.removeTool(colorFacesTool);
 		super.uninstall(c);
 	}
 	

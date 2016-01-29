@@ -2,14 +2,9 @@ package unam.dcct.view.tools;
 
 import de.jreality.math.Matrix;
 import de.jreality.math.MatrixBuilder;
-import de.jreality.scene.Appearance;
 import de.jreality.scene.IndexedFaceSet;
 import de.jreality.scene.IndexedLineSet;
 import de.jreality.scene.data.Attribute;
-import de.jreality.scene.event.AppearanceEvent;
-import de.jreality.scene.event.AppearanceListener;
-import de.jreality.shader.Color;
-import de.jreality.shader.CommonAttributes;
 import de.jreality.tools.DragEventTool;
 import de.jreality.tools.FaceDragEvent;
 import de.jreality.tools.FaceDragListener;
@@ -18,11 +13,10 @@ import de.jreality.tools.LineDragListener;
 import de.jreality.tools.PointDragEvent;
 import de.jreality.tools.PointDragListener;
 import unam.dcct.view.jRealityView;
-import unam.dcct.view.UI.InteractiveToolsPanel;
 
 /**
  * A custom tool for dragging vertices, edges and faces.
- * @author Fausto
+ * @author Fausto Salazar
  *
  */
 public class DragGeometryTool extends DragEventTool {
@@ -31,17 +25,10 @@ public class DragGeometryTool extends DragEventTool {
 	private boolean edgeDragEnabled = true;
 	private boolean faceDragEnabled = true;
 	
-	private jRealityView jrView;
-	
-	private Color[] colors;
-	private Appearance sceneContentAppearance;
-	private Color selectedColor;
-	private boolean colorFacesToolEnabled = false;
-	private InteractiveToolsPanel toolsPanel;
+	private jRealityView jrView;	
 
-	public DragGeometryTool(InteractiveToolsPanel toolsPanel){
+	public DragGeometryTool(){
 		jrView = jRealityView.getInstance();
-		this.toolsPanel = toolsPanel;
 		
 		addDragListeners();
 	}
@@ -132,10 +119,7 @@ public class DragGeometryTool extends DragEventTool {
 //							faceSet.setFaceAttributes(Attribute.COLORS, StorageModel.DOUBLE3_INLINED.createWritableDataList(toDoubleArray(new Color[]{Color.blue, Color.gray, Color.cyan})));
 //							faceSet.getFaceAttributes(Attribute.COLORS);
 //							faceSet.setFaceAttributes(Attribute.COLORS, new DoubleArrayArray.Inlined( toDoubleArray(new Color[]{Color.blue, Color.gray, Color.cyan}), 1 ));
-					if (colorFacesToolEnabled) {
-						colors[e.getIndex()] = selectedColor;
-						jrView.updateFacesColors(colors);
-					}
+
 				}
 			}
 
@@ -162,56 +146,6 @@ public class DragGeometryTool extends DragEventTool {
 
 	public void setFaceDragEnabled(boolean faceDragEnabled) {
 		this.faceDragEnabled = faceDragEnabled;
-	}
-	
-	/**
-	 * Colors the faces of the geometric object being displayed using the current's 
-	 * scene's main content appearance. 
-	 * <p>
-	 * This color is the one that is set using the ContentAppearance panel. 
-	 */
-	private void getAndColorFacesFromAppearance(){
-		
-		int numberOfFaces = jrView.getGeometricObject().getFacesIndices().length;
-				
-		colors = new Color[numberOfFaces];
-		Color baseColor = (Color)  sceneContentAppearance.getAttribute(CommonAttributes.POLYGON_SHADER + "." + CommonAttributes.DIFFUSE_COLOR);
-		for (int i = 0; i< numberOfFaces; i++){
-			colors[i] = baseColor;
-		}	
-	
-		jrView.updateFacesColors(colors);
-	}
-
-	public void setSelectedColor(Color selectedColor) {
-		this.selectedColor = selectedColor;
-	}
-
-	public void setColorFacesToolEnabled(boolean enabled) {
-		colorFacesToolEnabled = enabled;
-		
-		if (enabled && 
-				sceneContentAppearance==null){
-			// The first time this tool is enabled we 
-			// need to set up everything that is required
-			// to make this tool's functionality available.
-			sceneContentAppearance = jrView.getJRealityViewer()
-					.getViewer().getSceneRoot()
-					.getChildComponent(1) // 1 corresponds to the index of the main content node in the scene graph. See http://www3.math.tu-berlin.de/jreality/68-0-the-jreality-scene-graph.html
-					.getAppearance(); 
-			sceneContentAppearance.addAppearanceListener(new AppearanceListener(){
-
-				@Override
-				public void appearanceChanged(AppearanceEvent ev) {
-					
-					colorFacesToolEnabled = false;
-					DragGeometryTool.this.toolsPanel.getChkActiveColorFacesTool().setSelected(false);
-					
-					getAndColorFacesFromAppearance();
-			}});
-			
-			getAndColorFacesFromAppearance();
-		}
 	}
 
 }
