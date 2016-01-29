@@ -1,5 +1,6 @@
 package unam.dcct.misc;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -99,6 +100,7 @@ public final class Constants {
 	 * @see unam.dcct.model.immediatesnapshot.ImmediateSnapshot#getName()
 	 */
 	public static final List<String> availableCommunicationProtocolsNames = new ArrayList<String>();
+	public static final Color FACE_COLOR_CHOOSER_DEFAULT_COLOR = Color.red;
 
 	static {
 		List<String> protocolNames = getCommunicationProtocols();

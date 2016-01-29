@@ -1,0 +1,199 @@
+package unam.dcct.view.UI;
+
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JPanel;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+
+import de.jreality.plugin.basic.Scene;
+import de.jreality.plugin.basic.ViewShrinkPanelPlugin;
+import de.jreality.plugin.icon.ImageHook;
+import de.jreality.scene.SceneGraphComponent;
+import de.jreality.scene.Transformation;
+import de.jreality.scene.tool.InputSlot;
+import de.jreality.tools.DraggingTool;
+import de.jreality.util.ColorConverter;
+import de.jreality.util.DefaultMatrixSupport;
+import de.jtem.jrworkspace.plugin.Controller;
+import de.jtem.jrworkspace.plugin.PluginInfo;
+import unam.dcct.misc.Constants;
+import unam.dcct.view.jRealityView;
+import unam.dcct.view.tools.DragGeometryTool;
+
+/**
+ * Adds tools to let user interact with the visualization. Also provides a UI to use these
+ * tools. 
+ * <br>
+ * Controls are for enabling/disabling vertex, edge and face dragging, reseting the original
+ * camera perspective, dragging the whole geometric object, etc. 
+ * @author Fausto
+ *
+ */
+public class InteractiveToolsPanel extends ViewShrinkPanelPlugin implements ItemListener {
+	
+	private JPanel pContent;
+	private JButton btnResetPerspective;
+	private JCheckBox chkDragVertex,
+	chkDragEdge,
+	chkDragFace,
+	chkActiveColorFacesTool;
+	private jRealityView jrview;
+	
+	private DragGeometryTool dragGeometryTool;
+	private DraggingTool dragWholeObjectTool;
+
+	public InteractiveToolsPanel(){
+		// Define the position of the controls within jReality UI
+		setInitialPosition(SHRINKER_LEFT);
+		
+		jrview = jRealityView.getInstance();
+		
+		dragGeometryTool = new DragGeometryTool(this);
+		
+		pContent = new JPanel();
+		pContent.setBorder(BorderFactory.createTitledBorder("Interaction tools"));
+		pContent.setLayout(new BoxLayout(pContent,BoxLayout.PAGE_AXIS));
+
+		
+		JPanel dragPanel = new JPanel();
+		dragPanel.setLayout(new BoxLayout(dragPanel,BoxLayout.PAGE_AXIS));
+		dragPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
+		
+		chkDragVertex = new JCheckBox("Drag vertices");
+		chkDragEdge = new JCheckBox("Drag edges");
+		chkDragFace = new JCheckBox("Drag faces");
+		chkDragVertex.addItemListener(this);
+		chkDragEdge.addItemListener(this);
+		chkDragFace.addItemListener(this);
+		chkDragVertex.setSelected(true);
+		chkDragEdge.setSelected(true);
+		chkDragFace.setSelected(true);
+		btnResetPerspective = new JButton();
+		
+		/*
+		 * This button is for allowing the user to reset the original camera perspective when she
+		 * rotated or translated the visualized object. 
+		 */
+		btnResetPerspective.setText("Reset perspective");
+		btnResetPerspective.setActionCommand("R");
+		btnResetPerspective.addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (e.getActionCommand().equals("R")){
+					// Restore the original camera perspective
+					Transformation t = jrview.getSceneGraphComponent().getTransformation();
+					if (t!=null)
+						DefaultMatrixSupport.getSharedInstance().restoreDefault(t, true);
+				}
+			}
+		});
+
+		dragPanel.add(btnResetPerspective);
+		dragPanel.add(chkDragVertex);
+		dragPanel.add(chkDragEdge);
+		dragPanel.add(chkDragFace);
+		pContent.add(dragPanel);
+		
+		addColorFacesControl();
+		
+		// Embed this panel into jReality's Shrink Panel.
+		getShrinkPanel().add(pContent);
+	}
+
+	private void addColorFacesControl(){
+		JPanel sfPanel = new JPanel();
+		sfPanel.setLayout(new BoxLayout(sfPanel,BoxLayout.PAGE_AXIS));
+		sfPanel.setBorder(BorderFactory.createTitledBorder("Color faces"));
+		sfPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
+		
+		chkActiveColorFacesTool = new JCheckBox("Active");
+		chkActiveColorFacesTool.setSelected(false);
+		chkActiveColorFacesTool.addItemListener(this);
+		// Proper alignment properties
+		chkActiveColorFacesTool.setAlignmentX(Component.CENTER_ALIGNMENT);
+		sfPanel.add(chkActiveColorFacesTool);
+		
+		final ColorChooser faceColorChooser = new ColorChooser(Constants.FACE_COLOR_CHOOSER_DEFAULT_COLOR);
+		faceColorChooser.setAlignmentX(Component.CENTER_ALIGNMENT);
+		faceColorChooser.addChangeListener(new ChangeListener(){
+
+			@Override
+			public void stateChanged(ChangeEvent arg0) {
+				dragGeometryTool.setSelectedColor(ColorConverter.toJR(faceColorChooser.getSelectedColor()));				
+			}
+			
+		});
+		sfPanel.add(Box.createRigidArea(new Dimension(180,0)));
+		sfPanel.add(faceColorChooser);
+		
+		pContent.add(sfPanel);
+	}
+	
+	public void itemStateChanged(ItemEvent e) {
+		Object src = e.getSource();
+		if (src == chkDragVertex){
+			dragGeometryTool.setVertexDragEnabled(chkDragVertex.isSelected());
+		}else if (src == chkDragEdge){
+			dragGeometryTool.setEdgeDragEnabled(chkDragEdge.isSelected());
+		}else if (src == chkDragFace){
+			dragGeometryTool.setFaceDragEnabled(chkDragFace.isSelected());
+		}else if (src == chkActiveColorFacesTool ){
+			dragGeometryTool.setColorFacesToolEnabled(chkActiveColorFacesTool.isSelected());
+		}
+	}
+		
+
+	@Override
+	public void install(Controller c) throws Exception {
+		super.install(c);
+		Scene scene = c.getPlugin(Scene.class);
+		SceneGraphComponent sgc = scene.getContentComponent();
+		sgc.addTool(dragGeometryTool);
+		
+		/*		 
+		 * Create DraggingTool to let user drag the whole geometric object around the visualization space.
+		 Needed to tweak it a bit in order to enable it back, as this feature was removed 
+		 in the latest versions of jReality (I brought it back because I consider it useful for this program). 
+		 "PrimarySelection" is to activate dragging by pressing mouse's right button. 
+		 "DragActivation" is the original behavior, which activates it with middle button (mouse's wheel)
+		 but not every mouse has a middle button (e.g. Mac) */
+		dragWholeObjectTool = new DraggingTool(InputSlot.getDevice("PrimarySelection"));
+		dragWholeObjectTool.addCurrentSlot(InputSlot.getDevice("DragAlongViewDirection"));
+		dragWholeObjectTool.addCurrentSlot(InputSlot.getDevice("PointerEvolution"));		
+		sgc.addTool(dragWholeObjectTool);
+	}
+	
+	@Override
+	public void uninstall(Controller c) throws Exception {
+		Scene scene = c.getPlugin(Scene.class);
+		SceneGraphComponent content = scene.getContentComponent();
+		content.removeTool(dragGeometryTool);
+		content.removeTool(dragWholeObjectTool);
+		super.uninstall(c);
+	}
+	
+	@Override
+	public PluginInfo getPluginInfo() {
+		PluginInfo info = new PluginInfo();
+		info.name = "Interaction control panel";
+		info.vendorName = "UNAM";
+		return info; 
+	}
+
+	public JCheckBox getChkActiveColorFacesTool() {
+		return chkActiveColorFacesTool;
+	}
+	
+}

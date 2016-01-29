@@ -3,8 +3,6 @@ package unam.dcct.view.UI;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -16,8 +14,6 @@ import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
-import javax.swing.JColorChooser;
-import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -41,6 +37,7 @@ class NameColorStep extends Step {
 	private List<JTextField> l_processNames;
 	private List<ColorChooser> l_processColors;
 	private ColorChooser ncChooser;
+
 	private int n = 0;
 	
 	public NameColorStep() {
@@ -53,10 +50,9 @@ class NameColorStep extends Step {
 		pNonChromaticColor.setBorder(BorderFactory.createTitledBorder("Color for non-chromatic vertices"));
 		pNonChromaticColor.setAlignmentX(Component.CENTER_ALIGNMENT);
 		ncChooser = new ColorChooser(new Color(model.getNonChromaticColor().getRGB()));
-		JButton btnColor = ncChooser.getButton();
-		btnColor.setAlignmentX(Component.CENTER_ALIGNMENT);
-		pNonChromaticColor.add(Box.createRigidArea(new Dimension(180,0)));
-		pNonChromaticColor.add(ncChooser.getButton());
+//		ncChooser.setAlignmentX(Component.CENTER_ALIGNMENT);
+		pNonChromaticColor.add(Box.createRigidArea(new Dimension(100,0)));
+		pNonChromaticColor.add(ncChooser);
 		return pNonChromaticColor;
 	}
 	
@@ -103,10 +99,11 @@ class NameColorStep extends Step {
 			// For limiting introduced text to one character. 
 			txtN.setDocument(new JTextFieldLimit(1));
 			txtN.setText(pNames.get(i));
-			Dimension d = new Dimension(20,24);
+			Dimension d = new Dimension(22,24);
 			txtN.setPreferredSize(d);
 			txtN.setMinimumSize(d);
 			txtN.setMaximumSize(d);
+			
 			l_processNames.add(txtN);
 			
 			ColorChooser cChooser = new ColorChooser(ColorConverter.toAwt(colors.get(i)));
@@ -114,7 +111,7 @@ class NameColorStep extends Step {
 			
 			pBody.add(txtN);
 			pBody.add(Box.createRigidArea(new Dimension(10,0)));
-			pBody.add(cChooser.getButton());
+			pBody.add(cChooser);
 			
 			JLabel lbN = new JLabel("Process " + i + "'s name and color");
 			lbN.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -153,14 +150,14 @@ class NameColorStep extends Step {
 		
 		List<de.jreality.shader.Color> lprocColors = new ArrayList<de.jreality.shader.Color>(n);
 		for (ColorChooser ce : l_processColors){
-			Color oldColor = ce.getCurrentColor();
+			Color oldColor = ce.getSelectedColor();
 			de.jreality.shader.Color newColor = ColorConverter.toJR(oldColor);
 			lprocColors.add(newColor);
 		}
 		
 		model.setColors(lprocColors);
 		
-		Color oldColor = ncChooser.getCurrentColor();
+		Color oldColor = ncChooser.getSelectedColor();
 		model.setNonChromaticColor(ColorConverter.toJR(oldColor));
 		model.createInitialComplex(lprocNames);
 		
@@ -178,56 +175,6 @@ class NameColorStep extends Step {
 		back.visit();		
 	}
 		
-	/**
-	 * Custom color chooser.
-	 * @author Fausto
-	 *
-	 */
-	private class ColorChooser implements ActionListener {
-		JButton button = new JButton(" ");
-		Color currentColor;
-		JDialog dialog;
-		JColorChooser colorChooser = new JColorChooser();
-		static final String EDIT = "edit";
-		
-		public ColorChooser(Color defaultColor){
-			this.currentColor = defaultColor;
-			button.addActionListener(this);
-			button.setActionCommand(EDIT);
-			button.setBorderPainted(false);
-			button.setBackground(currentColor);
-			button.setContentAreaFilled(false);
-			button.setOpaque(true);
-			dialog = JColorChooser.createDialog(this.button,"Pick a Color",
-                    true,  
-                    colorChooser,
-                    this,  
-                    null); 
-		}
-
-		public void actionPerformed(ActionEvent e) {
-			if (EDIT.equals(e.getActionCommand())){
-	            colorChooser.setColor(currentColor);
-	            dialog.setVisible(true);
-			}
-			else{
-				currentColor = colorChooser.getColor();
-				button.setBackground(currentColor);
-				button.setForeground(currentColor);
-			}
-				
-		}
-
-		public JButton getButton() {
-			return button;
-		}
-
-		public Color getCurrentColor() {
-			return currentColor;
-		}
-
-	}
-
 	/***
 	 * Auxiliary class for limiting the number of characters introduced into a JTextField
 	 * Taken from : http://stackoverflow.com/questions/10136794/limiting-the-number-of-characters-in-a-jtextfield
@@ -247,5 +194,5 @@ class NameColorStep extends Step {
 		      super.insertString(offset, str, attr);
 		    }
 		  }
-		}
+	}
 }
