@@ -4,10 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 import unam.dcct.misc.Configuration;
 import unam.dcct.misc.Constants;
+import unam.dcct.model.AbstractModel;
 import unam.dcct.model.Model;
 import unam.dcct.topology.SimplicialComplex;
 import unam.dcct.view.UI.InteractiveToolsPanel;
 import unam.dcct.view.UI.SimplicialComplexPanel;
+import unam.dcct.view.commands.Command;
 import unam.dcct.view.geometry.GeometricComplex;
 import unam.dcct.view.geometry.Geometry;
 import de.jreality.geometry.IndexedFaceSetFactory;
@@ -23,6 +25,8 @@ import de.jreality.scene.SceneGraphComponent;
 import de.jreality.scene.data.Attribute;
 import de.jreality.scene.data.StorageModel;
 import de.jreality.shader.Color;
+import de.jreality.tools.RotateTool;
+import de.jreality.tools.SimpleRotateTool;
 import de.jtem.jrworkspace.plugin.Controller;
 import de.jtem.jrworkspace.plugin.PluginInfo;
 /***
@@ -34,7 +38,7 @@ import de.jtem.jrworkspace.plugin.PluginInfo;
  * @see unam.dcct.view.geometry.Face
  * @see unam.dcct.view.geometry.GeometricComplex
  */
-public class jRealityView implements View {
+public class jRealityView extends AbstractModel implements View {
 
 	private Model model;
 	private Geometry geometricObject;
@@ -82,6 +86,8 @@ public class jRealityView implements View {
 		contentAppearance.setShowPanel(false);
 		interactionControlPanel.setShowPanel(false);
 		viewer.setShowPanelSlots(true, false, false, false);
+		
+		updateViews(Command.RESET_VIEW);
 	}
 
 	private void updateView() {
@@ -175,9 +181,9 @@ public class jRealityView implements View {
 		viewer.getController().getPlugin(CameraMenu.class).setZoomEnabled(true);
 		viewer.registerPlugin(contentAppearance);
 		viewer.registerPlugin(new ContentLoader());
-		viewer.registerPlugin(new ContentTools());
 		viewer.registerPlugin(interactionControlPanel);
 		viewer.registerPlugin(simplicialComplexPanelPlugin);
+		viewer.registerPlugin(new ContentTools());		
 		//viewer.registerPlugin(new Inspector());
 		viewer.registerPlugin(SCOutputConsole.getInstance());
 		viewer.setShowPanelSlots(true, false, false, false);
@@ -341,6 +347,8 @@ public class jRealityView implements View {
 		if (geometricObject instanceof GeometricComplex)
 			SCOutputConsole.getInstance().setGeometricComplexInformation((GeometricComplex)geometricObject);
 	
+		updateViews(Command.COMPLEX_UPDATE);
+		
 		// Show pertinent panels
 		contentAppearance.setShowPanel(true);
 		interactionControlPanel.setShowPanel(true);
@@ -390,6 +398,8 @@ public class jRealityView implements View {
 			gc.setChromatic(model.isChromatic());
 			updateView(); 	
 			
+			updateViews(Command.CHROMATICITY_UPDATE);
+			
 			// Append geometric complex information to console.
 			SCOutputConsole.getInstance().setGeometricComplexInformation(gc);
 		}
@@ -410,5 +420,6 @@ public class jRealityView implements View {
 	public JRViewer getJRealityViewer() {
 		return viewer;
 	}
+
 
 }

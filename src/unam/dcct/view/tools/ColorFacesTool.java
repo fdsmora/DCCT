@@ -50,8 +50,6 @@ public class ColorFacesTool extends AbstractTool implements View {
 		
 		jrView = jRealityView.getInstance();
 		this.toolsPanel = toolsPanel;
-		
-		
 	}
 	
 	@Override
@@ -93,8 +91,8 @@ public class ColorFacesTool extends AbstractTool implements View {
 
 			}});
 			
-			// In order to work, I need to be notified when changes in the Model occur. 
-			Model.getInstance().registerView(this);
+			// In order to work, I need to be notified when changes in jRealityView occur. 
+			jrView.registerView(this);
 			displayComplex();
 		}
 		else if (!enabled){
@@ -105,7 +103,7 @@ public class ColorFacesTool extends AbstractTool implements View {
 	
 	private void deactivate(){
 		reset();
-		Model.getInstance().unregisterView(this);
+		jrView.unregisterView(this);
 	}
 
 	@Override
@@ -142,7 +140,6 @@ public class ColorFacesTool extends AbstractTool implements View {
 				Color[] newColors = new Color[baseGeometry.getFacesIndices().length];
 				int i = 0;
 				List<Face> parentFaces = parentGeometry.getFaces();
-				System.out.println("parentFaces:"+parentFaces);
 				for (Face f : baseGeometry.getFaces()){
 					Face parentFace = f.getParent();
 					System.out.println("parentFace:"+parentFace);
@@ -158,10 +155,6 @@ public class ColorFacesTool extends AbstractTool implements View {
 				colors[index]=selectedColor;
 				jrView.updateFacesColors(colors);
 			}
-		}
-
-		Color[] getFacesColors(){
-			return colors;
 		}
 		
 		List<Face> getFaces(){

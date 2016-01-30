@@ -33,9 +33,6 @@ public final class Constants {
 	public static final String NUMBER_OF_SIMPLICIES = "Total number of simplicies";
 	public static final String SET_NOTATION_REPRESENTATION = "Simplices summary and set notation representation";
 	public static final String UNKNOWN = "Unknown";
-	public static final String RESET_VIEW_COMMAND = "r";
-	public static final String COMPLEX_UPDATE_COMMAND = "cxu";
-	public static final String CHROMATICITY_UPDATE_COMMAND = "chu";
 	public static final String SIMPLICIAL_COMPLEX = "Simplicial complex";
 	public static final String SHARED_MEMORY = "Shared memory";
 	public static final String IMMEDIATE_SNAPSHOT = "Immediate Snapshot";
