@@ -16,7 +16,6 @@ import javax.swing.JPanel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import de.jreality.plugin.basic.Scene;
 import de.jreality.plugin.basic.ViewShrinkPanelPlugin;
 import de.jreality.scene.SceneGraphComponent;
 import de.jreality.scene.Transformation;
@@ -48,7 +47,7 @@ public class InteractiveToolsPanel extends ViewShrinkPanelPlugin implements Item
 	chkDragEdge,
 	chkDragFace,
 	chkActiveColorFacesTool;
-	private jRealityView jrview;
+	private jRealityView jrView;
 	
 	private DragGeometryTool dragGeometryTool;
 	private DraggingTool dragWholeObjectTool;
@@ -59,7 +58,7 @@ public class InteractiveToolsPanel extends ViewShrinkPanelPlugin implements Item
 		// Define the position of the controls within jReality UI
 		setInitialPosition(SHRINKER_LEFT);
 		
-		jrview = jRealityView.getInstance();
+		jrView = jRealityView.getInstance();
 		
 		dragGeometryTool = new DragGeometryTool();
 		colorFacesTool = new ColorFacesTool(this);
@@ -94,7 +93,7 @@ public class InteractiveToolsPanel extends ViewShrinkPanelPlugin implements Item
 			public void actionPerformed(ActionEvent e) {
 				if (e.getActionCommand().equals("R")){
 					// Restore the original camera perspective
-					Transformation t = jrview.getSceneGraphComponent().getTransformation();
+					Transformation t = jrView.getSceneGraphComponent().getTransformation();
 					if (t!=null)
 						DefaultMatrixSupport.getSharedInstance().restoreDefault(t, true);
 				}
@@ -173,8 +172,7 @@ public class InteractiveToolsPanel extends ViewShrinkPanelPlugin implements Item
 	@Override
 	public void install(Controller c) throws Exception {
 		super.install(c);
-		Scene scene = c.getPlugin(Scene.class);
-		SceneGraphComponent sgc = scene.getContentComponent();
+		SceneGraphComponent sgc = jrView.getSceneGraphComponent();
 		sgc.addTool(dragGeometryTool);
 		sgc.addTool(colorFacesTool);
 		
@@ -193,11 +191,10 @@ public class InteractiveToolsPanel extends ViewShrinkPanelPlugin implements Item
 	
 	@Override
 	public void uninstall(Controller c) throws Exception {
-		Scene scene = c.getPlugin(Scene.class);
-		SceneGraphComponent content = scene.getContentComponent();
-		content.removeTool(dragGeometryTool);
-		content.removeTool(dragWholeObjectTool);
-		content.removeTool(colorFacesTool);
+		SceneGraphComponent sgc = jrView.getSceneGraphComponent();
+		sgc.removeTool(dragGeometryTool);
+		sgc.removeTool(dragWholeObjectTool);
+		sgc.removeTool(colorFacesTool);
 		super.uninstall(c);
 	}
 	
