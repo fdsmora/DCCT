@@ -83,12 +83,9 @@ public class ColorFacesTool extends AbstractTool implements View {
 
 				@Override
 				public void appearanceChanged(AppearanceEvent ev) {
-					
-					ColorFacesTool.this.enabled = false;
-					ColorFacesTool.this.toolsPanel.setEnabledColorFacesToolUserControls(false);
-					
-					deactivate();
-
+					if (ev.getKey().equals("polygonShader.diffuseColor")){						
+						deactivate();
+					}
 			}});
 			
 			// In order to work, I need to be notified when changes in jRealityView occur. 
@@ -122,6 +119,8 @@ public class ColorFacesTool extends AbstractTool implements View {
 
 	@Override
 	public void reset() {
+		ColorFacesTool.this.enabled = false;
+		ColorFacesTool.this.toolsPanel.setEnabledColorFacesToolUserControls(false);
 		sceneContentAppearance = null;
 		colorFacesGeometry = null;
 		jrView.updateFacesColors(null);
@@ -142,7 +141,6 @@ public class ColorFacesTool extends AbstractTool implements View {
 				List<Face> parentFaces = parentGeometry.getFaces();
 				for (Face f : baseGeometry.getFaces()){
 					Face parentFace = f.getParent();
-					System.out.println("parentFace:"+parentFace);
 					newColors[i++] = parentGeometry.colors[parentFaces.indexOf(parentFace)];
 				}
 				colors = newColors;

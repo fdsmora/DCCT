@@ -380,6 +380,7 @@ public class jRealityView extends AbstractModel implements View {
 	
 	public void updateFacesColors(Color[] colors){
 		if (colors==null){
+			if (faceFactory==null) return;
 			faceFactory.getIndexedFaceSet().setFaceAttributes(Attribute.COLORS, null);
 		}else 
 			faceFactory.setFaceColors(toDoubleArray(colors));

@@ -1,6 +1,5 @@
 package unam.dcct.view.commands;
 
-import unam.dcct.misc.Constants;
 import unam.dcct.view.View;
 
 public abstract class Command {

@@ -1,20 +1,15 @@
 package unam.dcct.model;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 import de.jreality.shader.Color;
-//import javax.security.auth.login.Configuration;
-import unam.dcct.misc.Constants;
 import unam.dcct.misc.Configuration;
 import unam.dcct.misc.Constants.ProcessViewBrackets;
 import unam.dcct.topology.Process;
 import unam.dcct.topology.Simplex;
 import unam.dcct.topology.SimplicialComplex;
-import unam.dcct.view.View;
 import unam.dcct.view.commands.*;
 
 /**
