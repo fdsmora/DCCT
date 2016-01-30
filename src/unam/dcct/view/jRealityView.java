@@ -49,7 +49,7 @@ public class jRealityView implements View {
 	private InteractiveToolsPanel interactionControlPanel;
 	
 	private ContentAppearance contentAppearance;
-
+	
 	/**
 	 * Global point of access that returns the singleton instance of this class. 
 	 * @return
@@ -322,6 +322,7 @@ public class jRealityView implements View {
 	 * to draw the new complex into the screen. 
 	 */
 	public void displayComplex() {
+				
 		// Check if the generated complex is initial
 		SimplicialComplex protocolComplex = model.getProtocolComplex();
 		if (protocolComplex==null){
@@ -335,7 +336,7 @@ public class jRealityView implements View {
 		   drawn. */
 		//geometricObject = ((GeometricComplex)geometricObject).getFaces().get(0);
 		updateView();
-		
+				
 		// Append geometric complex information to console.
 		if (geometricObject instanceof GeometricComplex)
 			SCOutputConsole.getInstance().setGeometricComplexInformation((GeometricComplex)geometricObject);
@@ -370,7 +371,10 @@ public class jRealityView implements View {
 	}
 	
 	public void updateFacesColors(Color[] colors){
-		faceFactory.setFaceColors(toDoubleArray(colors));
+		if (colors==null){
+			faceFactory.getIndexedFaceSet().setFaceAttributes(Attribute.COLORS, null);
+		}else 
+			faceFactory.setFaceColors(toDoubleArray(colors));
 		faceFactory.update();
 	}
 

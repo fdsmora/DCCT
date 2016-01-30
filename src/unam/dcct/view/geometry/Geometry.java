@@ -34,12 +34,12 @@ public interface Geometry {
 	 * <p>
 	 * To understand what is a 'face indices' suppose that we enumerate 
 	 * the vertices contained in a face. Each number assigned to a vertex
-	 * is an 'index' of the vertex, so the set of indices corresponding 
+	 * is the 'index' of the vertex, so the set of indices corresponding 
 	 * to the vertices of a face is a 'face indices'.  
 	 * <p>
 	 * For example, consider a tetrahedron represented by an instance of this class. It has four vertices and four
 	 * faces. A call to this method should return the array [[0,1,2],[1,2,3],[0,1,3],[0,2,3]]. 
-	 * Such an array is required for geometric drawing by some math visualization libraries such as jReality. 
+	 * Such an array is required for drawing geometric objects by some math visualization libraries such as jReality. 
 	 * @return The array described above. 
 	 */
 	int[][] getFacesIndices();

@@ -141,6 +141,14 @@ public class Model {
 		views.add(v);
 	}
 	/**
+	 * Unregisters a previoulsy registered {@link View} so that it is not notified when some changes occur in the model.
+	 * @param The object whose class implements the View interface and was previously registered. If that object was not previously
+	 * registered nothing happens. 
+	 */
+	public void unregisterView(View v){
+		views.remove(v);
+	}
+	/**
 	 * Updates all registered Views. This method should be called when a change in the Model occurs.
 	 * Each specific change is represented by a commandType. 
 	 * @param commandType
