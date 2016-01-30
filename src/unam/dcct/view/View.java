@@ -21,4 +21,8 @@ public interface View {
 	 * Implementing classes must provide logic in this method that cleans the display and resets all controls.
 	 */
 	void reset();
+	/**
+	 * Notifies views that a new protocol complex is about to be created in the user interface
+	 */
+	void creatingNewProtocolComplex();
 }

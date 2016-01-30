@@ -114,8 +114,7 @@ class CommunicationProtocolStep extends Step {
 	public void validateAndExecute(){
 		String selectedProtocol = (String) cbProtocols.getSelectedItem();
 		model.setCommunicationProtocol(selectedProtocol);
-		// As this is the complex of the first round, we dismiss any previous generated protocol complexes. 
-		model.clearProtocolComplex();
+		model.creatingNewProtocolComplex();
 		model.executeRound();		
 		
 		Step next = Steps.NextRoundStep.getStep();

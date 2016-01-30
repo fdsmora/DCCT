@@ -32,6 +32,9 @@ import de.jtem.jrworkspace.plugin.PluginInfo;
 /***
  * This class contains methods and logic that produces geometric visualizations of
  * simplicial complexes and simplices using jReality library. 
+ * <b>
+ * This class implements the {@link unam.dcct.view.View} interface because
+ * some panels may need to be notified about changes in its state.  
  * @author Fausto Salazar
  * @see SimplicialComplexPanel
  * @see unam.dcct.view.geometry.Geometry
@@ -90,7 +93,7 @@ public class jRealityView extends AbstractModel implements View {
 		updateViews(Command.RESET_VIEW);
 	}
 
-	private void updateView() {
+	private void updateGeometry() {
 		setVertices();
 		setFaces();
 	}
@@ -341,7 +344,7 @@ public class jRealityView extends AbstractModel implements View {
 		/* For testing purposes uncomment this line in order to see that also single faces can also be
 		   drawn. */
 		//geometricObject = ((GeometricComplex)geometricObject).getFaces().get(0);
-		updateView();
+		updateGeometry();
 				
 		// Append geometric complex information to console.
 		if (geometricObject instanceof GeometricComplex)
@@ -397,7 +400,7 @@ public class jRealityView extends AbstractModel implements View {
 		if (geometricObject instanceof GeometricComplex){
 			GeometricComplex gc = (GeometricComplex)geometricObject;
 			gc.setChromatic(model.isChromatic());
-			updateView(); 	
+			updateGeometry(); 	
 			
 			updateViews(Command.CHROMATICITY_UPDATE);
 			
@@ -422,5 +425,8 @@ public class jRealityView extends AbstractModel implements View {
 		return viewer;
 	}
 
-
+	@Override
+	public void creatingNewProtocolComplex() {
+		updateViews(Command.NEW_PROTOCOL_COMPLEX);
+	}
 }

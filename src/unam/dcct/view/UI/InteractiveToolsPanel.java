@@ -86,7 +86,7 @@ public class InteractiveToolsPanel extends ViewShrinkPanelPlugin implements Item
 		 * This button is for allowing the user to reset the original camera perspective when she
 		 * rotated or translated the visualized object. 
 		 */
-		btnResetPerspective.setText("NO SIRVE");
+		btnResetPerspective.setText("Reset perspective");
 		btnResetPerspective.setActionCommand("R");
 		btnResetPerspective.addActionListener(new ActionListener(){
 			@Override

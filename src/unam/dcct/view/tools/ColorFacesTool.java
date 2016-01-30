@@ -58,6 +58,10 @@ public class ColorFacesTool extends AbstractTool implements View {
 		{
 			PickResult pick = tc.getCurrentPick();
 			if (pick!=null && pick.getPickType()==PickResult.PICK_TYPE_FACE){
+				if (colorFacesGeometry==null){
+					// Call this method in order to create the colorFacesGeometry
+					createColorFacesGeometry();
+				}
 				colorFacesGeometry.updateFaceColors(pick.getIndex(), selectedColor);
 			}
 		}
@@ -90,7 +94,7 @@ public class ColorFacesTool extends AbstractTool implements View {
 			
 			// In order to work, I need to be notified when changes in jRealityView occur. 
 			jrView.registerView(this);
-			displayComplex();
+			createColorFacesGeometry();
 		}
 		else if (!enabled){
 
@@ -106,15 +110,24 @@ public class ColorFacesTool extends AbstractTool implements View {
 	@Override
 	public void displayComplex() {
 		if (enabled){
-			GeometricComplex baseGeometry = (GeometricComplex)jrView.getGeometricObject();
-			colorFacesGeometry = new ColorFacesGeometry(baseGeometry, colorFacesGeometry);
+			createColorFacesGeometry();
 		}
 	}
+	
+	private void createColorFacesGeometry(){
+		GeometricComplex baseGeometry = (GeometricComplex)jrView.getGeometricObject();
+		colorFacesGeometry = new ColorFacesGeometry(baseGeometry, colorFacesGeometry);
+	}
 
+	/**
+	 * When called it cleans the already painted faces in the geometric object displayed.
+	 */
 	@Override
 	public void updateChromaticity() {
-		// TODO Auto-generated method stub
-		
+		if (enabled){
+			colorFacesGeometry = null;
+			jrView.updateFacesColors(null);
+		}	
 	}
 
 	@Override
@@ -126,10 +139,23 @@ public class ColorFacesTool extends AbstractTool implements View {
 		jrView.updateFacesColors(null);
 	}
 	
+	/**
+	 * A wrapper class that enhances the {@link unam.dcct.view.geometry.GeometricComplex} class
+	 * with the ability of having individually  {@link unam.dcct.view.geometry.Face}s.
+	 * @author Fausto
+	 *
+	 */
 	private class ColorFacesGeometry{
 		private GeometricComplex innerGeometry;
 		private Color[] colors;
 		
+		/**
+		 * Creates an instance of a "face-colorable" geometric simplicial complex.
+		 * @param baseGeometry The {@link unam.dcct.view.geometry.GeometricComplex} whose faces will be colorable. 
+		 * @param parentGeometry The geometric complex of the previous round. This is to support the functionality that 
+		 * if in the previous round the geometric complex had some faces colored, in the new complex the faces that 
+		 * are a subdivision of those faces need to appear colored with the same color. 
+		 */
 		ColorFacesGeometry(GeometricComplex baseGeometry, ColorFacesGeometry parentGeometry){
 			innerGeometry = baseGeometry;
 			if (parentGeometry==null)
@@ -180,5 +206,11 @@ public class ColorFacesTool extends AbstractTool implements View {
 		
 			jrView.updateFacesColors(colors);
 		}
+	}
+
+	@Override
+	public void creatingNewProtocolComplex() {
+		if (enabled)
+			colorFacesGeometry = null;
 	}
 }

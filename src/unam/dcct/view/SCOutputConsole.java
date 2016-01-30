@@ -226,4 +226,10 @@ public class SCOutputConsole extends ShrinkPanelPlugin implements View{
 		clearConsole();
 	}
 
+	@Override
+	public void creatingNewProtocolComplex() {
+		// Nothing needs to be done in this step
+		
+	}
+
 }

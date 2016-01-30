@@ -60,6 +60,15 @@ public class Model extends AbstractModel {
 	}
 	
 	/**
+	 * Notifies the model that a new protocol complex is about to be created
+	 */
+	public void creatingNewProtocolComplex(){
+		// As this is the complex of the first round, we dismiss any previous generated protocol complexes. 
+		clearProtocolComplex();
+		updateViews(Command.NEW_PROTOCOL_COMPLEX);
+	}
+	
+	/**
 	 * Creates an initial simplicial complex. 
 	 * @param pNames A list of names that will be assigned to each process of the new initial complex. 
 	 * @return The initial complex that has been created. 

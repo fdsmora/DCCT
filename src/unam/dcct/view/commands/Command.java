@@ -9,6 +9,7 @@ public abstract class Command {
 	public static final String RESET_VIEW = "r";
 	public static final String COMPLEX_UPDATE = "cxu";
 	public static final String CHROMATICITY_UPDATE = "chu";
+	public static final String NEW_PROTOCOL_COMPLEX = "npc";
 	
 	public Command(View receiver){
 		this.receiver = receiver;
@@ -23,6 +24,8 @@ public abstract class Command {
 			return new ComplexUpdateCommand(receiver);
 		if (type.equals(Command.CHROMATICITY_UPDATE))
 			return new ChromaticityUpdateCommand(receiver);
+		if (type.equals(Command.NEW_PROTOCOL_COMPLEX))
+			return new NewProtocolComplexCommand(receiver);
 		return null;
 	}
 }
