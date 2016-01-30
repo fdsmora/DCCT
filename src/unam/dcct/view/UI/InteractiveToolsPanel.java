@@ -1,5 +1,6 @@
 package unam.dcct.view.UI;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -12,6 +13,7 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -42,7 +44,6 @@ import unam.dcct.view.tools.DragGeometryTool;
 public class InteractiveToolsPanel extends ViewShrinkPanelPlugin implements ItemListener {
 	
 	private JPanel pContent;
-	private JButton btnResetPerspective;
 	private JCheckBox chkDragVertex,
 	chkDragEdge,
 	chkDragFace,
@@ -80,27 +81,12 @@ public class InteractiveToolsPanel extends ViewShrinkPanelPlugin implements Item
 		chkDragVertex.setSelected(true);
 		chkDragEdge.setSelected(true);
 		chkDragFace.setSelected(true);
-		btnResetPerspective = new JButton();
 		
-		/*
-		 * This button is for allowing the user to reset the original camera perspective when she
-		 * rotated or translated the visualized object. 
-		 */
-		btnResetPerspective.setText("Reset perspective");
-		btnResetPerspective.setActionCommand("R");
-		btnResetPerspective.addActionListener(new ActionListener(){
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if (e.getActionCommand().equals("R")){
-					// Restore the original camera perspective
-					Transformation t = jrView.getSceneGraphComponent().getTransformation();
-					if (t!=null)
-						DefaultMatrixSupport.getSharedInstance().restoreDefault(t, true);
-				}
-			}
-		});
-
-		dragPanel.add(btnResetPerspective);
+		JLabel lbResetCamera = new JLabel("To reset camera press 'e'");
+		lbResetCamera.setForeground(Color.BLUE);
+		
+		dragPanel.add(lbResetCamera);
+		
 		dragPanel.add(chkDragVertex);
 		dragPanel.add(chkDragEdge);
 		dragPanel.add(chkDragFace);
