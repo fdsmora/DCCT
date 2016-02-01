@@ -88,7 +88,7 @@ public class PartitionGenerator {
 		StringBuilder allPartitions = new StringBuilder();
 		
 		for (int[] rgf : allRGF){
-			System.out.println(Arrays.toString(rgf));
+//			System.out.println(Arrays.toString(rgf));
 			int k = getMax(rgf);
 			List<StringBuilder> partition = new ArrayList<StringBuilder>(k);
 			initPartition(k, partition);

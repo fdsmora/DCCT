@@ -25,8 +25,6 @@ import de.jreality.scene.SceneGraphComponent;
 import de.jreality.scene.data.Attribute;
 import de.jreality.scene.data.StorageModel;
 import de.jreality.shader.Color;
-import de.jreality.tools.RotateTool;
-import de.jreality.tools.SimpleRotateTool;
 import de.jtem.jrworkspace.plugin.Controller;
 import de.jtem.jrworkspace.plugin.PluginInfo;
 /***

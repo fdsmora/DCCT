@@ -37,7 +37,7 @@ import unam.dcct.view.tools.DragGeometryTool;
  * tools. 
  * <br>
  * Controls are for enabling/disabling vertex, edge and face dragging, reseting the original
- * camera perspective, dragging the whole geometric object, etc. 
+ * camera perspective (i.e. putting the object in the center of the camera), dragging the whole geometric object, etc. 
  * @author Fausto Salazar
  *
  */
@@ -82,7 +82,7 @@ public class InteractiveToolsPanel extends ViewShrinkPanelPlugin implements Item
 		chkDragEdge.setSelected(true);
 		chkDragFace.setSelected(true);
 		
-		JLabel lbResetCamera = new JLabel("To reset camera press 'e'");
+		JLabel lbResetCamera = new JLabel("To center object press 'e'");
 		lbResetCamera.setForeground(Color.BLUE);
 		
 		dragPanel.add(lbResetCamera);
