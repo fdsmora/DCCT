@@ -54,6 +54,7 @@ public class jRealityView extends AbstractModel implements View {
 	private InteractiveToolsPanel interactionControlPanel;
 	
 	private ContentAppearance contentAppearance;
+	private boolean disconnectedFaces;
 	
 	/**
 	 * Global point of access that returns the singleton instance of this class. 
@@ -87,6 +88,8 @@ public class jRealityView extends AbstractModel implements View {
 		contentAppearance.setShowPanel(false);
 		interactionControlPanel.setShowPanel(false);
 		viewer.setShowPanelSlots(true, false, false, false);
+		
+		resetDisconnectedFaces();
 		
 		updateViews(Command.RESET_VIEW);
 	}
@@ -124,20 +127,7 @@ public class jRealityView extends AbstractModel implements View {
 			faceFactory.setVertexCount(geometricObject.getVertexCount());
 			faceFactory.setVertexCoordinates(geometricObject.getCoordinates());
 			int[][] faces = geometricObject.getFacesIndices();
-			faceFactory.setFaceCount(faces.length);
-			
-//			Color[] faceColors = new Color[faces.length];
-//			for (int i = 0; i<faces.length; i++){
-//				if (i%3==0)
-//					faceColors[i]=Color.magenta;
-//				else if (i%3==1)
-//					faceColors[i]=Color.green;
-//				else
-//					faceColors[i]=Color.red;
-//			}				
-//			faceFactory.setFaceColors(toDoubleArray(faceColors));
-//			faceFactory.setFaceColors(faceColors);
-							
+			faceFactory.setFaceCount(faces.length);							
 			faceFactory.setFaceIndices(faces);
 			faceFactory.setGenerateFaceNormals(true);
 			faceFactory.setGenerateEdgesFromFaces(true);
@@ -329,14 +319,14 @@ public class jRealityView extends AbstractModel implements View {
 	 * to draw the new complex into the screen. 
 	 */
 	public void displayComplex() {
-				
+						
 		// Check if the generated complex is initial
 		SimplicialComplex protocolComplex = model.getProtocolComplex();
 		if (protocolComplex==null){
-			geometricObject = new GeometricComplex(model.getInitialComplex(), null);
+			geometricObject = new GeometricComplex(model.getInitialComplex(), null, disconnectedFaces);
 		}else
 		{
-			geometricObject = new GeometricComplex(protocolComplex, (GeometricComplex)geometricObject);
+			geometricObject = new GeometricComplex(protocolComplex, (GeometricComplex)geometricObject, disconnectedFaces);
 		}
 		
 		/* For testing purposes uncomment this line in order to see that also single faces can also be
@@ -353,6 +343,10 @@ public class jRealityView extends AbstractModel implements View {
 		// Show pertinent panels
 		contentAppearance.setShowPanel(true);
 		interactionControlPanel.setShowPanel(true);
+		// If geometric object has only one face then it's not necessary to enable face disconnection.
+		if (geometricObject.getFacesIndices().length<2)
+			interactionControlPanel.getBtnDisconnectFaces().setVisible(false);
+		
 		viewer.setShowPanelSlots(true, false, false, true);
 	}
 	
@@ -426,6 +420,17 @@ public class jRealityView extends AbstractModel implements View {
 
 	@Override
 	public void creatingNewProtocolComplex() {
+		resetDisconnectedFaces();
 		updateViews(Command.NEW_PROTOCOL_COMPLEX);
+	}
+
+	public void enableDisconnectedFaces() {
+		disconnectedFaces  = true;
+		displayComplex();
+	}
+	
+	private void resetDisconnectedFaces(){
+		disconnectedFaces = false;
+		interactionControlPanel.getBtnDisconnectFaces().setVisible(true);
 	}
 }

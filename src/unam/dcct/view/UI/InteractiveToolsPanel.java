@@ -54,6 +54,7 @@ public class InteractiveToolsPanel extends ViewShrinkPanelPlugin implements Item
 	private DraggingTool dragWholeObjectTool;
 	private ColorFacesTool colorFacesTool;
 	private ColorChooser faceColorChooser;
+	private JButton btnDisconnectFaces;
 
 	public InteractiveToolsPanel(){
 		// Define the position of the controls within jReality UI
@@ -90,10 +91,23 @@ public class InteractiveToolsPanel extends ViewShrinkPanelPlugin implements Item
 		dragPanel.add(chkDragVertex);
 		dragPanel.add(chkDragEdge);
 		dragPanel.add(chkDragFace);
+		
+		btnDisconnectFaces = new JButton("Disconnect faces");
+		btnDisconnectFaces.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				jrView.enableDisconnectedFaces();
+				((JButton)arg0.getSource()).setVisible(false);
+			}
+		});
+		btnDisconnectFaces.setAlignmentX(Component.CENTER_ALIGNMENT);
+		
 		pContent.add(dragPanel);
 		
 		addColorFacesControl();
-		
+		pContent.add(btnDisconnectFaces);
+
 		// Embed this panel into jReality's Shrink Panel.
 		getShrinkPanel().add(pContent);
 	}
@@ -194,6 +208,10 @@ public class InteractiveToolsPanel extends ViewShrinkPanelPlugin implements Item
 
 	public JCheckBox getChkActiveColorFacesTool() {
 		return chkActiveColorFacesTool;
+	}
+
+	public JButton getBtnDisconnectFaces() {
+		return btnDisconnectFaces;
 	}
 	
 }

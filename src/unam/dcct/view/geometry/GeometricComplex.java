@@ -2,6 +2,7 @@ package unam.dcct.view.geometry;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -29,7 +30,7 @@ public class GeometricComplex implements Geometry{
 	private double[][] coordinates;
 	private Color[] colors;
 	private String[] labels;
-	
+	private boolean disconnectedFaces;
 	/*
 	 * Vertices and faces computations are dependent on whether the geometric complex
 	 * is chromatic or non-chromatic, so these are managed by these special classes. 
@@ -56,11 +57,11 @@ public class GeometricComplex implements Geometry{
 	 * @see GeometricComplex#nonChromaticSortedVertexLabels
 	 * @see GeometricComplex#populateNonChromaticVertexLabels()
 	 */
-	public GeometricComplex(SimplicialComplex complex, GeometricComplex parent){
+	public GeometricComplex(SimplicialComplex complex, GeometricComplex parent, boolean disconnectedFaces){
 		this.parent = parent;
-		
-		chromaticGeometricComplexBehaviour = new ChromaticGeometricComplexBehaviour(complex);
-		nonChromaticGeometricComplexBehaviour = new NonChromaticGeometricComplexBehaviour(complex, parent);
+		this.disconnectedFaces = disconnectedFaces;
+		chromaticGeometricComplexBehaviour = new ChromaticGeometricComplexBehaviour(complex, disconnectedFaces);
+		nonChromaticGeometricComplexBehaviour = new NonChromaticGeometricComplexBehaviour(complex, parent, disconnectedFaces);
 
 		setChromatic(complex.isChromatic());
 	}
@@ -104,11 +105,12 @@ public class GeometricComplex implements Geometry{
 	private void setFaceIndices(){
 		faceIndices = new int[getFaces().size()][];
 		int i=0;
+		int k = 0; // used only when disconnectedFaces == true.
 		for (Face f : getFaces()){
 			int[] face_idx = new int[f.getVertexCount()];
 			int j = 0;
 			for (Vertex v : f.getVertices()){
-				face_idx[j++]=v.getIndex();
+				face_idx[j++]= disconnectedFaces ? k++ : v.getIndex();
 			}
 			faceIndices[i++]=face_idx;
 		}
@@ -178,14 +180,17 @@ public class GeometricComplex implements Geometry{
 	 *
 	 */
 	private abstract class GeometricComplexBehaviour {
-		protected List<Face> faces;
-		protected Map<String, Vertex> vertices;
+		private List<Face> faces;
+//		protected Map<String, Vertex> vertices;
+		private List<Vertex> vertices;
 		protected SimplicialComplex complex;
 		private boolean chromatic;
+		private boolean disconnectedFaces;
 		
-		GeometricComplexBehaviour(SimplicialComplex complex, boolean chromatic){
+		GeometricComplexBehaviour(SimplicialComplex complex, boolean chromatic, boolean disconnectedFaces){
 			this.chromatic = chromatic;
 			this.complex = complex;
+			this.disconnectedFaces = disconnectedFaces;
 		}
 	
 		protected void setVerticesAndFaces(){
@@ -225,23 +230,34 @@ public class GeometricComplex implements Geometry{
 			boolean originalChromaticity = complex.isChromatic();
 			complex.setChromatic(chromatic);
 			
-			vertices = new LinkedHashMap<String, Vertex>();
-			int indexCount = 0;
-			for (Face f : getFaces()){
-				for (Vertex v : f.getVertices()){
-					String key = getKey(v);
-					if(vertices.containsKey(key)){
-						Vertex dup = vertices.get(key);
-						v.setIndex(dup.getIndex());
+			if (disconnectedFaces){
+				vertices = new ArrayList<Vertex>();
+				for (Face f : getFaces()){
+					for (Vertex v : f.getVertices()){
+						vertices.add(v);
 					}
-					else {
-//						if (!chromatic) {
-//							System.out.println("Key: " + key + " vertex: " + v.getLabel() );
-//						}
-						vertices.put(key,v);
-						v.setIndex(indexCount++);
-					}
-				}			
+				}
+			}
+			else {	
+				Map<String, Vertex> verticesMap = new LinkedHashMap<String, Vertex>();
+				int indexCount = 0;
+				for (Face f : getFaces()){
+					for (Vertex v : f.getVertices()){
+						String key = getKey(v);
+						if(verticesMap.containsKey(key)){
+							Vertex dup = verticesMap.get(key);
+							v.setIndex(dup.getIndex());
+						}
+						else {
+	//						if (!chromatic) {
+	//							System.out.println("Key: " + key + " vertex: " + v.getLabel() );
+	//						}
+							verticesMap.put(key,v);
+							v.setIndex(indexCount++);
+						}
+					}			
+				}
+				vertices = new ArrayList<Vertex>(verticesMap.values());
 			}
 			
 			// Leave it as it was
@@ -249,7 +265,7 @@ public class GeometricComplex implements Geometry{
 		}
 		
 		List<Vertex> getVertices() {
-			return new ArrayList<Vertex>(vertices.values());
+			return vertices;
 		}
 
 		List<Face> getFaces() {
@@ -271,8 +287,8 @@ public class GeometricComplex implements Geometry{
 	 */
 	private class ChromaticGeometricComplexBehaviour extends GeometricComplexBehaviour {
 
-		public ChromaticGeometricComplexBehaviour(SimplicialComplex complex) {		
-			super(complex, true);
+		public ChromaticGeometricComplexBehaviour(SimplicialComplex complex, boolean disconnectedFaces) {		
+			super(complex, true, disconnectedFaces);
 			setVerticesAndFaces();
 		}
 
@@ -287,8 +303,8 @@ public class GeometricComplex implements Geometry{
 		// See the documentation for the constructor of GeometricComplex to understand this field. 
 		private NonChromaticGeometricComplexBehaviour parent;
 		
-		public NonChromaticGeometricComplexBehaviour(SimplicialComplex complex, GeometricComplex parent) {		
-			super(complex, false);
+		public NonChromaticGeometricComplexBehaviour(SimplicialComplex complex, GeometricComplex parent, boolean disconnectedFaces) {		
+			super(complex, false,disconnectedFaces);
 			this.parent = parent!=null ? parent.nonChromaticGeometricComplexBehaviour : null;
 			setVerticesAndFaces();
 		}
