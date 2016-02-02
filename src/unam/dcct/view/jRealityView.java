@@ -385,6 +385,7 @@ public class jRealityView extends AbstractModel implements View {
 			faceFactory.getIndexedFaceSet().setFaceAttributes(Attribute.COLORS, null);
 		}else 
 			faceFactory.setFaceColors(toDoubleArray(colors));
+		psf.update();
 		faceFactory.update();
 	}
 
