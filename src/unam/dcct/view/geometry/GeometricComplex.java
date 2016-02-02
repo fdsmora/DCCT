@@ -52,6 +52,9 @@ public class GeometricComplex implements Geometry{
 	 * We need this notion of parent geometric complex in order to properly create the 
 	 * vertices of the geometric complex. If parent == null, then this geometric complex
 	 * is considered to be the initial complex.  
+	 * @param complex The {@link unam.dcct.topology.SimplicialComplex} instance whose information will be extracted to build this geometric complex.
+	 * @param parent The GeometricComplex that is parent of this new geometric complex
+	 * @param disconnectedFaces Whether its faces will appear disconnected or joined by their common vertices.
 	 * @see GeometricComplex#setVertices()
 	 * @see GeometricComplex#getAncestorNonChromaticVertexLabels(String)
 	 * @see GeometricComplex#nonChromaticSortedVertexLabels

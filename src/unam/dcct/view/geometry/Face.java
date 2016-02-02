@@ -214,7 +214,8 @@ public class Face implements Geometry {
 			// in the complex of the previous round. 
 			if (count == 1){
 				String key = String.format(Process.STR_FORMAT, pid, processView[pid]);
-				return locateAncestorCoordinates(key, null);
+				return locateAncestorCoordinates(key, null)
+						.clone(); // Need to clone in order to fix a bug that happens when disconnected faces mode is on.
 			}
 			
 			final float EPSILON = Configuration.getInstance().EPSILON_VALUE  ;

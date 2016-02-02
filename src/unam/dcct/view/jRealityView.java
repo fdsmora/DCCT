@@ -113,7 +113,6 @@ public class jRealityView extends AbstractModel implements View {
 			psf.setVertexCount(geometricObject.getVertexCount());
 			psf.setVertexCoordinates(geometricObject.getCoordinates());
 			// Need to convert colors to a double array, otherwise doesn't work. 
-//			psf.setVertexColors(geometricObject.getVertexColors());
 			psf.setVertexColors(toDoubleArray(geometricObject.getVertexColors()));
 			psf.setVertexAttribute(Attribute.LABELS, StorageModel.STRING_ARRAY.createReadOnly(geometricObject.getVertexLabels()));
 			psf.update();
