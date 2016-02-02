@@ -158,9 +158,16 @@ public class ColorFacesTool extends AbstractTool implements View {
 		 */
 		ColorFacesGeometry(GeometricComplex baseGeometry, ColorFacesGeometry parentGeometry){
 			innerGeometry = baseGeometry;
-			if (parentGeometry==null)
+			if (parentGeometry==null){
 				colorAllFacesFromAppearance();
-			else{
+				return;
+			}
+			// This happens when the disconnected faces mode is activated and this tool is active.
+			else if (baseGeometry.getParent()==parentGeometry.innerGeometry){
+				colors = parentGeometry.colors;
+			}
+			else 
+			{
 				// Color the new faces with the colors of their parent faces's colors.
 				Color[] newColors = new Color[baseGeometry.getFacesIndices().length];
 				int i = 0;
@@ -170,8 +177,8 @@ public class ColorFacesTool extends AbstractTool implements View {
 					newColors[i++] = parentGeometry.colors[parentFaces.indexOf(parentFace)];
 				}
 				colors = newColors;
-				jrView.updateFacesColors(colors);
 			}
+			jrView.updateFacesColors(colors);
 		}
 		
 		void updateFaceColors(int index, Color selectedColor) {

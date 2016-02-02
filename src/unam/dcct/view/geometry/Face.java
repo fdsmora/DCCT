@@ -202,7 +202,6 @@ public class Face implements Geometry {
 
 		private Queue<Color> qColors;
 
-
 		@Override
 		public double[] calculateCoordinatesPerProcess(Process p) {
 			String[] processView = p.getViewArray();
