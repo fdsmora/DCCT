@@ -64,6 +64,8 @@ public class Model extends AbstractModel {
 	 */
 	public void creatingNewProtocolComplex(){
 		// As this is the complex of the first round, we dismiss any previous generated protocol complexes. 
+		// Only clear protocol complex in this case. If protocol complex is already null it means
+		// we just created initial complex and theres no need to execute this code as it causes problems. 
 		if (protocolComplex !=null){
 			clearProtocolComplex();
 			updateViews(Command.NEW_PROTOCOL_COMPLEX);

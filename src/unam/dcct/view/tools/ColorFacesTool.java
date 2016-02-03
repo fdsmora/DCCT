@@ -90,7 +90,7 @@ public class ColorFacesTool extends AbstractTool implements View {
 				@Override
 				public void appearanceChanged(AppearanceEvent ev) {
 					if (ev.getKey().equals("polygonShader.diffuseColor")){						
-						deactivate();
+						resetEverything();
 					}
 			}});
 			
@@ -100,13 +100,13 @@ public class ColorFacesTool extends AbstractTool implements View {
 		}
 		else if (!enabled){
 			if (anyFacesPainted== false)
-				deactivate();
+				resetEverything();
 			else 
 				toolsPanel.setEnabledColorFacesToolUserControls(false);
 		}
 	}
 	
-	private void deactivate(){
+	private void resetEverything(){
 		toolsPanel.setEnabledColorFacesToolUserControls(false);
 		enabled = false;
 		anyFacesPainted = false;
@@ -142,13 +142,13 @@ public class ColorFacesTool extends AbstractTool implements View {
 
 	@Override
 	public void reset() {
-		deactivate();
+		resetEverything();
 	}
 	
 	@Override
 	public void creatingNewProtocolComplex() {
 		if (isValid())
-			colorFacesGeometry = null;
+			resetEverything();
 	}
 
 	public boolean isAnyFacesPainted() {
@@ -163,7 +163,7 @@ public class ColorFacesTool extends AbstractTool implements View {
 		this.anyFacesPainted = anyFacesPainted;
 		if (anyFacesPainted == false){
 			if (!enabled){
-				deactivate();
+				resetEverything();
 			}
 			else{
 				colorFacesGeometry.colorAllFacesFromAppearance();
