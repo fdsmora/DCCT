@@ -20,11 +20,9 @@ import javax.swing.event.ChangeListener;
 
 import de.jreality.plugin.basic.ViewShrinkPanelPlugin;
 import de.jreality.scene.SceneGraphComponent;
-import de.jreality.scene.Transformation;
 import de.jreality.scene.tool.InputSlot;
 import de.jreality.tools.DraggingTool;
 import de.jreality.util.ColorConverter;
-import de.jreality.util.DefaultMatrixSupport;
 import de.jtem.jrworkspace.plugin.Controller;
 import de.jtem.jrworkspace.plugin.PluginInfo;
 import unam.dcct.misc.Constants;
@@ -41,7 +39,7 @@ import unam.dcct.view.tools.DragGeometryTool;
  * @author Fausto Salazar
  *
  */
-public class InteractiveToolsPanel extends ViewShrinkPanelPlugin implements ItemListener {
+public class InteractiveToolsPanel extends ViewShrinkPanelPlugin implements ItemListener, ActionListener {
 	
 	private JPanel pContent;
 	private JCheckBox chkDragVertex,
@@ -54,7 +52,8 @@ public class InteractiveToolsPanel extends ViewShrinkPanelPlugin implements Item
 	private DraggingTool dragWholeObjectTool;
 	private ColorFacesTool colorFacesTool;
 	private ColorChooser faceColorChooser;
-	private JButton btnDisconnectFaces;
+	private JButton btnDisconnectFaces,
+					btnEraseColoredFaces;
 
 	public InteractiveToolsPanel(){
 		// Define the position of the controls within jReality UI
@@ -93,26 +92,19 @@ public class InteractiveToolsPanel extends ViewShrinkPanelPlugin implements Item
 		dragPanel.add(chkDragFace);
 		
 		btnDisconnectFaces = new JButton("Disconnect faces");
-		btnDisconnectFaces.addActionListener(new ActionListener(){
-
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				jrView.enableDisconnectedFaces();
-				((JButton)arg0.getSource()).setVisible(false);
-			}
-		});
+		btnDisconnectFaces.addActionListener(this);
 		btnDisconnectFaces.setAlignmentX(Component.CENTER_ALIGNMENT);
 		
 		pContent.add(dragPanel);
 		
-		addColorFacesControl();
+		makeColorFacesControl();
 		pContent.add(btnDisconnectFaces);
 
 		// Embed this panel into jReality's Shrink Panel.
 		getShrinkPanel().add(pContent);
 	}
 
-	private void addColorFacesControl(){
+	private void makeColorFacesControl(){
 		JPanel sfPanel = new JPanel();
 		sfPanel.setLayout(new BoxLayout(sfPanel,BoxLayout.PAGE_AXIS));
 		sfPanel.setBorder(BorderFactory.createTitledBorder("Color faces"));
@@ -135,10 +127,17 @@ public class InteractiveToolsPanel extends ViewShrinkPanelPlugin implements Item
 			
 		});
 		
+		btnEraseColoredFaces = new JButton("Erase");
+		btnEraseColoredFaces.setAlignmentX(Component.CENTER_ALIGNMENT);
+		btnEraseColoredFaces.setVisible(false);
+		btnEraseColoredFaces.addActionListener(this);
+		
 		setEnabledColorFacesToolUserControls(false);
 		
 		sfPanel.add(Box.createRigidArea(new Dimension(180,0)));
 		sfPanel.add(faceColorChooser);
+		sfPanel.add(Box.createRigidArea(new Dimension(180,25)));
+		sfPanel.add(btnEraseColoredFaces);
 		
 		pContent.add(sfPanel);
 	}
@@ -212,6 +211,25 @@ public class InteractiveToolsPanel extends ViewShrinkPanelPlugin implements Item
 
 	public JButton getBtnDisconnectFaces() {
 		return btnDisconnectFaces;
+	}
+
+	public JButton getBtnEraseColoredFaces() {
+		return btnEraseColoredFaces;
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent arg0) {
+		Object s = arg0.getSource();
+		if(s == btnDisconnectFaces){
+			jrView.enableDisconnectedFaces();
+			btnDisconnectFaces.setVisible(false);
+		}else if (s == btnEraseColoredFaces){
+			if (colorFacesTool.isAnyFacesPainted()){
+				colorFacesTool.setAnyFacesPainted(false); // Erase color in colored faces
+				btnEraseColoredFaces.setVisible(false);
+			}
+		}
+		
 	}
 	
 }
