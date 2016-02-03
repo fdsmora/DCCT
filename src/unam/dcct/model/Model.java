@@ -64,8 +64,10 @@ public class Model extends AbstractModel {
 	 */
 	public void creatingNewProtocolComplex(){
 		// As this is the complex of the first round, we dismiss any previous generated protocol complexes. 
-		clearProtocolComplex();
-		updateViews(Command.NEW_PROTOCOL_COMPLEX);
+		if (protocolComplex !=null){
+			clearProtocolComplex();
+			updateViews(Command.NEW_PROTOCOL_COMPLEX);
+		}
 	}
 	
 	/**

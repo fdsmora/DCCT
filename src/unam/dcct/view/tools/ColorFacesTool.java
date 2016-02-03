@@ -102,14 +102,15 @@ public class ColorFacesTool extends AbstractTool implements View {
 			if (anyFacesPainted== false)
 				deactivate();
 			else 
-				ColorFacesTool.this.toolsPanel.setEnabledColorFacesToolUserControls(false);
+				toolsPanel.setEnabledColorFacesToolUserControls(false);
 		}
 	}
 	
 	private void deactivate(){
-		ColorFacesTool.this.toolsPanel.setEnabledColorFacesToolUserControls(false);
+		toolsPanel.setEnabledColorFacesToolUserControls(false);
 		enabled = false;
 		anyFacesPainted = false;
+		toolsPanel.getBtnEraseColoredFaces().setVisible(false);
 		sceneContentAppearance = null;
 		colorFacesGeometry = null;
 		jrView.updateFacesColors(null);
@@ -118,7 +119,7 @@ public class ColorFacesTool extends AbstractTool implements View {
 
 	@Override
 	public void displayComplex() {
-		if (enabled || anyFacesPainted){
+		if (isValid()){
 			createColorFacesGeometry();
 		}
 	}
@@ -142,6 +143,38 @@ public class ColorFacesTool extends AbstractTool implements View {
 	@Override
 	public void reset() {
 		deactivate();
+	}
+	
+	@Override
+	public void creatingNewProtocolComplex() {
+		if (isValid())
+			colorFacesGeometry = null;
+	}
+
+	public boolean isAnyFacesPainted() {
+		return anyFacesPainted;
+	}
+
+	public boolean isEnabled() {
+		return enabled;
+	}
+
+	public void setAnyFacesPainted(boolean anyFacesPainted) {
+		this.anyFacesPainted = anyFacesPainted;
+		if (anyFacesPainted == false){
+			if (!enabled){
+				deactivate();
+			}
+			else{
+				colorFacesGeometry.colorAllFacesFromAppearance();
+			}
+		}
+		else{
+			toolsPanel.getBtnEraseColoredFaces().setVisible(true);
+		}
+	}
+	private boolean isValid(){
+		return (enabled || anyFacesPainted);
 	}
 	
 	/**
@@ -217,35 +250,6 @@ public class ColorFacesTool extends AbstractTool implements View {
 			}	
 		
 			jrView.updateFacesColors(colors);
-		}
-	}
-
-	@Override
-	public void creatingNewProtocolComplex() {
-		if (enabled)
-			colorFacesGeometry = null;
-	}
-
-	public boolean isAnyFacesPainted() {
-		return anyFacesPainted;
-	}
-
-	public boolean isEnabled() {
-		return enabled;
-	}
-
-	public void setAnyFacesPainted(boolean anyFacesPainted) {
-		this.anyFacesPainted = anyFacesPainted;
-		if (anyFacesPainted == false){
-			if (!enabled){
-				deactivate();
-			}
-			else{
-				colorFacesGeometry.colorAllFacesFromAppearance();
-			}
-		}
-		else{
-			toolsPanel.getBtnEraseColoredFaces().setVisible(true);
 		}
 	}
 }
