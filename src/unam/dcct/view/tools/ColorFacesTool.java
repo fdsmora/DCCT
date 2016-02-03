@@ -134,9 +134,8 @@ public class ColorFacesTool extends AbstractTool implements View {
 	 */
 	@Override
 	public void updateChromaticity() {
-		if (enabled){
-			colorFacesGeometry = null;
-			jrView.updateFacesColors(null);
+		if (isValid()){
+			resetEverything();
 		}	
 	}
 
