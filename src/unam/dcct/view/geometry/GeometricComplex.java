@@ -24,6 +24,7 @@ import unam.dcct.topology.SimplicialComplex;
 public class GeometricComplex implements Geometry{
 	private boolean chromatic = true;
 	private GeometricComplex parent;
+	private SimplicialComplex complex;
 
 	// Geometric attribute fields
 	private int[][] faceIndices; 	
@@ -62,6 +63,7 @@ public class GeometricComplex implements Geometry{
 	 */
 	public GeometricComplex(SimplicialComplex complex, GeometricComplex parent, boolean disconnectedFaces){
 		this.parent = parent;
+		this.complex = complex;
 		this.disconnectedFaces = disconnectedFaces;
 		chromaticGeometricComplexBehaviour = new ChromaticGeometricComplexBehaviour(complex, disconnectedFaces);
 		nonChromaticGeometricComplexBehaviour = new NonChromaticGeometricComplexBehaviour(complex, parent, disconnectedFaces);
@@ -422,5 +424,9 @@ public class GeometricComplex implements Geometry{
 				nonChromaticSortedVertexLabels.put(view,view);
 			}
 		}		
+	}
+
+	public SimplicialComplex getComplex() {
+		return complex;
 	}
 }

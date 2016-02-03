@@ -163,7 +163,7 @@ public class ColorFacesTool extends AbstractTool implements View {
 				return;
 			}
 			// This happens when the disconnected faces mode is activated and this tool is active.
-			else if (baseGeometry.getParent()==parentGeometry.innerGeometry){
+			else if (baseGeometry.getComplex()==parentGeometry.innerGeometry.getComplex()){
 				colors = parentGeometry.colors;
 			}
 			else 
