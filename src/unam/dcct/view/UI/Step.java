@@ -2,11 +2,13 @@ package unam.dcct.view.UI;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+
 import unam.dcct.misc.Constants;
 import unam.dcct.model.Model;
 

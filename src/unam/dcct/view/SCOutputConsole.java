@@ -8,7 +8,9 @@ import java.util.List;
 
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
+
 import com.google.common.base.Strings;
+
 import de.jreality.plugin.JRViewer;
 import de.jreality.plugin.icon.ImageHook;
 import de.jtem.jrworkspace.plugin.Controller;

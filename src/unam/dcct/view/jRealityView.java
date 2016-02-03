@@ -2,16 +2,7 @@ package unam.dcct.view;
 
 import java.util.ArrayList;
 import java.util.List;
-import unam.dcct.misc.Configuration;
-import unam.dcct.misc.Constants;
-import unam.dcct.model.AbstractModel;
-import unam.dcct.model.Model;
-import unam.dcct.topology.SimplicialComplex;
-import unam.dcct.view.UI.InteractiveToolsPanel;
-import unam.dcct.view.UI.SimplicialComplexPanel;
-import unam.dcct.view.commands.Command;
-import unam.dcct.view.geometry.GeometricComplex;
-import unam.dcct.view.geometry.Geometry;
+
 import de.jreality.geometry.IndexedFaceSetFactory;
 import de.jreality.geometry.PointSetFactory;
 import de.jreality.plugin.JRViewer;
@@ -27,6 +18,16 @@ import de.jreality.scene.data.StorageModel;
 import de.jreality.shader.Color;
 import de.jtem.jrworkspace.plugin.Controller;
 import de.jtem.jrworkspace.plugin.PluginInfo;
+import unam.dcct.misc.Configuration;
+import unam.dcct.misc.Constants;
+import unam.dcct.model.AbstractModel;
+import unam.dcct.model.Model;
+import unam.dcct.topology.SimplicialComplex;
+import unam.dcct.view.UI.InteractiveToolsPanel;
+import unam.dcct.view.UI.SimplicialComplexPanel;
+import unam.dcct.view.commands.Command;
+import unam.dcct.view.geometry.GeometricComplex;
+import unam.dcct.view.geometry.Geometry;
 /***
  * This class contains methods and logic that produces geometric visualizations of
  * simplicial complexes and simplices using jReality library. 
@@ -342,9 +343,10 @@ public class jRealityView extends AbstractModel implements View {
 		// Show pertinent panels
 		contentAppearance.setShowPanel(true);
 		interactionControlPanel.setShowPanel(true);
-		// If geometric object has only one face then it's not necessary to enable face disconnection.
-		if (geometricObject.getFacesIndices().length<2)
-			interactionControlPanel.getBtnDisconnectFaces().setVisible(false);
+		// If geometric object has more than one face then offer the possibility of disconnecting faces
+		if (disconnectedFaces==false)
+			if (geometricObject.getFacesIndices().length>1)
+				interactionControlPanel.getBtnDisconnectFaces().setVisible(true);
 		
 		viewer.setShowPanelSlots(true, false, false, true);
 	}
@@ -430,6 +432,6 @@ public class jRealityView extends AbstractModel implements View {
 	
 	private void resetDisconnectedFaces(){
 		disconnectedFaces = false;
-		interactionControlPanel.getBtnDisconnectFaces().setVisible(true);
+		interactionControlPanel.getBtnDisconnectFaces().setVisible(false);
 	}
 }

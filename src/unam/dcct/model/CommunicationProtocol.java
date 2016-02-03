@@ -2,6 +2,7 @@ package unam.dcct.model;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import unam.dcct.misc.Constants;
 import unam.dcct.model.immediatesnapshot.ImmediateSnapshot;
 import unam.dcct.topology.Simplex;

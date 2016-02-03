@@ -3,6 +3,7 @@ package unam.dcct.model.nonimmediatesnapshot;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
 import org.paukov.combinatorics.Factory;
 import org.paukov.combinatorics.Generator;
 import org.paukov.combinatorics.ICombinatoricsVector;

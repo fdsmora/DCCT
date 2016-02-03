@@ -1,18 +1,33 @@
 package unam.dcct.view.UI;
 
 import java.awt.Component;
+import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.JScrollBar;
+import javax.swing.JScrollPane;
+import javax.swing.JViewport;
+import javax.swing.SwingUtilities;
+import javax.swing.event.PopupMenuEvent;
+import javax.swing.event.PopupMenuListener;
+import javax.swing.plaf.basic.BasicComboPopup;
+
 import unam.dcct.misc.Constants;
 import unam.dcct.misc.Constants.ProcessViewBrackets;
 import unam.dcct.model.Model;
-import java.awt.*;
-import javax.swing.*;
-import javax.swing.event.*;
-import javax.swing.plaf.basic.*;
 
 /**
  * Represents the step in the {@link unam.dcct.view.UI.SimplicialComplexPanel} wizard

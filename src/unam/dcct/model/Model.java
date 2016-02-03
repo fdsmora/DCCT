@@ -10,7 +10,7 @@ import unam.dcct.misc.Constants.ProcessViewBrackets;
 import unam.dcct.topology.Process;
 import unam.dcct.topology.Simplex;
 import unam.dcct.topology.SimplicialComplex;
-import unam.dcct.view.commands.*;
+import unam.dcct.view.commands.Command;
 
 /**
  * It is the model component of the application's MVC architecture.

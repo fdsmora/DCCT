@@ -3,9 +3,11 @@ package unam.dcct.model.WR;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
 import org.paukov.combinatorics.Factory;
 import org.paukov.combinatorics.Generator;
 import org.paukov.combinatorics.ICombinatoricsVector;
+
 import unam.dcct.model.ViewMatrixGenerator;
 
 public class WR_ScenarioGenerator extends ViewMatrixGenerator {

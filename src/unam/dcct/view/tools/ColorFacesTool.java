@@ -13,13 +13,11 @@ import de.jreality.shader.Color;
 import de.jreality.shader.CommonAttributes;
 import de.jreality.util.ColorConverter;
 import unam.dcct.misc.Constants;
-import unam.dcct.model.Model;
 import unam.dcct.view.View;
 import unam.dcct.view.jRealityView;
 import unam.dcct.view.UI.InteractiveToolsPanel;
 import unam.dcct.view.geometry.Face;
 import unam.dcct.view.geometry.GeometricComplex;
-import unam.dcct.view.geometry.Geometry;
 
 /**
  * A tool that lets the user color individual faces of the displayed geometric object

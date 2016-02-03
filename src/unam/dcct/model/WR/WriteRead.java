@@ -3,6 +3,7 @@ package unam.dcct.model.WR;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
 import unam.dcct.misc.Configuration;
 import unam.dcct.misc.Constants;
 import unam.dcct.model.CommunicationProtocol;
