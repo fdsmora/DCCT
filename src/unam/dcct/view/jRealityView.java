@@ -170,15 +170,16 @@ public class jRealityView extends AbstractModel implements View {
 		
 		// We enable zoom tool by default. 
 		viewer.getController().getPlugin(CameraMenu.class).setZoomEnabled(true);
+		viewer.registerPlugin(simplicialComplexPanelPlugin);
+		viewer.registerPlugin(interactionControlPanel);
 		viewer.registerPlugin(contentAppearance);
 		viewer.registerPlugin(new ContentLoader());
-		viewer.registerPlugin(interactionControlPanel);
-		viewer.registerPlugin(simplicialComplexPanelPlugin);
 		viewer.registerPlugin(new ContentTools());		
 		//viewer.registerPlugin(new Inspector());
 		viewer.registerPlugin(SCOutputConsole.getInstance());
 		viewer.setShowPanelSlots(true, false, false, false);
 		viewer.setContent(sgc);
+
 	}
 
 	/**
@@ -432,6 +433,6 @@ public class jRealityView extends AbstractModel implements View {
 	
 	private void resetDisconnectedFaces(){
 		disconnectedFaces = false;
-		interactionControlPanel.getBtnDisconnectFaces().setVisible(false);
+		interactionControlPanel.resetDisconnectFaces();
 	}
 }

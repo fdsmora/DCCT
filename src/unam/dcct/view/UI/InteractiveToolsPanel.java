@@ -15,6 +15,7 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -54,6 +55,12 @@ public class InteractiveToolsPanel extends ViewShrinkPanelPlugin implements Item
 	private ColorChooser faceColorChooser;
 	private JButton btnDisconnectFaces,
 					btnEraseColoredFaces;
+	private final JLabel lbDisconnectFaces = new JLabel("Faces are disconnected");
+	{
+		lbDisconnectFaces.setForeground(Color.BLUE);
+		lbDisconnectFaces.setVisible(false);
+		lbDisconnectFaces.setAlignmentX(Component.CENTER_ALIGNMENT);
+	}
 
 	public InteractiveToolsPanel(){
 		// Define the position of the controls within jReality UI
@@ -99,6 +106,7 @@ public class InteractiveToolsPanel extends ViewShrinkPanelPlugin implements Item
 		
 		makeColorFacesControl();
 		pContent.add(btnDisconnectFaces);
+		pContent.add(lbDisconnectFaces);
 
 		// Embed this panel into jReality's Shrink Panel.
 		getShrinkPanel().add(pContent);
@@ -115,6 +123,9 @@ public class InteractiveToolsPanel extends ViewShrinkPanelPlugin implements Item
 		// Proper alignment properties
 		chkActiveColorFacesTool.setAlignmentX(Component.CENTER_ALIGNMENT);
 		sfPanel.add(chkActiveColorFacesTool);
+		
+		JPanel pColor = new JPanel();
+		pColor.setLayout(new BoxLayout(pColor,BoxLayout.LINE_AXIS));
 		
 		faceColorChooser = new ColorChooser(Constants.FACE_COLOR_CHOOSER_DEFAULT_COLOR);
 		faceColorChooser.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -135,9 +146,11 @@ public class InteractiveToolsPanel extends ViewShrinkPanelPlugin implements Item
 		setEnabledColorFacesToolUserControls(false);
 		
 		sfPanel.add(Box.createRigidArea(new Dimension(180,0)));
-		sfPanel.add(faceColorChooser);
-		sfPanel.add(Box.createRigidArea(new Dimension(180,25)));
-		sfPanel.add(btnEraseColoredFaces);
+		pColor.add(faceColorChooser);
+		pColor.add(Box.createRigidArea(new Dimension(10,0)));
+		pColor.add(btnEraseColoredFaces);
+		
+		sfPanel.add(pColor);
 		
 		pContent.add(sfPanel);
 	}
@@ -223,6 +236,7 @@ public class InteractiveToolsPanel extends ViewShrinkPanelPlugin implements Item
 		if(s == btnDisconnectFaces){
 			jrView.enableDisconnectedFaces();
 			btnDisconnectFaces.setVisible(false);
+			lbDisconnectFaces.setVisible(true);
 		}else if (s == btnEraseColoredFaces){
 			if (colorFacesTool.isAnyFacesPainted()){
 				colorFacesTool.setAnyFacesPainted(false); // Erase color in colored faces
@@ -231,5 +245,9 @@ public class InteractiveToolsPanel extends ViewShrinkPanelPlugin implements Item
 		}
 		
 	}
-	
+
+	public void resetDisconnectFaces() {
+		btnDisconnectFaces.setVisible(false);
+		lbDisconnectFaces.setVisible(false);
+	}
 }
