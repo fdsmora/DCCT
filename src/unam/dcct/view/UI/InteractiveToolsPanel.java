@@ -15,7 +15,6 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -54,12 +53,22 @@ public class InteractiveToolsPanel extends ViewShrinkPanelPlugin implements Item
 	private ColorFacesTool colorFacesTool;
 	private ColorChooser faceColorChooser;
 	private JButton btnDisconnectFaces,
-					btnEraseColoredFaces;
+					btnEraseColoredFaces,
+					btnMapChromaticity;
+	private static final String mapChromaticityToolTipText = "<html>This helps to distinguish which face in a non-chromatic complex corresponds to a face in a chromatic complex or viceversa."
+			+ "								<br> When a face is colored, the corresponding face in the other complex will be automatically colored as well."
+			+ "								<br> This function can only be activated now.</html>";
+	private final JLabel lbMapChromaticity = new JLabel("Map chromaticity is activated");
 	private final JLabel lbDisconnectFaces = new JLabel("Faces are disconnected");
 	{
 		lbDisconnectFaces.setForeground(Color.BLUE);
 		lbDisconnectFaces.setVisible(false);
 		lbDisconnectFaces.setAlignmentX(Component.CENTER_ALIGNMENT);
+		
+		lbMapChromaticity.setForeground(Color.BLUE);
+		lbMapChromaticity.setVisible(false);
+		lbMapChromaticity.setAlignmentX(Component.CENTER_ALIGNMENT);
+		lbMapChromaticity.setToolTipText(mapChromaticityToolTipText);
 	}
 
 	public InteractiveToolsPanel(){
@@ -149,8 +158,16 @@ public class InteractiveToolsPanel extends ViewShrinkPanelPlugin implements Item
 		pColor.add(faceColorChooser);
 		pColor.add(Box.createRigidArea(new Dimension(10,0)));
 		pColor.add(btnEraseColoredFaces);
-		
+		pColor.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
+			
 		sfPanel.add(pColor);
+		btnMapChromaticity = new JButton("Map chromaticity");
+		btnMapChromaticity.setVisible(false);
+		btnMapChromaticity.addActionListener(this);
+		btnMapChromaticity.setToolTipText(mapChromaticityToolTipText);
+		btnMapChromaticity.setAlignmentX(Component.CENTER_ALIGNMENT);
+		sfPanel.add(btnMapChromaticity);
+		sfPanel.add(lbMapChromaticity);
 		
 		pContent.add(sfPanel);
 	}
@@ -242,6 +259,10 @@ public class InteractiveToolsPanel extends ViewShrinkPanelPlugin implements Item
 				colorFacesTool.setAnyFacesPainted(false); // Erase color in colored faces
 				btnEraseColoredFaces.setVisible(false);
 			}
+		}else if (s == btnMapChromaticity){
+			colorFacesTool.setMapChromaticity(true);
+			btnMapChromaticity.setVisible(false);
+			lbMapChromaticity.setVisible(true);
 		}
 		
 	}
@@ -249,5 +270,14 @@ public class InteractiveToolsPanel extends ViewShrinkPanelPlugin implements Item
 	public void resetDisconnectFaces() {
 		btnDisconnectFaces.setVisible(false);
 		lbDisconnectFaces.setVisible(false);
+	}
+	
+	public void resetMapChromaticity() {
+		btnMapChromaticity.setVisible(false);
+		lbMapChromaticity.setVisible(false);
+	}
+
+	public JButton getBtnMapChromaticity() {
+		return btnMapChromaticity;
 	}
 }

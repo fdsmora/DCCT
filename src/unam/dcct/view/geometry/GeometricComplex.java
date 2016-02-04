@@ -146,6 +146,14 @@ public class GeometricComplex implements Geometry{
 		return innerGeometricComplexBehaviour.getFaces();
 	}
 	
+	public List<Face> getChromaticFaces(){
+		return chromaticGeometricComplexBehaviour.getFaces();
+	}
+	
+	public List<Face> getNonChromaticFaces(){
+		return nonChromaticGeometricComplexBehaviour.getFaces();
+	}
+	
 	@Override
 	public String toString(){
 		StringBuilder sb = new StringBuilder();
@@ -272,7 +280,7 @@ public class GeometricComplex implements Geometry{
 			return vertices;
 		}
 
-		List<Face> getFaces() {
+		protected List<Face> getFaces() {
 			return faces;
 		}
 

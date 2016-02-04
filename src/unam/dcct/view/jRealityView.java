@@ -24,6 +24,7 @@ import unam.dcct.model.AbstractModel;
 import unam.dcct.model.Model;
 import unam.dcct.topology.SimplicialComplex;
 import unam.dcct.view.UI.InteractiveToolsPanel;
+import unam.dcct.view.UI.SCOutputConsole;
 import unam.dcct.view.UI.SimplicialComplexPanel;
 import unam.dcct.view.commands.Command;
 import unam.dcct.view.geometry.GeometricComplex;

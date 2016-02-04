@@ -1,4 +1,4 @@
-package unam.dcct.view;
+package unam.dcct.view.UI;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -21,6 +21,7 @@ import unam.dcct.misc.Constants;
 import unam.dcct.model.Model;
 import unam.dcct.topology.Simplex;
 import unam.dcct.topology.SimplicialComplex;
+import unam.dcct.view.View;
 import unam.dcct.view.geometry.GeometricComplex;
 
 /**

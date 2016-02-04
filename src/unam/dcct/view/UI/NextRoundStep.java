@@ -20,9 +20,7 @@ class NextRoundStep extends Step {
 	private int roundCount = 1;
 	private JRadioButton rbChromatic = new JRadioButton(Constants.CHROMATIC);
 	private JRadioButton rbNonChromatic = new JRadioButton(Constants.NON_CHROMATIC);
-	
-	private boolean finishedExecutingRound;
-	
+		
 	public NextRoundStep(){
 		super();	
 		
@@ -73,27 +71,11 @@ class NextRoundStep extends Step {
 	
 	@Override
 	public void validateAndExecute(){
-		finishedExecutingRound = false;
 		int capture = 0;
 		if (roundCount>=2) 
 			capture = JOptionPane.showConfirmDialog(null,"Performance of the application may decrease after executing this round. Do you want to proceed?");
 		if (capture==0) {
-			final JOptionPane p = new JOptionPane("Creating protocol complex, please wait...", JOptionPane.INFORMATION_MESSAGE);
-			final JDialog d = p.createDialog(null, "Please wait");
-			Thread t = new Thread() {
-				 public void run() {
-		                try {
-		                	while(!finishedExecutingRound){
-		                		d.setVisible(true);
-		                	}
-		                } catch (Exception e) {
-		                }
-		            }
-			};
-			t.start();
         	model.executeRound();
-        	finishedExecutingRound = true;
-        	d.setVisible(false);
 			++roundCount;
 		}
 		if (roundCount>=Configuration.getInstance().MAX_ALLOWED_ROUNDS){

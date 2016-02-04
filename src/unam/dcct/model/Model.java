@@ -237,6 +237,10 @@ public class Model extends AbstractModel {
 	public void setSelectedBrackets(String selectedBrackets) {
 		this.selectedBrackets = selectedBrackets;
 	}
+	/**
+	 * Gets the numbers of rounds that the communication protocol has been executed. 
+	 * @return
+	 */
 	public int getRoundCount() {
 		return roundCount;
 	}
