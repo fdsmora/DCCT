@@ -77,8 +77,8 @@ public class ColorFacesTool extends AbstractTool implements View {
 		// If mapChromaticity is enabled, then it need to behave
 		// as if it was always enabled, no matter if the 'activate' checkbox 
 		// is checked or unchecked. 
-		if (isMapChromaticityEnabled())
-			enabled = true;
+//		if (isMapChromaticityEnabled())
+//			enabled = true;
 		this.enabled = enabled;
 		
 		activateMapChromaticityButton();
@@ -126,7 +126,7 @@ public class ColorFacesTool extends AbstractTool implements View {
 
 	@Override
 	public void displayComplex() {
-		if (isValid()){
+		if (isValid() || isMapChromaticityEnabled()){
 			createColorFacesGeometry();
 			
 			activateMapChromaticityButton();
@@ -206,7 +206,7 @@ public class ColorFacesTool extends AbstractTool implements View {
 	 */
 	private void activateMapChromaticityButton(){
 		// This button should only be displayed in the first round of execution.
-		boolean isFirstRound = Model.getInstance().getRoundCount()==1;
+		boolean isFirstRound = Model.getInstance().getRoundCount()==1 && !mapChromaticity;
 		toolsPanel.getBtnMapChromaticity().setVisible(isFirstRound);
 	}
 	
