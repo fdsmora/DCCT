@@ -47,6 +47,7 @@ class NameColorStep extends Step {
 		JPanel pNonChromaticColor = new JPanel();
 		pNonChromaticColor.setLayout(new BoxLayout(pNonChromaticColor,BoxLayout.PAGE_AXIS));
 		pNonChromaticColor.setBorder(BorderFactory.createTitledBorder("Color for non-chromatic vertices"));
+		pNonChromaticColor.setToolTipText("Color for non-chromatic vertices");
 		pNonChromaticColor.setAlignmentX(Component.CENTER_ALIGNMENT);
 		ncChooser = new ColorChooser(new Color(model.getNonChromaticColor().getRGB()));
 //		ncChooser.setAlignmentX(Component.CENTER_ALIGNMENT);

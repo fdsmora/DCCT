@@ -18,10 +18,26 @@ public class WR_ScenarioGenerator extends ViewMatrixGenerator {
 		WR_ScenarioGenerator gen = new WR_ScenarioGenerator();
 		List<int[][]> mats = gen.generate(n);
 		for (int[][] m : mats){
-			System.out.println(Arrays.deepToString(m));
+//			System.out.println(Arrays.deepToString(m));
+			
+			imprimeFormato(m);
+			System.out.println("  ----- ");
 		}
 	}
 	
+	private static void imprimeFormato(int[][] m) {
+		for (int i = 0; i<m.length;i++){
+			System.out.print("|");
+			String prefix = " ";
+			for (int j = 0; j<m.length; j++){
+				System.out.print(prefix + m[i][j]);
+//				prefix = " ";
+			}
+			System.out.println(" |");
+		}
+		
+	}
+
 	private static List<List<Integer>> generateCombinations(int n, int k){
 		// Create array containing integers from 0 to n-1
 		Integer[] ids = new Integer[n] ; 
